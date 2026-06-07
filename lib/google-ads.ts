@@ -6,7 +6,7 @@
 // Google Tag Manager Configuration
 export const GTM_CONFIG = {
   // Your GTM Container ID (Get from: https://tagmanager.google.com/)
-  GTM_ID: 'GTM-XXXXXXXXX', // Replace with your GTM ID
+  GTM_ID: 'GTM-NGWRC7R4', // Replace with your GTM ID
   
   // Environment
   ENVIRONMENT: process.env.NODE_ENV || 'production',
