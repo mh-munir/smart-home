@@ -29,7 +29,7 @@ export async function GET(req) {
         updatedAt: slide.updatedAt?.toISOString() || null,
       }));
     } else {
-      slides = await getHeroSlides();
+      slides = await getHeroSlides({ fallbackOnError: false });
     }
 
     return Response.json(slides);
