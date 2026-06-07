@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
   title: "Home Smart Products - Best Smart Home Devices Reviews & Buying Guide 2026",
@@ -12,14 +13,32 @@ export const metadata = {
     "Find the best home smart products with expert reviews and comprehensive buying guides. Smart locks, cameras, lighting, thermostats & more. Trusted affiliate recommendations.",
   keywords:
     "home smart products, smart home devices, smart lock reviews, smart camera, smart lighting, smart thermostat, home automation, best smart home gadgets",
+  alternates: {
+    canonical: SITE_URL,
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://smart-home.vercel.app",
-    siteName: "SmartHome Affiliate",
+    url: SITE_URL,
+    siteName: SITE_NAME,
     title: "Home Smart Products - Best Smart Home Devices & Reviews",
     description:
       "Expert reviews of home smart products. Find the best smart home devices for your needs with our comprehensive guides.",
+    images: [
+      {
+        url: DEFAULT_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: "Home Smart Products - Best Smart Home Devices",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Home Smart Products - Best Smart Home Devices & Reviews",
+    description:
+      "Expert reviews of home smart products. Find the best smart home devices for your needs with our comprehensive guides.",
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 
@@ -38,7 +57,7 @@ export default async function Home() {
       <SchemaMarkup 
         title="Home Smart Products - Best Smart Home Devices Reviews & Buying Guide 2026"
         description="Find the best home smart products with expert reviews and comprehensive buying guides. Smart locks, cameras, lighting, thermostats & more."
-        url="https://smart-home.vercel.app"
+        url={SITE_URL}
         type="WebSite"
       />
       <Navbar />

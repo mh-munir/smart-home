@@ -3,6 +3,8 @@
  * Generates optimized metadata for all pages
  */
 
+import { DEFAULT_LOGO, DEFAULT_OG_IMAGE, SITE_EMAIL, SITE_NAME, SITE_URL } from '@/lib/site';
+
 export interface SEOMetadata {
   title: string;
   description: string;
@@ -68,8 +70,8 @@ export function generateHomeSEO(): SEOMetadata {
       'IoT devices home',
       'connected home devices',
     ],
-    ogImage: 'https://smart-home.vercel.app/og-image.jpg',
-    canonical: 'https://smart-home.vercel.app',
+    ogImage: DEFAULT_OG_IMAGE,
+    canonical: SITE_URL,
     robots: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
     twitterCard: 'summary_large_image',
   };
@@ -83,7 +85,7 @@ export function generateProductSEO(
   productSlug: string,
   productCategory?: string
 ): SEOMetadata {
-  const baseUrl = 'https://smart-home.vercel.app';
+  const baseUrl = SITE_URL;
   const productUrl = `${baseUrl}/products/${productSlug}`;
 
   return {
@@ -100,7 +102,7 @@ export function generateProductSEO(
       'smart home products',
       'home automation',
     ],
-    ogImage: productImage || 'https://smart-home.vercel.app/og-image.jpg',
+    ogImage: productImage || DEFAULT_OG_IMAGE,
     canonical: productUrl,
     robots: 'index, follow',
     twitterCard: 'summary_large_image',
@@ -192,7 +194,7 @@ export function generateArticleSchema(
       name: 'SmartHome Affiliate',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://smart-home.vercel.app/logo.png',
+        url: DEFAULT_LOGO,
       },
     },
     url,
@@ -222,9 +224,9 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'SmartHome Affiliate',
-    url: 'https://smart-home.vercel.app',
-    logo: 'https://smart-home.vercel.app/logo.png',
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: DEFAULT_LOGO,
     description: 'Expert reviews and buying guides for home smart products and devices',
     sameAs: [
       'https://www.facebook.com/smarthomeaffiliate',
@@ -234,7 +236,7 @@ export function generateOrganizationSchema() {
     contact: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
-      email: 'support@smart-home.vercel.app',
+      email: SITE_EMAIL,
     },
   };
 }

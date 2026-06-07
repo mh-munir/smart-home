@@ -3,10 +3,12 @@
  * Optimizes Core Web Vitals and Search Engine Rankings
  */
 
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/site';
+
 export const SEO_CONFIG = {
   // Domain and site URL
-  SITE_URL: 'https://smart-home.vercel.app',
-  SITE_NAME: 'SmartHome Affiliate',
+  SITE_URL,
+  SITE_NAME,
   SITE_DESCRIPTION: 'Expert reviews and buying guides for home smart products and devices',
   SITE_AUTHOR: 'SmartHome Affiliate',
   
@@ -91,10 +93,10 @@ export const SEO_CONFIG = {
   },
 
   // Canonical domain
-  CANONICAL_DOMAIN: 'https://smart-home.vercel.app',
+  CANONICAL_DOMAIN: SITE_URL,
 
   // Open Graph default image
-  OG_IMAGE: 'https://smart-home.vercel.app/og-image.jpg',
+  OG_IMAGE: DEFAULT_OG_IMAGE,
   OG_IMAGE_WIDTH: 1200,
   OG_IMAGE_HEIGHT: 630,
 
@@ -124,7 +126,7 @@ export const SEO_CONFIG = {
     // Maximum URLs per sitemap
     maxUrls: 50000,
     // Sitemap index URL
-    sitemapIndex: 'https://smart-home.vercel.app/sitemap.xml',
+    sitemapIndex: `${SITE_URL}/sitemap.xml`,
   },
 
   // Robots.txt configuration

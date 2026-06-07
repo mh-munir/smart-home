@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
+import { SITE_URL } from "@/lib/site";
 
 interface Product {
   _id: string;
@@ -30,7 +31,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://smart-home.vercel.app",
+    url: SITE_URL,
     siteName: "Smart Home Affiliate",
   },
 };

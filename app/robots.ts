@@ -1,8 +1,7 @@
 import type { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://smart-home.vercel.app';
-
   return {
     rules: [
       {
@@ -54,10 +53,10 @@ export default function robots(): MetadataRoute.Robots {
       },
     ],
     sitemap: [
-      `${baseUrl}/sitemap.xml`,
-      `${baseUrl}/sitemap-products.xml`,
-      `${baseUrl}/sitemap-pages.xml`,
+      `${SITE_URL}/sitemap.xml`,
+      `${SITE_URL}/sitemap-products.xml`,
+      `${SITE_URL}/sitemap-pages.xml`,
     ],
-    host: baseUrl,
+    host: SITE_URL,
   };
 }

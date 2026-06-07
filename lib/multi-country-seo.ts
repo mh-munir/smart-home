@@ -3,6 +3,8 @@
  * Supports Amazon marketplace countries with hreflang tags
  */
 
+import { SITE_URL } from '@/lib/site';
+
 export interface CountryConfig {
   code: string; // ISO 3166-1 alpha-2
   locale: string; // BCP 47 language tag
@@ -18,7 +20,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   US: {
     code: 'US',
     locale: 'en-US',
-    domain: 'https://smart-home.vercel.app',
+    domain: SITE_URL,
     currency: 'USD',
     language: 'English',
     name: 'United States',
@@ -27,7 +29,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   GB: {
     code: 'GB',
     locale: 'en-GB',
-    domain: 'https://smart-home.vercel.app/en-gb',
+    domain: `${SITE_URL}/en-gb`,
     currency: 'GBP',
     language: 'English',
     name: 'United Kingdom',
@@ -36,7 +38,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   DE: {
     code: 'DE',
     locale: 'de-DE',
-    domain: 'https://smart-home.vercel.app/de',
+    domain: `${SITE_URL}/de`,
     currency: 'EUR',
     language: 'Deutsch',
     name: 'Germany',
@@ -45,7 +47,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   FR: {
     code: 'FR',
     locale: 'fr-FR',
-    domain: 'https://smart-home.vercel.app/fr',
+    domain: `${SITE_URL}/fr`,
     currency: 'EUR',
     language: 'Français',
     name: 'France',
@@ -54,7 +56,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   IT: {
     code: 'IT',
     locale: 'it-IT',
-    domain: 'https://smart-home.vercel.app/it',
+    domain: `${SITE_URL}/it`,
     currency: 'EUR',
     language: 'Italiano',
     name: 'Italy',
@@ -63,7 +65,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   ES: {
     code: 'ES',
     locale: 'es-ES',
-    domain: 'https://smart-home.vercel.app/es',
+    domain: `${SITE_URL}/es`,
     currency: 'EUR',
     language: 'Español',
     name: 'Spain',
@@ -72,7 +74,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   CA: {
     code: 'CA',
     locale: 'en-CA',
-    domain: 'https://smart-home.vercel.app/en-ca',
+    domain: `${SITE_URL}/en-ca`,
     currency: 'CAD',
     language: 'English',
     name: 'Canada',
@@ -81,7 +83,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   MX: {
     code: 'MX',
     locale: 'es-MX',
-    domain: 'https://smart-home.vercel.app/es-mx',
+    domain: `${SITE_URL}/es-mx`,
     currency: 'MXN',
     language: 'Español',
     name: 'Mexico',
@@ -90,7 +92,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   BR: {
     code: 'BR',
     locale: 'pt-BR',
-    domain: 'https://smart-home.vercel.app/pt-br',
+    domain: `${SITE_URL}/pt-br`,
     currency: 'BRL',
     language: 'Português',
     name: 'Brazil',
@@ -99,7 +101,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   JP: {
     code: 'JP',
     locale: 'ja-JP',
-    domain: 'https://smart-home.vercel.app/ja',
+    domain: `${SITE_URL}/ja`,
     currency: 'JPY',
     language: '日本語',
     name: 'Japan',
@@ -108,7 +110,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   AU: {
     code: 'AU',
     locale: 'en-AU',
-    domain: 'https://smart-home.vercel.app/en-au',
+    domain: `${SITE_URL}/en-au`,
     currency: 'AUD',
     language: 'English',
     name: 'Australia',
@@ -117,7 +119,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   IN: {
     code: 'IN',
     locale: 'en-IN',
-    domain: 'https://smart-home.vercel.app/en-in',
+    domain: `${SITE_URL}/en-in`,
     currency: 'INR',
     language: 'English',
     name: 'India',
@@ -126,7 +128,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   NL: {
     code: 'NL',
     locale: 'nl-NL',
-    domain: 'https://smart-home.vercel.app/nl',
+    domain: `${SITE_URL}/nl`,
     currency: 'EUR',
     language: 'Nederlands',
     name: 'Netherlands',
@@ -135,7 +137,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   SE: {
     code: 'SE',
     locale: 'sv-SE',
-    domain: 'https://smart-home.vercel.app/sv',
+    domain: `${SITE_URL}/sv`,
     currency: 'SEK',
     language: 'Svenska',
     name: 'Sweden',
@@ -144,7 +146,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   PL: {
     code: 'PL',
     locale: 'pl-PL',
-    domain: 'https://smart-home.vercel.app/pl',
+    domain: `${SITE_URL}/pl`,
     currency: 'PLN',
     language: 'Polski',
     name: 'Poland',
@@ -153,7 +155,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   EG: {
     code: 'EG',
     locale: 'ar-EG',
-    domain: 'https://smart-home.vercel.app/ar-eg',
+    domain: `${SITE_URL}/ar-eg`,
     currency: 'EGP',
     language: 'العربية',
     name: 'Egypt',
@@ -162,7 +164,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   SA: {
     code: 'SA',
     locale: 'ar-SA',
-    domain: 'https://smart-home.vercel.app/ar-sa',
+    domain: `${SITE_URL}/ar-sa`,
     currency: 'SAR',
     language: 'العربية',
     name: 'Saudi Arabia',
@@ -171,7 +173,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   AE: {
     code: 'AE',
     locale: 'ar-AE',
-    domain: 'https://smart-home.vercel.app/ar-ae',
+    domain: `${SITE_URL}/ar-ae`,
     currency: 'AED',
     language: 'العربية',
     name: 'United Arab Emirates',
@@ -180,7 +182,7 @@ export const AMAZON_COUNTRIES: Record<string, CountryConfig> = {
   SG: {
     code: 'SG',
     locale: 'en-SG',
-    domain: 'https://smart-home.vercel.app/en-sg',
+    domain: `${SITE_URL}/en-sg`,
     currency: 'SGD',
     language: 'English',
     name: 'Singapore',

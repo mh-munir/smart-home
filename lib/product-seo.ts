@@ -5,6 +5,7 @@
 
 import type { Metadata } from 'next';
 import { generateProductSEO, generateProductSchema, generateBreadcrumbSchema } from '@/lib/seo-metadata';
+import { SITE_NAME, SITE_URL } from '@/lib/site';
 
 interface Product {
   _id: string;
@@ -23,7 +24,7 @@ interface Product {
 /**
  * Generate metadata for product page
  */
-export function generateProductMetadata(product: Product, baseUrl: string = 'https://smart-home.vercel.app'): Metadata {
+export function generateProductMetadata(product: Product, baseUrl: string = SITE_URL): Metadata {
   const productUrl = `${baseUrl}/products/${product.slug}`;
   const seoData = generateProductSEO(
     product.name,
@@ -60,7 +61,7 @@ export function generateProductMetadata(product: Product, baseUrl: string = 'htt
           alt: product.name,
         },
       ],
-      siteName: 'SmartHome Affiliate',
+      siteName: SITE_NAME,
     },
     twitter: {
       card: 'summary_large_image',
@@ -76,7 +77,7 @@ export function generateProductMetadata(product: Product, baseUrl: string = 'htt
  */
 export function generateProductJsonLd(
   product: Product,
-  baseUrl: string = 'https://smart-home.vercel.app'
+  baseUrl: string = SITE_URL
 ): object {
   const productUrl = `${baseUrl}/products/${product.slug}`;
 
@@ -90,7 +91,7 @@ export function generateProductJsonLd(
     url: productUrl,
     brand: {
       '@type': 'Brand',
-      name: 'SmartHome Affiliate',
+      name: SITE_NAME,
     },
     offers: {
       '@type': 'Offer',
@@ -100,7 +101,7 @@ export function generateProductJsonLd(
       url: productUrl,
       seller: {
         '@type': 'Organization',
-        name: 'SmartHome Affiliate',
+        name: SITE_NAME,
         url: baseUrl,
       },
     },
@@ -124,7 +125,7 @@ export function generateProductJsonLd(
  */
 export function generateProductBreadcrumbJsonLd(
   product: Product,
-  baseUrl: string = 'https://smart-home.vercel.app'
+  baseUrl: string = SITE_URL
 ): object {
   const items = [
     { name: 'Home', url: baseUrl },
