@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /api/
+
+Disallow: /admin
+Disallow: /.next
+
+Sitemap: https://smart-home.vercel.app/sitemap.xml
+
+# Specific rules for crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay (in seconds)
+Crawl-delay: 1
