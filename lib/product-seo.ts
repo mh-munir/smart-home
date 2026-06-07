@@ -48,7 +48,7 @@ export function generateProductMetadata(product: Product, baseUrl: string = 'htt
       canonical: productUrl,
     },
     openGraph: {
-      type: 'product',
+      type: 'website',
       title: `${product.name} - Best Review & Buying Guide`,
       description: product.description.substring(0, 160),
       url: productUrl,

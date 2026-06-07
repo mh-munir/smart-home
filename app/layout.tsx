@@ -4,6 +4,10 @@ import "./globals.css";
 import { GoogleAnalyticsComponent } from "@/components/GoogleAnalyticsComponent";
 import { generateHrefLangLinks } from "@/lib/multi-country-seo";
 
+const alternateLanguages = Object.fromEntries(
+  generateHrefLangLinks().map((link) => [link.hrefLang, link.href])
+);
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -21,22 +25,9 @@ export const metadata: Metadata = {
   keywords:
     "home smart products, smart home devices, smart lock, smart camera, smart lighting, smart thermostat, smart speakers, home automation, best smart home products, affiliate review",
   robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
-  charset: "utf-8",
   alternates: {
     canonical: "https://smart-home.vercel.app",
-    languages: {
-      'en-US': 'https://smart-home.vercel.app',
-      'en-GB': 'https://smart-home.vercel.app/en-gb',
-      'de': 'https://smart-home.vercel.app/de',
-      'fr': 'https://smart-home.vercel.app/fr',
-      'it': 'https://smart-home.vercel.app/it',
-      'es': 'https://smart-home.vercel.app/es',
-      'pt-BR': 'https://smart-home.vercel.app/pt-br',
-      'ja': 'https://smart-home.vercel.app/ja',
-      'en-IN': 'https://smart-home.vercel.app/en-in',
-      'ar-EG': 'https://smart-home.vercel.app/ar-eg',
-      'x-default': 'https://smart-home.vercel.app',
-    },
+    languages: alternateLanguages,
   },
   openGraph: {
     type: "website",
@@ -66,30 +57,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   width: "device-width",
-  initihead>
-        {/* Hreflang tags for multi-country SEO */}
-        {generateHrefLangLinks().map((link) => (
-          <link
-            key={`${link.hrefLang}-${link.href}`}
-            rel={link.rel}
-            hrefLang={link.hrefLang}
-            href={link.href}
-          />
-        ))}
-        
-        {/* Preconnect to Google Analytics */}
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-      </head>
-      <body className="min-h-full flex flex-col">
-        {/* Google Analytics & Ads Tracking */}
-        <GoogleAnalyticsComponent
-          gtmId={process.env.NEXT_PUBLIC_GTM_ID}
-          ga4Id={process.env.NEXT_PUBLIC_GA4_ID}
-          conversionId={process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}
-        />
-        {children}
-      
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -102,7 +70,14 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <GoogleAnalyticsComponent
+          gtmId={process.env.NEXT_PUBLIC_GTM_ID}
+          ga4Id={process.env.NEXT_PUBLIC_GA4_ID}
+          conversionId={process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}
+        />
+        {children}
+      </body>
     </html>
   );
 }

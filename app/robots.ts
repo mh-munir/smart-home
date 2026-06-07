@@ -45,32 +45,19 @@ export default function robots(): MetadataRoute.Robots {
       },
       // Block aggressive bots
       {
-        userAgent: ['MJ12bot', 'AhrefsBot', 'SemrushBot', 'DotBot'],
+        userAgent: ['MJ12bot', 'AhrefsBot', 'SemrushBot', 'DotBot', 'MojeekBot'],
         disallow: '/',
       },
+      {
+        userAgent: 'YandexBot',
+        allow: '/',
+      },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [
+      `${baseUrl}/sitemap.xml`,
+      `${baseUrl}/sitemap-products.xml`,
+      `${baseUrl}/sitemap-pages.xml`,
+    ],
     host: baseUrl,
   };
-}
-Disallow: /
-
-User-agent: MojeekBot
-Disallow: /
-
-User-agent: YandexBot
-Allow: /
-
-# Sitemaps
-Sitemap: ${baseUrl}/sitemap.xml
-Sitemap: ${baseUrl}/sitemap-products.xml
-Sitemap: ${baseUrl}/sitemap-pages.xml`;
-
-  return new Response(robots, {
-    headers: {
-      'Content-Type': 'text/plain',
-      'Cache-Control': 'public, max-age=86400, s-maxage=86400',
-      'Vary': 'Accept-Encoding',
-    },
-  });
 }
