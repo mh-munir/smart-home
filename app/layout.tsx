@@ -55,6 +55,9 @@ export const metadata: Metadata = {
       "Discover the best home smart products with expert reviews and recommendations.",
     images: [DEFAULT_OG_IMAGE],
   },
+  other: {
+    'impact-site-verification': 'b2ee48a0-8bb8-4a14-a223-ad18f05f34cf',
+  },
 };
 
 export const viewport: Viewport = {
