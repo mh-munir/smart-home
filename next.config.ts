@@ -140,9 +140,6 @@ const nextConfig: NextConfig = {
     };
   },
 
-  // Compression for faster delivery
-  compress: true,
-
   // Optimize CSS and JavaScript (swcMinify removed in Next.js 16+)
 
   // Experimental features (most are now automatic in Next.js 16+)
