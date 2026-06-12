@@ -27,7 +27,7 @@ export default async function ReviewPage() {
             <ul className="space-y-2">
               {blog.sections.map((section, index) => (
                 <li key={index}>
-                  <a href={`#section-${index}`} className="text-orange-500 hover:underline">
+                  <a href={`#section-${index}`} className="text-teal-600 hover:underline">
                     {section.heading}
                   </a>
                 </li>

@@ -8,7 +8,7 @@ const emptyForm = {
   description: "",
   image: "",
   ctaText: "Explore Products",
-  ctaLink: "/review",
+  ctaLink: "/blog",
   order: "0",
   isActive: true,
 };
@@ -83,7 +83,7 @@ export default function HeroSliderAdminPage() {
       description: slide.description || "",
       image: slide.image || "",
       ctaText: slide.ctaText || "Explore Products",
-      ctaLink: slide.ctaLink || "/review",
+      ctaLink: slide.ctaLink || "/blog",
       order: String(slide.order ?? 0),
       isActive: Boolean(slide.isActive),
     });
@@ -280,7 +280,7 @@ export default function HeroSliderAdminPage() {
                   key={slide._id}
                   className="overflow-hidden rounded-2xl border border-gray-200"
                 >
-                  <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
+                  <div className="relative aspect-video overflow-hidden bg-gray-100">
                     <Image
                       src={slide.image}
                       alt={slide.title}

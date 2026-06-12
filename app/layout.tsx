@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GoogleAnalyticsComponent } from "@/components/GoogleAnalyticsComponent";
+import GoogleTagManager from "@/components/GoogleTagManager";
+import GoogleAdSenseScript from "@/components/GoogleAdSenseScript";
 import { generateHrefLangLinks } from "@/lib/multi-country-seo";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -55,9 +57,6 @@ export const metadata: Metadata = {
       "Discover the best home smart products with expert reviews and recommendations.",
     images: [DEFAULT_OG_IMAGE],
   },
-  other: {
-    'impact-site-verification': 'b2ee48a0-8bb8-4a14-a223-ad18f05f34cf',
-  },
 };
 
 export const viewport: Viewport = {
@@ -74,13 +73,19 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
     >
+      <head>
+      </head>
       <body className="min-h-full flex flex-col">
+        <GoogleTagManager />
         <GoogleAnalyticsComponent
           gtmId={process.env.NEXT_PUBLIC_GTM_ID}
           ga4Id={process.env.NEXT_PUBLIC_GA4_ID}
           conversionId={process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}
         />
+        <GoogleAdSenseScript />
         {children}
       </body>
     </html>

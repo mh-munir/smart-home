@@ -48,7 +48,7 @@ export async function PUT(req, { params }) {
 
     const product = await Product.findByIdAndUpdate(id, data, { new: true });
     revalidatePath("/");
-    revalidatePath("/review");
+    revalidatePath("/blog");
     return Response.json(serializeProduct(product));
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
@@ -65,7 +65,7 @@ export async function DELETE(req, { params }) {
 
     await Product.findByIdAndDelete(id);
     revalidatePath("/");
-    revalidatePath("/review");
+    revalidatePath("/blog");
     return Response.json({ message: "Product deleted" });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

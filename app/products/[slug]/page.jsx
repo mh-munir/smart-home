@@ -2,18 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { SITE_URL } from '@/lib/site';
 
 export default function ProductDetails() {
   const params = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [imageZoom, setImageZoom] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [relatedProducts, setRelatedProducts] = useState([]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -24,6 +23,10 @@ export default function ProductDetails() {
         }
         const data = await response.json();
         setProduct(data);
+
+        // Fetch related products
+        const allProducts = await fetch('/api/products').then(r => r.json());
+        setRelatedProducts(allProducts.filter(p => p.category === data.category && p.slug !== params.slug).slice(0, 3));
       } catch (err) {
         setError(err.message);
       } finally {
@@ -36,23 +39,17 @@ export default function ProductDetails() {
     }
   }, [params.slug]);
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setMousePos({ x, y });
-  };
-
   if (loading) {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100">
+        <div className="min-h-screen flex items-center justify-center bg-white">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-indigo-200 border-t-indigo-600 mx-auto mb-4"></div>
-            <p className="text-gray-700 font-semibold text-lg">Loading amazing product...</p>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-teal-200 border-t-teal-600 mx-auto mb-4"></div>
+            <p className="text-gray-700 font-semibold text-lg">Loading product...</p>
           </div>
         </div>
+        <Footer />
       </>
     );
   }
@@ -61,16 +58,17 @@ export default function ProductDetails() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-red-50 to-orange-50">
-          <div className="text-center bg-white p-12 rounded-2xl shadow-2xl max-w-md mx-4">
+        <div className="min-h-screen flex items-center justify-center bg-white">
+          <div className="text-center bg-white p-12 rounded-2xl max-w-md mx-4 border border-gray-200">
             <div className="text-5xl mb-4">❌</div>
             <h1 className="text-3xl font-bold text-gray-900 mb-3">Product Not Found</h1>
             <p className="text-gray-600 mb-8 text-lg">{error || 'The product you are looking for does not exist.'}</p>
-            <Link href="/" className="inline-block bg-linear-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-3 rounded-lg font-bold transition-all transform hover:scale-105">
+            <Link href="/" className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-bold transition-all">
               ← Back to Products
             </Link>
           </div>
         </div>
+        <Footer />
       </>
     );
   }
@@ -78,197 +76,176 @@ export default function ProductDetails() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-white">
-        <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
-          {/* Breadcrumb */}
-          <div className="mb-8">
-            <Link href="/" className="text-teal-600 hover:text-teal-700 font-semibold transition-colors text-sm uppercase tracking-wide">
-              ← Back to Products
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Product Image */}
-            <div className="flex flex-col">
-              <div 
-                className="relative bg-gray-100 overflow-hidden h-96 md:h-full md:min-h-96 border border-gray-200 group cursor-zoom-in"
-                onMouseEnter={() => setImageZoom(true)}
-                onMouseLeave={() => setImageZoom(false)}
-                onMouseMove={handleMouseMove}
-              >
-                {product.image ? (
-                  <>
-                    <Image
-                      src={product.image}
-                      alt={product.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className={`object-cover transition-transform duration-300 ${
-                        imageZoom ? 'scale-125' : 'scale-100'
-                      }`}
-                      style={imageZoom ? {
-                        transformOrigin: `${mousePos.x}% ${mousePos.y}%`
-                      } : {}}
-                      unoptimized
-                    />
-                  </>
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center flex-col gap-3 text-gray-400">
-                    <span className="text-5xl">📷</span>
-                    <p className="font-semibold">No image available</p>
-                  </div>
-                )}
-              </div>
+      <div className="min-h-screen bg-white">
+        {/* Product Header - Hero Section */}
+        <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-12 sm:py-16">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-teal-100 capitalize">{product.category || 'Smart Home'}</span>
+              <span className="text-teal-100">•</span>
+              <span className="text-teal-100">⭐ {product.rating || 4.5}</span>
             </div>
-
-            {/* Product Information */}
-            <div className="flex flex-col">
-              {/* Category */}
-              {product.category && (
-                <div className="mb-4">
-                  <span className="text-teal-600 text-xs uppercase font-bold tracking-wide">
-                    {product.category}
-                  </span>
-                </div>
-              )}
-
-              {/* Title */}
-              <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6 leading-tight">
-                {product.title}
-              </h1>
-
-              {/* Rating and Price */}
-              <div className="flex items-baseline gap-6 mb-8 pb-8 border-b border-gray-200">
-                <div>
-                  <p className="text-gray-600 text-sm font-semibold mb-1">Rating</p>
-                  <div className="flex items-center gap-2">
-                    <span className="text-yellow-400 text-2xl">★</span>
-                    <p className="text-2xl font-bold text-gray-900">
-                      {product.rating || 4.5}
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-gray-600 text-sm font-semibold mb-1">Price</p>
-                  <p className="text-3xl font-bold text-teal-600">
-                    {product.price || 'Contact for price'}
-                  </p>
-                </div>
-              </div>
-
-              {/* Description */}
-              <p className="text-gray-700 text-lg leading-relaxed mb-8">
-                {product.description || 'Premium smart home product'}
-              </p>
-
-              {/* Features */}
-              <div className="mb-8">
-                <h3 className="text-sm font-bold uppercase tracking-wide text-gray-900 mb-4">Features</h3>
-                <ul className="space-y-2">
-                  <li className="flex items-center gap-3 text-gray-700">
-                    <span className="text-teal-600">✓</span>
-                    <span>High Quality Product</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-gray-700">
-                    <span className="text-teal-600">✓</span>
-                    <span>Fast Delivery</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-gray-700">
-                    <span className="text-teal-600">✓</span>
-                    <span>Affordable Price</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-gray-700">
-                    <span className="text-teal-600">✓</span>
-                    <span>Customer Service</span>
-                  </li>
-                </ul>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="space-y-3 pt-4">
-                <a
-                  href={product.affiliateLink || '#'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block bg-teal-600 hover:bg-teal-700 text-white px-6 py-4 rounded font-bold text-center text-lg transition-colors"
-                >
-                  Buy Now
-                </a>
-                <Link
-                  href="/"
-                  className="block border-2 border-teal-600 text-teal-600 hover:bg-teal-50 px-6 py-4 rounded font-bold text-center transition-colors"
-                >
-                  View More Products
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Product Stats */}
-          {product.clicks !== undefined || product.conversions !== undefined ? (
-            <div className="mt-16 pt-12 border-t border-gray-200">
-              <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8">Product Statistics</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="bg-gray-50 p-6 border border-gray-200">
-                  <p className="text-gray-600 text-xs font-bold uppercase tracking-wide mb-2">Total Clicks</p>
-                  <p className="text-3xl font-bold text-gray-900">{product.clicks || 0}</p>
-                </div>
-                <div className="bg-gray-50 p-6 border border-gray-200">
-                  <p className="text-gray-600 text-xs font-bold uppercase tracking-wide mb-2">Conversions</p>
-                  <p className="text-3xl font-bold text-gray-900">{product.conversions || 0}</p>
-                </div>
-                <div className="bg-gray-50 p-6 border border-gray-200">
-                  <p className="text-gray-600 text-xs font-bold uppercase tracking-wide mb-2">Created</p>
-                  <p className="text-lg font-bold text-gray-900">
-                    {new Date(product.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className="bg-gray-50 p-6 border border-gray-200">
-                  <p className="text-gray-600 text-xs font-bold uppercase tracking-wide mb-2">Category</p>
-                  <p className="text-lg font-bold text-gray-900">{product.category || 'N/A'}</p>
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {/* Why Trust Section */}
-          <div className="mt-16 pt-12 border-t border-gray-200">
-            <h2 className="text-2xl font-serif font-bold text-gray-900 mb-8">Why Choose This Product?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🎯</div>
-                <h3 className="font-bold text-lg text-gray-900 mb-2">Accurate & Reliable</h3>
-                <p className="text-gray-600 text-sm">Best quality products carefully selected for you</p>
-              </div>
-              <div className="border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🚀</div>
-                <h3 className="font-bold text-lg text-gray-900 mb-2">Fast Shipping</h3>
-                <p className="text-gray-600 text-sm">Quick and reliable delivery to your doorstep</p>
-              </div>
-              <div className="border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💯</div>
-                <h3 className="font-bold text-lg text-gray-900 mb-2">Complete Support</h3>
-                <p className="text-gray-600 text-sm">24/7 customer service for your peace of mind</p>
-              </div>
+            <h1 className="text-4xl sm:text-5xl font-bold mb-6">
+              {product.title}
+            </h1>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-teal-100">
+              <span className="text-2xl font-bold text-white">{product.price || 'Contact for price'}</span>
             </div>
           </div>
         </div>
-      </main>
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.5s ease-out;
-        }
-      `}</style>
+
+        {/* Main Content */}
+        <div className="max-w-3xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+          {/* Product Image */}
+          {product.image && (
+            <div className="mb-12">
+              <img
+                src={product.image}
+                alt={product.title}
+                className="w-full h-96 object-cover rounded-lg border border-gray-200"
+              />
+            </div>
+          )}
+
+          {/* Description */}
+          <div className="prose prose-lg max-w-none mb-12">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Description</h2>
+            <p className="text-gray-700 leading-relaxed">
+              {product.description || 'A premium smart home product designed for modern living.'}
+            </p>
+          </div>
+
+          {/* Features */}
+          <div className="mb-12 pb-12 border-b border-gray-200">
+            <h3 className="text-xl font-bold text-gray-900 mb-6">Key Features</h3>
+            <ul className="space-y-3">
+              {[
+                'High Quality Construction',
+                'Easy Installation',
+                'Affordable Price',
+                'Excellent Customer Support',
+                '24/7 Availability',
+                'Fast Shipping Available'
+              ].map((feature, idx) => (
+                <li key={idx} className="flex items-center gap-3 text-gray-700">
+                  <span className="text-teal-600 font-bold">✓</span>
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Product Stats */}
+          {product.clicks !== undefined && (
+            <div className="bg-gray-50 p-8 rounded-lg mb-12 border border-gray-200">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Product Stats</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div>
+                  <p className="text-sm font-semibold text-gray-600 mb-1">Clicks</p>
+                  <p className="text-2xl font-bold text-gray-900">{product.clicks || 0}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-600 mb-1">Conversions</p>
+                  <p className="text-2xl font-bold text-gray-900">{product.conversions || 0}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-600 mb-1">Rating</p>
+                  <p className="text-2xl font-bold text-gray-900">⭐ {product.rating || 4.5}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Share Section */}
+          <div className="border-t border-b border-gray-200 py-6 mb-12">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Share This Product</h3>
+            <div className="flex gap-4">
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(product.title)}&url=${SITE_URL}/products/${product.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-teal-600 hover:text-teal-700 font-semibold"
+              >
+                Twitter
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${SITE_URL}/products/${product.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-teal-600 hover:text-teal-700 font-semibold"
+              >
+                Facebook
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${SITE_URL}/products/${product.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-teal-600 hover:text-teal-700 font-semibold"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
+
+          {/* Related Products */}
+          {relatedProducts.length > 0 && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Related Products</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedProducts.map((relatedProduct) => (
+                  <Link
+                    key={relatedProduct.slug}
+                    href={`/products/${relatedProduct.slug}`}
+                    className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition"
+                  >
+                    {relatedProduct.image && (
+                      <div className="bg-gray-100 h-32 overflow-hidden">
+                        <img
+                          src={relatedProduct.image}
+                          alt={relatedProduct.title}
+                          className="w-full h-full object-cover group-hover:scale-110 transition"
+                        />
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <h3 className="font-bold text-gray-900 mb-2 group-hover:text-teal-600 line-clamp-2">
+                        {relatedProduct.title}
+                      </h3>
+                      <p className="text-sm text-teal-600 font-bold">
+                        {relatedProduct.price || 'Contact for price'}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* CTA Section */}
+          <section className="bg-teal-50 border-l-4 border-teal-600 p-6 rounded mb-12">
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Get This Product Now</h3>
+            <p className="text-gray-700 mb-6">
+              Ready to upgrade your smart home? Click below to purchase this product at the best price.
+            </p>
+            <a
+              href={product.affiliateLink || '#'}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition font-semibold"
+            >
+              Buy Now on Amazon
+            </a>
+          </section>
+
+          {/* Back Link */}
+          <Link
+            href="/"
+            className="text-teal-600 hover:text-teal-700 font-semibold"
+          >
+            ← Back to All Products
+          </Link>
+        </div>
+      </div>
       <Footer />
     </>
   );

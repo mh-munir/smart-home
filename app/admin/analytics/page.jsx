@@ -6,7 +6,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <h3 className="text-gray-600 font-semibold mb-2">Total Visitors</h3>
-          <p className="text-3xl font-bold text-blue-500">45,230</p>
+          <p className="text-3xl font-bold text-primary-500">45,230</p>
           <p className="text-xs text-gray-500 mt-2">↑ 12% from last month</p>
         </div>
 

@@ -24,7 +24,7 @@ const HeroSlideSchema = new mongoose.Schema(
     },
     ctaLink: {
       type: String,
-      default: "/review",
+      default: "/blog",
       trim: true,
     },
     order: {

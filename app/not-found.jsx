@@ -8,13 +8,13 @@ export default function NotFound() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center px-4">
+      <main className="min-h-screen bg-linear-to-br from-slate-50 via-white to-primary-50 flex items-center justify-center px-4">
         <div className="max-w-lg w-full">
           {/* 404 Animation */}
           <div className="text-center mb-8">
             <div className="relative inline-block">
-              <div className="absolute inset-0 bg-linear-to-r from-indigo-500 to-purple-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
-              <div className="relative text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 animate-bounce">
+              <div className="absolute inset-0 bg-linear-to-r from-primary-500 to-purple-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+              <div className="relative text-8xl md:text-9xl font-black text-transparent bg-clip-text bg-linear-to-r from-primary-600 via-purple-600 to-pink-600 animate-bounce">
                 404
               </div>
             </div>
@@ -48,15 +48,15 @@ export default function NotFound() {
                 <h3 className="font-bold text-gray-900 mb-2 text-lg">What happened?</h3>
                 <ul className="text-gray-600 space-y-2 text-sm">
                   <li className="flex items-start gap-2">
-                    <span className="text-indigo-600 font-bold">✓</span>
+                    <span className="text-primary-600 font-bold">✓</span>
                     <span>The page was deleted or moved</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-indigo-600 font-bold">✓</span>
+                    <span className="text-primary-600 font-bold">✓</span>
                     <span>The URL is incorrect or misspelled</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-indigo-600 font-bold">✓</span>
+                    <span className="text-primary-600 font-bold">✓</span>
                     <span>The link is no longer active</span>
                   </li>
                 </ul>
@@ -68,13 +68,13 @@ export default function NotFound() {
           <div className="space-y-3">
             <Link
               href="/"
-              className="block w-full bg-linear-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105 hover:shadow-xl shadow-lg text-center text-lg"
+              className="block w-full bg-linear-to-r from-primary-600 to-primary-600 hover:from-primary-700 hover:to-primary-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105 hover:shadow-xl shadow-lg text-center text-lg"
             >
               🏠 Back to Home
             </Link>
             <Link
               href="/"
-              className="block w-full border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-50 font-bold py-4 px-6 rounded-xl transition-all text-center text-lg"
+              className="block w-full border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-bold py-4 px-6 rounded-xl transition-all text-center text-lg"
             >
               📦 Browse Products
             </Link>
@@ -88,13 +88,13 @@ export default function NotFound() {
             <div className="flex gap-4 justify-center">
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
+                className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold transition-colors"
               >
                 <span>📧</span> Contact Us
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
+                className="inline-flex items-center gap-2 text-primary-600 hover:text-primary-700 font-semibold transition-colors"
               >
                 <span>❓</span> Help Center
               </Link>

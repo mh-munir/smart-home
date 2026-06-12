@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   // Enable React strict mode for development
   reactStrictMode: true,
   
+  // High-traffic performance optimization
+  compress: true,
+  generateEtags: true,
+  poweredByHeader: false, // Remove X-Powered-By header
+  
   // Image optimization for SEO and Core Web Vitals
   images: {
     remotePatterns: [
@@ -23,6 +28,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.imgix.net",
       },
+      {
+        protocol: "https",
+        hostname: "**.aliexpress.com",
+      },
     ],
     // Modern image formats for better Core Web Vitals
     formats: ["image/avif", "image/webp"],
@@ -30,8 +39,9 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     // Image sizes for responsive behavior
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Cache optimization
+    // Aggressive caching for images
     minimumCacheTTL: 31536000, // 1 year for versioned images
+    unoptimized: false,
     // Dangerously allow SVG
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -73,10 +83,19 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com; img-src 'self' https: data: https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https: https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
           },
-          // Cache headers for SEO freshness
+          // Aggressive cache for high traffic scenarios
           {
             key: "Cache-Control",
-            value: "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
+            value: "public, max-age=7200, s-maxage=86400, stale-while-revalidate=604800",
+          },
+          // Additional performance headers
+          {
+            key: "Accept-Encoding",
+            value: "gzip, deflate, br",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
           },
         ],
       },

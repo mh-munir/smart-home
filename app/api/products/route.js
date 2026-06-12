@@ -83,7 +83,7 @@ export async function POST(req) {
     };
 
     revalidatePath("/");
-    revalidatePath("/review");
+    revalidatePath("/blog");
     return Response.json(serializedProduct);
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

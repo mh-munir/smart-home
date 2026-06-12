@@ -8,10 +8,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "seed:admin": "node scripts/seed-admin.js",
+    "reset:products": "node scripts/reset-products.js",
+    "update:products:amazon": "node scripts/update-products-amazon.js"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^17.4.2",
     "mongoose": "^9.6.2",
     "next": "16.2.6",

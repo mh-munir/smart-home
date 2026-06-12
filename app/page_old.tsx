@@ -61,7 +61,7 @@ export default async function Home() {
                 <a
                   key={cat}
                   href={`#${cat}`}
-                  className="whitespace-nowrap font-semibold text-gray-700 hover:text-indigo-600 transition-colors py-2 px-2 border-b-2 border-transparent hover:border-indigo-600"
+                  className="whitespace-nowrap font-semibold text-gray-700 hover:text-primary-600 transition-colors py-2 px-2 border-b-2 border-transparent hover:border-primary-600"
                 >
                   {cat}
                 </a>
@@ -91,7 +91,7 @@ export default async function Home() {
         )}
 
         {/* Newsletter Signup Section */}
-        <section className="py-12 px-4 bg-indigo-50 border-y border-indigo-200">
+        <section className="py-12 px-4 bg-primary-50 border-y border-primary-200">
           <div className="max-w-2xl mx-auto text-center">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
               Get the Latest Smart Home Tips
@@ -103,12 +103,12 @@ export default async function Home() {
               <input
                 type="email"
                 placeholder="Enter your email address"
-                className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100"
+                className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-primary-600 focus:ring-2 focus:ring-primary-100"
                 required
               />
               <button
                 type="submit"
-                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-bold transition-colors"
+                className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-bold transition-colors"
               >
                 Subscribe
               </button>
@@ -188,7 +188,7 @@ export default async function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-16 px-4 bg-linear-to-r from-indigo-600 to-blue-600 text-white">
+        <section className="py-16 px-4 bg-linear-to-r from-primary-600 to-primary-600 text-white">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Transform Your Home Today
@@ -198,7 +198,7 @@ export default async function Home() {
             </p>
             <a
               href="#"
-              className="inline-block bg-white text-indigo-600 px-8 py-4 rounded-lg font-bold text-lg transition-transform transform hover:scale-105 hover:shadow-xl"
+              className="inline-block bg-white text-primary-600 px-8 py-4 rounded-lg font-bold text-lg transition-transform transform hover:scale-105 hover:shadow-xl"
             >
               Explore All Products →
             </a>

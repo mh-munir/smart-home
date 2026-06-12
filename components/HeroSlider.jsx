@@ -55,7 +55,7 @@ export default function HeroSlider({ slides }) {
         </div>
       ))}
 
-      <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 min-h-[420px] flex items-center">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 min-h-105 flex items-center">
         <div className="max-w-3xl">
           <p className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-1 text-sm uppercase tracking-[0.24em] text-orange-100">
             Featured Smart Home Picks
@@ -68,7 +68,7 @@ export default function HeroSlider({ slides }) {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
-              href={slides[activeIndex].ctaLink || "/review"}
+              href={slides[activeIndex].ctaLink || "/blog"}
               className="inline-flex items-center rounded-full bg-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-400"
             >
               {slides[activeIndex].ctaText || "Explore Products"}

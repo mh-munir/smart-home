@@ -22,10 +22,10 @@ export default function Navbar() {
               Home
             </Link>
             <Link
-              href="/review"
+              href="/blog"
               className="text-gray-700 hover:text-teal-600 font-semibold transition-colors text-xs uppercase tracking-wide"
             >
-              Reviews
+              Blog
             </Link>
             <Link
               href="/guides"
@@ -46,13 +46,6 @@ export default function Navbar() {
               About
             </a>
           </div>
-
-          <Link
-            href="/admin"
-            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-sm font-bold transition-colors"
-          >
-            Admin
-          </Link>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ export default function AdminDashboard() {
 
         <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
           <h3 className="text-gray-600 font-semibold mb-2">Total Blogs</h3>
-          <p className="text-4xl font-bold text-blue-500">45</p>
+          <p className="text-4xl font-bold text-primary-500">45</p>
           <p className="text-sm text-gray-500 mt-2">Published articles</p>
         </div>
 
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
             <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 rounded transition-colors">
               ➕ Add New Product
             </button>
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded transition-colors">
+            <button className="w-full bg-primary-500 hover:bg-primary-600 text-white py-2 rounded transition-colors">
               📝 Write New Blog
             </button>
             <button className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded transition-colors">
