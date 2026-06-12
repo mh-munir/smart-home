@@ -3,6 +3,15 @@
 import { useEffect } from 'react';
 import { isAdSenseEnabled, getAdSlot } from '@/lib/adsense-config';
 
+// Type for AdSense window object
+declare global {
+  interface Window {
+    adsbygoogle?: Array<{
+      [key: string]: string | boolean | object;
+    }>;
+  }
+}
+
 /**
  * Horizontal Ad Unit (728x90 or 970x90)
  */
@@ -11,7 +20,7 @@ export function HorizontalAdUnit({ slot = 'topBanner', className = '' }) {
   const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
 
   useEffect(() => {
-    if (isAdSenseEnabled() && window.adsbygoogle) {
+    if (isAdSenseEnabled() && typeof window !== 'undefined' && window.adsbygoogle) {
       try {
         window.adsbygoogle.push({});
       } catch (e) {
@@ -46,7 +55,7 @@ export function VerticalAdUnit({ slot = 'sidebar', className = '' }) {
   const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
 
   useEffect(() => {
-    if (isAdSenseEnabled() && window.adsbygoogle) {
+    if (isAdSenseEnabled() && typeof window !== 'undefined' && window.adsbygoogle) {
       try {
         window.adsbygoogle.push({});
       } catch (e) {
@@ -80,7 +89,7 @@ export function SquareAdUnit({ slot = 'sidebar', className = '' }) {
   const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
 
   useEffect(() => {
-    if (isAdSenseEnabled() && window.adsbygoogle) {
+    if (isAdSenseEnabled() && typeof window !== 'undefined' && window.adsbygoogle) {
       try {
         window.adsbygoogle.push({});
       } catch (e) {
@@ -114,7 +123,7 @@ export function InContentAdUnit({ slot = 'inContent', className = '' }) {
   const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
 
   useEffect(() => {
-    if (isAdSenseEnabled() && window.adsbygoogle) {
+    if (isAdSenseEnabled() && typeof window !== 'undefined' && window.adsbygoogle) {
       try {
         window.adsbygoogle.push({});
       } catch (e) {
@@ -149,7 +158,7 @@ export function ResponsiveAdUnit({ slot = 'topBanner', className = '' }) {
   const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
 
   useEffect(() => {
-    if (isAdSenseEnabled() && window.adsbygoogle) {
+    if (isAdSenseEnabled() && typeof window !== 'undefined' && window.adsbygoogle) {
       try {
         window.adsbygoogle.push({});
       } catch (e) {
