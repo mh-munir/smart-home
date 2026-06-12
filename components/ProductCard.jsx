@@ -2,16 +2,22 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function ProductCard({ product, showBuyButton = true }) {
-  const formattedDate = product.createdAt
-    ? new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(
+  const [formattedDate, setFormattedDate] = useState(null);
+
+  useEffect(() => {
+    if (product.createdAt) {
+      const date = new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(
         new Date(product.createdAt),
-      )
-    : null;
+      );
+      setFormattedDate(date);
+    }
+  }, [product.createdAt]);
 
   return (
-    <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col">
+    <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col" suppressHydrationWarning>
       <Link
         href={`/products/${product.slug}`}
         className="flex flex-1 flex-col"
