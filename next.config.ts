@@ -81,8 +81,8 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self' https:; " +
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://pagead.googlesyndication.com https://*.adtrafficquality.google; " +
-              "script-src-elem 'self' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://pagead.googlesyndication.com https://*.adtrafficquality.google; " +
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://pagead.googlesyndication.com https://*.adtrafficquality.google https://koro; " +
+              "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://pagead.googlesyndication.com https://*.adtrafficquality.google https://koro; " +
               "img-src 'self' https: data: https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com; " +
               "connect-src 'self' https: https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
