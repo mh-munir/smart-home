@@ -1,8 +1,9 @@
+import Image from 'next/image';
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
 import { getBlogArticle, getLatestArticles } from "@/lib/blog";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE, DEFAULT_LOGO } from "@/lib/site";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({
@@ -60,9 +61,33 @@ export default function BlogPostAffiliate({
     (a) => a.id !== article.id
   );
 
+  // Structured data and LCP image helpers
+  const articleUrl = `${SITE_URL}/blog/${article.slug}`;
+  const imageUrl = article.image
+    ? article.image.startsWith('http')
+      ? article.image
+      : `${SITE_URL}${article.image}`
+    : DEFAULT_OG_IMAGE;
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+    headline: article.title,
+    image: [imageUrl],
+    datePublished: article.date ?? undefined,
+    author: { '@type': 'Person', name: article.author ?? SITE_NAME },
+    publisher: { '@type': 'Organization', name: SITE_NAME, logo: { '@type': 'ImageObject', url: DEFAULT_LOGO } },
+    description: article.excerpt,
+  };
+
   return (
     <>
       <Navbar />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
         {/* Breadcrumb */}
         <div className="bg-white border-b border-gray-200">
@@ -109,7 +134,7 @@ export default function BlogPostAffiliate({
 
             {/* Author Section */}
             <div className="flex items-center gap-4 pt-6 border-t border-white/20">
-              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center text-2xl">
+              <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center text-2xl" aria-hidden="true">
                 👤
               </div>
               <div>
@@ -117,6 +142,20 @@ export default function BlogPostAffiliate({
                 <p className="text-teal-100 text-sm">বিশেষজ্ঞ লেখক</p>
               </div>
             </div>
+            {/* Optional featured image (prioritized for LCP) */}
+            {article.image && (
+              <div className="mt-6 max-w-4xl">
+                <div className="relative w-full h-64 rounded-lg overflow-hidden shadow-lg">
+                  <Image
+                    src={imageUrl}
+                    alt={article.title || SITE_NAME}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -217,7 +256,7 @@ export default function BlogPostAffiliate({
               {/* Author Bio */}
               <div className="bg-linear-to-r from-teal-50 to-cyan-50 p-8 rounded-xl border border-teal-200 mb-12">
                 <div className="flex items-start gap-4 mb-4">
-                  <div className="w-16 h-16 bg-teal-200 rounded-full flex items-center justify-center text-3xl shrink-0">
+                  <div className="w-16 h-16 bg-teal-200 rounded-full flex items-center justify-center text-3xl shrink-0" aria-hidden="true">
                     👨‍💼
                   </div>
                   <div>
@@ -291,10 +330,16 @@ export default function BlogPostAffiliate({
                 </p>
                 <input
                   type="email"
+                  name="email"
+                  aria-label="নিউজলেটারে সাইন আপ করতে আপনার ইমেল"
                   placeholder="আপনার ইমেল"
                   className="w-full px-4 py-2 rounded-lg text-gray-900 mb-3 text-sm"
                 />
-                <button className="w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-2 rounded-lg transition-all">
+                <button
+                  type="button"
+                  aria-label="নিউজলেটার-সাইন-আপ"
+                  className="w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-2 rounded-lg transition-all"
+                >
                   সাইন আপ করুন
                 </button>
               </div>

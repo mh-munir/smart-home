@@ -1,18 +1,18 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
-  title: "Privacy Policy - Home Smart Products",
+  title: `Privacy Policy - ${SITE_NAME}`,
   description:
-    "Privacy Policy for Home Smart Products. Learn how we collect, use, and protect your personal data.",
+    `Privacy Policy for ${SITE_NAME}. Learn how we collect, use, and protect your personal data.`,
   alternates: {
     canonical: `${SITE_URL}/privacy-policy`,
   },
   openGraph: {
-    title: "Privacy Policy - Home Smart Products",
+    title: `Privacy Policy - ${SITE_NAME}`,
     description:
-      "Privacy Policy for Home Smart Products. Learn how we collect, use, and protect your personal data.",
+      `Privacy Policy for ${SITE_NAME}. Learn how we collect, use, and protect your personal data.`,
     url: `${SITE_URL}/privacy-policy`,
     type: "website",
   },
@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="text-2xl font-bold mt-8 mb-4">1. Introduction</h2>
               <p>
-                Welcome to {SITE_NAME} ("we," "us," "our," or "Company"). We are committed to protecting your privacy and ensuring you have a positive experience on our website. This Privacy Policy outlines our practices regarding the collection, use, and safeguarding of your personal information.
+                Welcome to {SITE_NAME} (&quot;we,&quot; &quot;us,&quot; &quot;our,&quot; or &quot;Company&quot;). We are committed to protecting your privacy and ensuring you have a positive experience on our website. This Privacy Policy outlines our practices regarding the collection, use, and safeguarding of your personal information.
               </p>
             </section>
 
@@ -141,7 +141,7 @@ export default function PrivacyPolicy() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-bold mt-8 mb-4">9. Children's Privacy</h2>
+              <h2 className="text-2xl font-bold mt-8 mb-4">9. Children&apos;s Privacy</h2>
               <p>
                 Our website is not directed to children under 13. We do not knowingly collect personal information from children under 13. If we become aware of such information, we will take steps to delete it promptly.
               </p>
@@ -160,7 +160,7 @@ export default function PrivacyPolicy() {
                 If you have questions about this Privacy Policy or our privacy practices, please contact us at:
               </p>
               <p className="mt-4">
-                <strong>Email:</strong> support@smarthomeproducts.com
+                <strong>Email:</strong> {SITE_EMAIL}
               </p>
               <p>
                 <strong>Website:</strong> {SITE_URL}

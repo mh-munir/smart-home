@@ -57,9 +57,7 @@ export const metadata: Metadata = {
       "Discover the best home smart products with expert reviews and recommendations.",
     images: [DEFAULT_OG_IMAGE],
   },
-  other: {
-    "google-adsense-account": "ca-pub-8998788891126313",
-  },
+  // removed inline google-adsense-account meta; script injected in <head>
 };
 
 export const viewport: Viewport = {
@@ -80,12 +78,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <meta name="google-adsense-account" content="ca-pub-8998788891126313" />
         <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8998788891126313"
           crossOrigin="anonymous"
         ></script>
+        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
       </head>
       <body className="min-h-full flex flex-col">
         <GoogleTagManager />
@@ -94,7 +93,12 @@ export default function RootLayout({
           ga4Id={process.env.NEXT_PUBLIC_GA4_ID}
         />
         <GoogleAdSenseScript />
-        {children}
+        <a href="#main-content" className="sr-only focus:not-sr-only">
+          Skip to content
+        </a>
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
       </body>
     </html>
   );

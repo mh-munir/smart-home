@@ -1,18 +1,19 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import Link from "next/link";
+import { SITE_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
-  title: "Disclaimer - Home Smart Products",
+  title: `Disclaimer - ${SITE_NAME}`,
   description:
-    "Disclaimer for Home Smart Products. Important information about product reviews and recommendations.",
+    `Disclaimer for ${SITE_NAME}. Important information about product reviews and recommendations.`,
   alternates: {
     canonical: `${SITE_URL}/disclaimer`,
   },
   openGraph: {
-    title: "Disclaimer - Home Smart Products",
+    title: `Disclaimer - ${SITE_NAME}`,
     description:
-      "Disclaimer for Home Smart Products. Important information about product reviews and recommendations.",
+      `Disclaimer for ${SITE_NAME}. Important information about product reviews and recommendations.`,
     url: `${SITE_URL}/disclaimer`,
     type: "website",
   },
@@ -54,7 +55,7 @@ export default function Disclaimer() {
                 <li>Based on research and analysis at the time of publication</li>
                 <li>Subject to change without notice</li>
                 <li>Not guaranteed to be 100% accurate or complete</li>
-                <li>Provided "as is" without warranties</li>
+                <li>Provided &quot;as is&quot; without warranties</li>
               </ul>
               <p className="mt-4">
                 We recommend verifying all product information directly with manufacturers before making purchasing decisions.
@@ -83,7 +84,7 @@ export default function Disclaimer() {
                 {SITE_NAME} participates in affiliate marketing programs. We may earn commissions from purchases made through our links. However, this does not influence our product selections or recommendations. We only promote products we genuinely believe provide value.
               </p>
               <p className="mt-4">
-                Please see our <a href="/affiliate-disclosure" className="text-primary-600 hover:underline">Affiliate Disclosure</a> page for more information.
+                Please see our <Link href="/affiliate-disclosure" className="text-teal-600 hover:underline">Affiliate Disclosure</Link> page for more information.
               </p>
             </section>
 
@@ -130,7 +131,7 @@ export default function Disclaimer() {
                 <li>May not be accurate in real-time</li>
               </ul>
               <p className="mt-4">
-                Always verify current prices and availability on the retailer's website before making a purchase.
+                Always verify current prices and availability on the retailer&apos;s website before making a purchase.
               </p>
             </section>
 
@@ -156,8 +157,8 @@ export default function Disclaimer() {
                 While we strive to maintain accurate and functional website content:
               </p>
               <ul className="list-disc pl-6 space-y-2">
-                <li>The website is provided "as is"</li>
-                <li>We don't guarantee uninterrupted service</li>
+                <li>The website is provided &quot;as is&quot;</li>
+                <li>We don&apos;t guarantee uninterrupted service</li>
                 <li>Errors and omissions may occur</li>
                 <li>We reserve the right to modify content</li>
               </ul>
@@ -205,7 +206,7 @@ export default function Disclaimer() {
                 If you have questions about this disclaimer, please contact us at:
               </p>
               <p className="mt-4">
-                <strong>Email:</strong> support@smarthomeproducts.com
+                <strong>Email:</strong> {SITE_EMAIL}
               </p>
               <p>
                 <strong>Website:</strong> {SITE_URL}

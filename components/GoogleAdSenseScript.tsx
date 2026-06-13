@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import { isAdSenseEnabled } from '@/lib/adsense-config';
 
@@ -26,8 +26,33 @@ export default function GoogleAdSenseScript() {
   // Use the canonical AdSense script URL and specify client via `data-ad-client`
   const adSenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js`;
 
+  // Prevent duplicate injection: default to not inserting until we check the DOM
+  const [shouldInsert, setShouldInsert] = useState(false);
+
+  // Decide whether to insert the client script (avoid duplicates if already present in <head>)
   useEffect(() => {
-    // Monitor script loading status
+    if (typeof document === 'undefined') return;
+    try {
+      const hasQueryScript = document.querySelector(
+        `script[src*="pagead/js/adsbygoogle.js?client=${adClient}"]`
+      );
+      const hasDataClientScript = document.querySelector(
+        'script[src*="pagead/js/adsbygoogle.js"][data-ad-client]'
+      );
+      if ((window as any).adsbygoogle || hasQueryScript || hasDataClientScript) {
+        setShouldInsert(false);
+      } else {
+        setShouldInsert(true);
+      }
+    } catch (e) {
+      // if any DOM check fails, fallback to inserting the script
+      setShouldInsert(true);
+    }
+  }, [adClient]);
+
+  // Monitor script loading status only when we plan to insert it
+  useEffect(() => {
+    if (!shouldInsert) return;
     const checkScriptLoaded = () => {
       if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
         if (isDev) {
@@ -38,10 +63,9 @@ export default function GoogleAdSenseScript() {
       return false;
     };
 
-    // Check periodically for script availability
     const interval = setInterval(checkScriptLoaded, 500);
     return () => clearInterval(interval);
-  }, [isDev]);
+  }, [isDev, shouldInsert]);
 
   const handleScriptLoad = () => {
     if (isDev) {
@@ -79,11 +103,13 @@ export default function GoogleAdSenseScript() {
     }
   };
 
+  if (!shouldInsert) return null;
+
   return (
     <Script
       async
       src={adSenseUrl}
-      strategy="afterInteractive"
+      strategy="lazyOnload"
       onLoad={handleScriptLoad}
       onError={(e) => handleScriptError(e)}
       crossOrigin="anonymous"

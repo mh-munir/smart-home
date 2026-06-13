@@ -1,8 +1,9 @@
-'use client';
+ 'use client';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { SITE_URL } from '@/lib/site';
@@ -98,10 +99,13 @@ export default function ProductDetailsAffiliate() {
               {/* Left - Product Image */}
               <div className="flex items-center justify-center">
                 {product.image ? (
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.title}
+                    width={900}
+                    height={520}
                     className="w-full h-80 object-cover rounded-xl shadow-2xl border-4 border-white"
+                    loading="eager"
                   />
                 ) : (
                   <div className="w-full h-80 bg-white/20 rounded-xl flex items-center justify-center text-6xl">
@@ -385,7 +389,7 @@ export default function ProductDetailsAffiliate() {
                   >
                     <div className="bg-linear-to-br from-teal-500 to-teal-600 h-40 flex items-center justify-center text-4xl">
                       {relProduct.image ? (
-                        <img src={relProduct.image} alt={relProduct.title} className="w-full h-full object-cover" />
+                        <Image src={relProduct.image} alt={relProduct.title} width={400} height={240} className="w-full h-full object-cover" />
                       ) : (
                         '📦'
                       )}

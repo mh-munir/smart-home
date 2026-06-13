@@ -26,7 +26,11 @@ export function GoogleAnalyticsComponent({
   }, []);
 
   // Don't render if tracking IDs are not configured
-  if (gtmId === 'GTM-XXXXXXXXX' && ga4Id === 'G-XXXXXXXXXX') {
+  const isProd = process.env.NODE_ENV === 'production';
+  const isPlaceholder = gtmId === 'GTM-XXXXXXXXX' && ga4Id === 'G-XXXXXXXXXX';
+
+  // Only load analytics in production with valid IDs to avoid affecting Lighthouse locally
+  if (!isProd || isPlaceholder) {
     return null;
   }
 
@@ -35,7 +39,7 @@ export function GoogleAnalyticsComponent({
       {/* Google Tag Manager */}
       <Script
         id="gtm-script"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -50,11 +54,11 @@ export function GoogleAnalyticsComponent({
       {/* Google Analytics 4 */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
       <Script
         id="ga4-script"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
