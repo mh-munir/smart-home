@@ -16,7 +16,6 @@
     "add:affiliate-links": "node scripts/add-affiliate-links.js"
   },
   "dependencies": {
-    "@vercel/analytics": "^2.0.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^17.4.2",
     "mongoose": "^9.6.2",

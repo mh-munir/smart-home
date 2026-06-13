@@ -1,13 +1,13 @@
-# ✅ মাল্টি-অ্যাফিলিয়েট সিস্টেম সম্পূর্ণ হয়েছে!
+# ✅ Multi-Affiliate System - Setup Complete!
 
-আপনার স্মার্ট-হোম অ্যাফিলিয়েট সাইট এখন **7টি বিভিন্ন অ্যাফিলিয়েট নেটওয়ার্ক** সমর্থন করতে সম্পূর্ণভাবে কনফিগার করা হয়েছে! 🎉
+Your smart-home affiliate site is now fully configured to support **7 different affiliate networks**! 🎉
 
-## 📝 কি পরিবর্তন করা হয়েছে?
+## 📝 What changed
 
-### 1. **ডাটাবেস মডেল আপডেট** ✅
-- Product স্কিমায় নতুন `affiliateLinks` ফিল্ড যোগ করা হয়েছে
-- প্রতিটি অ্যাফিলিয়েট নেটওয়ার্কের জন্য আলাদা ট্র্যাকিং
-- বিশেষ সংজ্ঞা সহ পাঠানো:
+### 1. **Database model updates** ✅
+- Added a new `affiliateLinks` field to the Product schema
+- Separate tracking per affiliate network
+- Example structure:
   ```javascript
   affiliateLinks: Map {
     "amazon": { url, enabled, priority, clicks, conversions },
@@ -16,132 +16,132 @@
   }
   ```
 
-### 2. **অ্যাফিলিয়েট কনফিগারেশন সিস্টেম** ✅
-- **নতুন ফাইল**: `lib/affiliate-config.ts`
-- 7টি অ্যাফিলিয়েট নেটওয়ার্ক কনফিগার করা
-- পরিবেশ ভেরিয়েবল থেকে সহজ সক্রিয়করণ
+### 2. **Affiliate configuration system** ✅
+- **New file**: `lib/affiliate-config.ts`
+- Configured 7 affiliate networks
+- Easy enable/disable via environment variables
 
-### 3. **অ্যাফিলিয়েট ইউটিলিটি লাইব্রেরি** ✅
-- **নতুন ফাইল**: `lib/affiliate-utils.ts`
-- সহজ ফাংশন:
-  - `generateAffiliateLink()` - অ্যাফিলিয়েট লিংক তৈরি করুন
-  - `getBestAffiliateLink()` - সেরা অগ্রাধিকার লিংক পান
-  - `getActiveAffiliateLinks()` - সক্রিয় লিংকের তালিকা
-  - `trackAffiliateClick()` - ক্লিক ট্র্যাক করুন
-  - `trackAffiliateConversion()` - রূপান্তর ট্র্যাক করুন
+### 3. **Affiliate utility library** ✅
+- **New file**: `lib/affiliate-utils.ts`
+- Helper functions:
+  - `generateAffiliateLink()` - generate affiliate links
+  - `getBestAffiliateLink()` - get highest-priority link
+  - `getActiveAffiliateLinks()` - list active links
+  - `trackAffiliateClick()` - track clicks
+  - `trackAffiliateConversion()` - track conversions
 
-### 4. **আপডেট করা UI উপাদান** ✅
-- **আপডেট**: `components/ProductCard.jsx`
-- একাধিক অ্যাফিলিয়েট লিংক সমর্থন
-- "Buy Now" এ সর্বোচ্চ অগ্রাধিকার বোতাম
-- অন্যান্য অপশনের জন্য "More Options" ড্রপডাউন
-- স্বয়ংক্রিয় ক্লিক ট্র্যাকিং
+### 4. **Updated UI components** ✅
+- **Updated**: `components/ProductCard.jsx`
+- Support for multiple affiliate links
+- Primary "Buy Now" button shows highest-priority link
+- "More Options" dropdown for alternative networks
+- Automatic click tracking
 
-### 5. **ট্র্যাকিং API আপডেট** ✅
-- **আপডেট**: `app/api/track-conversion/route.ts`
-- মাল্টি-অ্যাফিলিয়েট ট্র্যাকিং সমর্থন
-- পৃথক ক্লিক এবং রূপান্তর গণনা
-- লিগ্যাসি Google Ads ট্র্যাকিং সংরক্ষিত
+### 5. **Tracking API updates** ✅
+- **Updated**: `app/api/track-conversion/route.ts`
+- Multi-affiliate tracking support
+- Separate click and conversion counts
+- Legacy Google Ads tracking preserved
 
-### 6. **অ্যানালিটিক্স এন্ডপয়েন্ট** ✅
-- **নতুন API**: `app/api/affiliate-stats/route.ts`
-- সমস্ত পণ্যের অ্যানালিটিক্স পান
-- প্রতিটি পণ্যের অ্যাফিলিয়েট পারফরম্যান্স
-- রূপান্তর হার গণনা
+### 6. **Analytics endpoint** ✅
+- **New API**: `app/api/affiliate-stats/route.ts`
+- Fetch analytics across all products
+- Affiliate performance per product
+- Conversion rate calculations
 
-### 7. **মাইগ্রেশন স্ক্রিপ্ট** ✅
-- **নতুন ফাইল**: `scripts/migrate-multi-affiliate.js`
-- বিদ্যমান একক-অ্যাফিলিয়েট লিংক রূপান্তর
-- স্বয়ংক্রিয় নেটওয়ার্ক সনাক্তকরণ
-- একটি কমান্ডে চালান: `npm run migrate:multi-affiliate`
+### 7. **Migration script** ✅
+- **New file**: `scripts/migrate-multi-affiliate.js`
+- Convert existing single-affiliate links to multi-affiliate format
+- Automatic network detection
+- Run with: `npm run migrate:multi-affiliate`
 
-### 8. **অ্যাফিলিয়েট লিংক যোগ স্ক্রিপ্ট** ✅
-- **নতুন ফাইল**: `scripts/add-affiliate-links.js`
-- নতুন পণ্যে অ্যাফিলিয়েট লিংক যোগ করুন
-- পৃথক আপডেট বা বাল্ক আপডেট সমর্থন
+### 8. **Add-affiliate-links script** ✅
+- **New file**: `scripts/add-affiliate-links.js`
+- Add affiliate links to new products
+- Supports per-product or bulk updates
 
-### 9. **পরিবেশ ভেরিয়েবল যোগ করা** ✅
-- **আপডেট**: `.env.local`
-- 7টি অ্যাফিলিয়েট নেটওয়ার্ক কনফিগ ভেরিয়েবল যোগ করা
-- সহজ সক্রিয়করণ/নিষ্ক্রিয়করণ
+### 9. **Environment variables added** ✅
+- **Updated**: `.env.local`
+- Added config variables for 7 affiliate networks
+- Easy enable/disable toggles
 
-### 10. **প্যাকেজ স্ক্রিপ্ট যোগ করা** ✅
-- **আপডেট**: `package.json`
-- `npm run migrate:multi-affiliate` - পণ্য মাইগ্রেট করুন
-- `npm run add:affiliate-links` - লিংক যোগ করুন
+### 10. **Package scripts added** ✅
+- **Updated**: `package.json`
+- `npm run migrate:multi-affiliate` - migrate products
+- `npm run add:affiliate-links` - add links
 
-## 🎯 সমর্থিত অ্যাফিলিয়েট নেটওয়ার্ক
+## 🎯 Supported Affiliate Networks
 
-| নেটওয়ার্ক | আইডি | অঞ্চল | কমিশন |
-|---------|------|------|--------|
-| Amazon Associates | `amazon` | বিশ্বব্যাপী | 3-10% |
-| AliExpress | `aliexpress` | চীন | 2-10% |
-| eBay Partner | `ebay` | বিশ্বব্যাপী | 4-8% |
-| Flipkart | `flipkart` | ভারত | 4-8% |
-| Daraz | `daraz` | বাংলাদেশ | 3-8% |
-| Rokomari | `rokomari` | বাংলাদেশ | 5-15% |
-| AJIO | `ajio` | ভারত | 4-8% |
+| Network | ID | Region | Commission |
+|---------|----:|--------|-----------:|
+| Amazon Associates | `amazon` | Global | 3-10% |
+| AliExpress | `aliexpress` | China | 2-10% |
+| eBay Partner | `ebay` | Global | 4-8% |
+| Flipkart | `flipkart` | India | 4-8% |
+| Daraz | `daraz` | Bangladesh | 3-8% |
+| Rokomari | `rokomari` | Bangladesh | 5-15% |
+| AJIO | `ajio` | India | 4-8% |
 
-## 🚀 পরবর্তী ধাপ
+## 🚀 Next steps
 
-### তাত্ক্ষণিকভাবে করতে হবে:
+### Immediate actions:
 
-1. **অ্যাফিলিয়েট নেটওয়ার্কে যোগ দিন**
-   - প্রতিটি প্ল্যাটফর্মে অ্যাকাউন্ট তৈরি করুন
-   - আপনার অ্যাফিলিয়েট আইডি নোট করুন
+1. **Register with affiliate networks**
+  - Create accounts on each platform
+  - Note down your affiliate IDs
 
-2. **`.env.local` আপডেট করুন**
-   ```bash
-   NEXT_PUBLIC_AMAZON_AFFILIATE_TAG=your-tag-20
-   NEXT_PUBLIC_ALIEXPRESS_AFFILIATE_ID=your-id
-   # ... অন্যান্য নেটওয়ার্কের জন্য
-   ```
+2. **Update `.env.local`**
+  ```bash
+  NEXT_PUBLIC_AMAZON_AFFILIATE_TAG=your-tag-20
+  NEXT_PUBLIC_ALIEXPRESS_AFFILIATE_ID=your-id
+  # ... for other networks
+  ```
 
-3. **বিদ্যমান পণ্য মাইগ্রেট করুন**
-   ```bash
-   npm run migrate:multi-affiliate
-   ```
+3. **Migrate existing products**
+  ```bash
+  npm run migrate:multi-affiliate
+  ```
 
-4. **সার্ভার পুনরায় শুরু করুন**
-   ```bash
-   npm run dev
-   ```
+4. **Restart the server**
+  ```bash
+  npm run dev
+  ```
 
-5. **নতুন পণ্যে অ্যাফিলিয়েট লিংক যোগ করুন**
-   - অ্যাডমিন প্যানেলে ম্যানুয়ালি, অথবা
-   - স্ক্রিপ্ট দিয়ে: `npm run add:affiliate-links`
+5. **Add affiliate links to new products**
+  - Manually in the admin panel, or
+  - Use the script: `npm run add:affiliate-links`
 
-## 📊 ট্র্যাকিং কীভাবে কাজ করে?
+## 📊 How tracking works
 
 ```
-ব্যবহারকারী ক্লিক করে → "Buy on Amazon" বোতামে
+User clicks the "Buy on Amazon" button
          ↓
-ProductCard লিখে → `/api/track-conversion`
+ProductCard calls `/api/track-conversion`
          ↓
-API আপডেট করে → MongoDB এ ক্লিক কাউন্ট
+API updates click counts in MongoDB
          ↓
-অ্যানালিটিক্স দেখুন → `/api/affiliate-stats`
+View analytics at `/api/affiliate-stats`
 ```
 
-## 📈 কর্মক্ষমতা পর্যবেক্ষণ
+## 📈 Performance monitoring
 
-**সমস্ত পণ্যের অ্যানালিটিক্স:**
+**Analytics for all products:**
 ```bash
 curl http://localhost:3000/api/affiliate-stats
 ```
 
-**একটি পণ্যের বিস্তারিত:**
+**Details for a single product:**
 ```bash
 curl "http://localhost:3000/api/affiliate-stats?productId=PRODUCT_ID"
 ```
 
-**প্রতিক্রিয়া উদাহরণ:**
+**Sample response:**
 ```json
 {
   "success": true,
   "data": [{
     "productId": "123",
-    "title": "স্মার্ট বাল্ব",
+    "title": "Smart Bulb",
     "totalClicks": 1250,
     "totalConversions": 45,
     "conversionRate": "3.6%",
@@ -153,37 +153,37 @@ curl "http://localhost:3000/api/affiliate-stats?productId=PRODUCT_ID"
 }
 ```
 
-## 💡 টিপস এবং ট্রিকস
+## 💡 Tips and tricks
 
-### 1. **বাজার-নির্দিষ্ট কৌশল**
-- **বাংলাদেশ**: Daraz এবং Rokomari প্রথম রাখুন
-- **ভারত**: Flipkart এবং AJIO প্রথম রাখুন
-- **বৈশ্বিক**: Amazon এবং eBay প্রথম রাখুন
+### 1. **Market-specific strategy**
+- **Bangladesh**: prioritize Daraz and Rokomari
+- **India**: prioritize Flipkart and AJIO
+- **Global**: prioritize Amazon and eBay
 
-### 2. **অগ্রাধিকার অপ্টিমাইজ করুন**
+### 2. **Optimize priorities**
 ```javascript
-// এই সেট করুন স্ক্রিপ্টে
-amazon: { priority: 1 },      // বড় বোতাম
-aliexpress: { priority: 2 },  // ড্রপডাউনে
-ebay: { priority: 3 }         // ড্রপডাউনে
+// Configure in your script
+amazon: { priority: 1 },      // primary button
+aliexpress: { priority: 2 },  // in dropdown
+ebay: { priority: 3 }         // in dropdown
 ```
 
-### 3. **নিয়মিত পরীক্ষা করুন**
-- সমস্ত লিংক কাজ করছে নিশ্চিত করুন
-- ব্রাউজার কনসোল ত্রুটি চেক করুন
-- মোবাইল এবং ডেস্কটপে পরীক্ষা করুন
+### 3. **Test regularly**
+- Ensure all links are working
+- Check browser console for errors
+- Test on mobile and desktop
 
-## 📚 ডকুমেন্টেশন ফাইল
+## 📚 Documentation files
 
-নতুন গাইড ফাইল তৈরি করা হয়েছে:
+New guide files created:
 
-- **`MULTI_AFFILIATE_SETUP.md`** - বিস্তারিত সেটআপ গাইড
-- **`MULTI_AFFILIATE_QUICK_REF.md`** - দ্রুত রেফারেন্স
+- **`MULTI_AFFILIATE_SETUP.md`** - detailed setup guide
+- **`MULTI_AFFILIATE_QUICK_REF.md`** - quick reference
 
-## 🔧 ফাইল তালিকা পরিবর্তিত/যোগ করা
+## 🔧 Files added/modified
 
 ```
-✅ যোগ করা হয়েছে:
+✅ Added:
 ├── lib/affiliate-config.ts
 ├── lib/affiliate-utils.ts
 ├── app/api/affiliate-stats/route.ts
@@ -192,34 +192,34 @@ ebay: { priority: 3 }         // ড্রপডাউনে
 ├── MULTI_AFFILIATE_SETUP.md
 └── MULTI_AFFILIATE_QUICK_REF.md
 
-✏️ আপডেট করা হয়েছে:
-├── models/Product.js (নতুন affiliateLinks ফিল্ড)
-├── components/ProductCard.jsx (মাল্টি-অ্যাফিলিয়েট সাপোর্ট)
-├── app/api/track-conversion/route.ts (উন্নত ট্র্যাকিং)
-├── .env.local (নতুন অ্যাফিলিয়েট ভেরিয়েবল)
-└── package.json (নতুন npm স্ক্রিপ্ট)
+✏️ Updated:
+├── models/Product.js (new affiliateLinks field)
+├── components/ProductCard.jsx (multi-affiliate support)
+├── app/api/track-conversion/route.ts (improved tracking)
+├── .env.local (new affiliate variables)
+└── package.json (new npm scripts)
 ```
 
-## ✨ মূল বৈশিষ্ট্য
+## ✨ Key features
 
-✅ **একাধিক অ্যাফিলিয়েট সমর্থন** - 7টি নেটওয়ার্ক একসাথে
-✅ **স্বয়ংক্রিয় ট্র্যাকিং** - ক্লিক এবং রূপান্তর গণনা
-✅ **অগ্রাধিকার সিস্টেম** - সেরা রূপান্তর অপ্টিমাইজ করুন
-✅ **অ্যানালিটিক্স এন্ডপয়েন্ট** - রিয়েল-টাইম ডেটা
-✅ **মাইগ্রেশন সমর্থন** - বিদ্যমান ডেটা সংরক্ষণ
-✅ **ইউজার-ফ্রেন্ডলি UI** - ড্রপডাউন মেনু সহ
-✅ **পরিবেশ কনফিগার** - সহজ সক্রিয়করণ/নিষ্ক্রিয়করণ
+✅ **Multi-affiliate support** - 7 networks in one
+✅ **Automatic tracking** - click and conversion counts
+✅ **Priority system** - optimize for highest converting link
+✅ **Analytics endpoint** - real-time data
+✅ **Migration support** - preserve existing data
+✅ **User-friendly UI** - dropdown menus
+✅ **Environment configuration** - easy enable/disable
 
-## 🎉 আপনি প্রস্তুত!
+## 🎉 You're ready!
 
-এখন আপনার সাইট:
-- ✅ একাধিক অ্যাফিলিয়েট প্রোগ্রাম থেকে আয় করতে পারে
-- ✅ পৃথক অ্যাফিলিয়েটের জন্য পারফরম্যান্স ট্র্যাক করতে পারে
-- ✅ অগ্রাধিকারের ভিত্তিতে স্মার্ট লিংক প্রদর্শন করতে পারে
-- ✅ বৈশ্বিক এবং স্থানীয় অ্যাফিলিয়েট সমর্থন করতে পারে
+Your site can now:
+- ✅ Earn from multiple affiliate programs
+- ✅ Track performance per affiliate
+- ✅ Smartly display links based on priority
+- ✅ Support global and local affiliate networks
 
-**শুরু করুন এবং একাধিক উৎস থেকে আপনার আয় বাড়ান!** 💰
+**Get started and increase earnings from multiple sources!** 💰
 
 ---
 
-**প্রশ্ন বা সমস্যা?** `MULTI_AFFILIATE_QUICK_REF.md` দেখুন বা সমস্যা সমাধান বিভাগ যোগাযোগ করুন।
+**Questions or issues?** See `MULTI_AFFILIATE_QUICK_REF.md` or the troubleshooting section.

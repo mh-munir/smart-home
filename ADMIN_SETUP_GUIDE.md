@@ -2,7 +2,7 @@
 
 ## 🔐 Default Credentials
 
-আপনার admin panel এর জন্য default credentials তৈরি করা হয়েছে:
+Default credentials for the admin panel have been created:
 
 ```
 Email:    admin@smartome.local
@@ -10,8 +10,8 @@ Password: SmartAdmin123!@#
 ```
 
 ### 📋 Credentials Location
-- `.env.local` ফাইলে store করা আছে
-- পরিবর্তন করতে এই variables edit করুন:
+- Stored in the `.env.local` file
+- To change them, edit these variables:
   - `ADMIN_DEFAULT_EMAIL`
   - `ADMIN_DEFAULT_PASSWORD`
   - `ADMIN_DEFAULT_FULLNAME`
@@ -24,24 +24,24 @@ Password: SmartAdmin123!@#
 ```bash
 npm install
 ```
-এটি `bcryptjs` এবং অন্যান্য dependencies install করবে।
+This will install `bcryptjs` and other dependencies.
 
 ### Step 2: Database Seeding
 ```bash
 npm run seed:admin
 ```
 
-এই command:
-- MongoDB তে connect করবে
-- Default admin user তৈরি করবে
-- Password automatically hash করবে
+This command will:
+- Connect to MongoDB
+- Create the default admin user
+- Automatically hash the password
 
 ### Step 3: Start Development Server
 ```bash
 npm run dev
 ```
 
-Website এ navigate করুন: `http://localhost:3000`
+Navigate to the website: `http://localhost:3000`
 
 ---
 
@@ -58,23 +58,23 @@ https://your-domain.com/admin/login
 ```
 
 ### Login Method
-আপনার admin panel password দিয়ে login করতে পারেন।
+Log in using the admin email and password.
 
 ---
 
 ## ⚙️ Authentication System
 
 ### Supported Login Methods
-1. **Password-based Login** (আপনার ইমেইল এবং পাসওয়ার্ড দিয়ে)
-2. **Google OAuth** (Google account দিয়ে - যদি configured থাকে)
+1. **Password-based Login** (using your email and password)
+2. **Google OAuth** (using a Google account - if configured)
 
 ### Password Requirements
-মিনিমাম password standards:
-- ✅ কমপক্ষে ৮ ক্যারেক্টার
-- ✅ কমপক্ষে একটি uppercase letter (A-Z)
-- ✅ কমপক্ষে একটি lowercase letter (a-z)
-- ✅ কমপক্ষে একটি number (0-9)
-- ✅ কমপক্ষে একটি special character (!@#$%^&* ইত্যাদি)
+Password requirements:
+- ✅ At least 8 characters
+- ✅ At least one uppercase letter (A-Z)
+- ✅ At least one lowercase letter (a-z)
+- ✅ At least one number (0-9)
+- ✅ At least one special character (e.g. !@#$%^&*)
 
 ---
 
@@ -82,9 +82,9 @@ https://your-domain.com/admin/login
 
 ### Admin Roles
 ```
-1. super_admin    - সব কিছুর access (default)
+1. super_admin    - Full access (default)
 2. admin          - Products, Blogs, Analytics
-3. editor         - শুধু content editing
+3. editor         - Content editing only
 ```
 
 ### Default Permissions (super_admin)
@@ -99,16 +99,16 @@ https://your-domain.com/admin/login
 ## 🔄 Password Management
 
 ### Change Your Password
-1. Admin panel এ login করুন
-2. Settings/Profile এ যান
-3. "Change Password" এ click করুন
-4. পুরনো এবং নতুন password enter করুন
-5. Save করুন
+1. Log in to the admin panel
+2. Go to Settings/Profile
+3. Click "Change Password"
+4. Enter your old and new passwords
+5. Click Save
 
 ### Password Reset
-যদি password ভুলে যান:
+If you forget the password:
 ```bash
-# এটি default admin user reset করবে
+# This will reset the default admin user
 npm run seed:admin
 ```
 
@@ -121,14 +121,14 @@ npm run seed:admin
 - ✅ Secure session tokens (HMAC based)
 - ✅ HTTP-only cookies
 - ✅ Login attempt tracking
-- ✅ Account locking (5 attempts এর পর 15 minutes)
+ - ✅ Account locking (after 5 attempts for 15 minutes)
 - ✅ CSRF protection
 
 ### Recommended
-- [ ] Enable HTTPS/SSL (production এ আবশ্যক)
+- [ ] Enable HTTPS/SSL (required in production)
 - [ ] Change default password immediately
-- [ ] Set strong NEXTAUTH_SECRET
-- [ ] Enable 2FA (যদি সম্ভব হয়)
+- [ ] Set a strong NEXTAUTH_SECRET
+- [ ] Enable 2FA (if possible)
 
 ---
 
@@ -207,14 +207,15 @@ ADMIN_EMAILS=email@example.com
 
 ### Issue: Login fails with "Invalid email or password"
 **Solution:**
-- Email correct format check করুন
-- Password typing again করুন (case-sensitive)
-- Default credentials ব্যবহার করুন
+**Solution:**
+- Check the email format
+- Re-type the password (case-sensitive)
+- Use the default credentials
 
 ### Issue: Account is locked
 **Solution:**
-- 15 minutes wait করুন (auto unlock)
-- Database থেকে manually unlock করুন:
+- Wait 15 minutes (auto unlock)
+- Manually unlock from the database:
 ```bash
 db.adminusers.updateOne(
   { email: "admin@smartome.local" },
@@ -224,14 +225,16 @@ db.adminusers.updateOne(
 
 ### Issue: MongoDB connection error
 **Solution:**
-- MongoDB running check করুন
-- MONGODB_URI correct check করুন
-- Connection string format verify করুন
+**Solution:**
+- Check that MongoDB is running
+- Verify the `MONGODB_URI` is correct
+- Verify the connection string format
 
 ### Issue: Password hashing fails
 **Solution:**
-- bcryptjs installed check করুন: `npm install bcryptjs`
-- Node version compatible check করুন (Node 14+)
+**Solution:**
+- Ensure `bcryptjs` is installed: `npm install bcryptjs`
+- Ensure Node version is compatible (Node 14+)
 
 ---
 
@@ -276,11 +279,11 @@ Before going production:
 
 ## 📞 Support
 
-Issues এর জন্য:
-1. Check আপনার `.env.local` configuration
-2. MongoDB connection verify করুন
-3. Browser console এর error messages check করুন
-4. Server logs দেখুন (`npm run dev` terminal এ)
+For support / issues:
+1. Check your `.env.local` configuration
+2. Verify the MongoDB connection
+3. Check browser console for error messages
+4. Check server logs (in the `npm run dev` terminal)
 
 ---
 

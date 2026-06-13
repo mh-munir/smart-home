@@ -7,57 +7,59 @@
 আপনার সাইট এখন নিম্নলিখিত অ্যাফিলিয়েট প্রোগ্রাম সমর্থন করে:
 
 1. **Amazon Associates** - বিশ্বব্যাপী
-2. **AliExpress Affiliate** - চীন-ভিত্তিক ই-কমার্স
-3. **eBay Partner Network** - বৈশ্বিক অনলাইন নিলাম
-4. **Flipkart Affiliate** - ভারত-ভিত্তিক ই-কমার্স
-5. **Daraz Affiliate** - বাংলাদেশ এবং দক্ষিণ এশিয়া
-6. **Rokomari Affiliate** - বাংলাদেশ বই এবং পণ্য
-7. **AJIO Affiliate** - ভারত-ভিত্তিক ফ্যাশন এবং লাইফস্টাইল
+# 🌐 Multi-Affiliate System Setup Guide
 
-## 🚀 সেটআপ ধাপ
+This guide walks you through configuring your Smart Home affiliate site to support multiple affiliate networks.
 
-### ধাপ 1: প্রতিটি অ্যাফিলিয়েট প্রোগ্রামে যোগ দিন
+## 📋 Supported Affiliate Networks
 
-আপনার অ্যাফিলিয়েট আইডি পেতে প্রতিটি প্ল্যাটফর্মে সাইন আপ করুন:
+The site supports the following affiliate programs:
+
+1. **Amazon Associates** - Global
+2. **AliExpress Affiliate** - China-based e-commerce
+3. **eBay Partner Network** - Global marketplace
+4. **Flipkart Affiliate** - India-based e-commerce
+5. **Daraz Affiliate** - Bangladesh & South Asia
+6. **Rokomari Affiliate** - Bangladesh books and products
+7. **AJIO Affiliate** - India fashion & lifestyle
+
+## 🚀 Setup Steps
+
+### Step 1: Register with each affiliate program
+
+Sign up on each platform to obtain your affiliate IDs.
 
 #### Amazon Associates
-- ওয়েবসাইট: https://associates.amazon.com/
-- আপনার **Associate Tag** কপি করুন
-- এটি সাধারণত এর মতো দেখায়: `yourname-20`
+- Website: https://associates.amazon.com/
+- Copy your **Associate Tag** (usually like `yourname-20`).
 
 #### AliExpress Affiliate
-- ওয়েবসাইট: https://portals.aliexpress.com/
-- আপনার **Affiliate ID** বা **FCid** পান
-- প্রচারমূলক URL থেকে ID বের করুন
+- Website: https://portals.aliexpress.com/
+- Get your **Affiliate ID** (FCid) from the promotional URL or dashboard.
 
 #### eBay Partner Network
-- ওয়েবসাইট: https://partnernetwork.ebay.com/
-- আপনার **Campaign ID** তৈরি করুন
-- চিহ্নিতকরণের জন্য এটি ব্যবহার করুন
+- Website: https://partnernetwork.ebay.com/
+- Create and copy your **Campaign ID**.
 
 #### Flipkart Affiliate
-- ওয়েবসাইট: https://affiliate.flipkart.com/
-- আপনার **Affiliate ID** সংগ্রহ করুন
-- অ্যাফিলিয়েট লিংক থেকে ID বের করুন
+- Website: https://affiliate.flipkart.com/
+- Copy your **Affiliate ID** from the dashboard.
 
 #### Daraz Affiliate
-- ওয়েবসাইট: https://affiliate.daraz.com.bd/
-- আপনার **Affiliate ID** সংগ্রহ করুন
-- বাংলাদেশে পণ্যগুলির জন্য নিখুঁত
+- Website: https://affiliate.daraz.com.bd/
+- Get your **Affiliate ID** for Bangladesh-focused products.
 
 #### Rokomari Affiliate
-- ওয়েবসাইট: https://affiliate.rokomari.com/
-- আপনার **Affiliate ID** পান
-- বাংলাদেশ-ভিত্তিক শপিং এর জন্য চমৎকার
+- Website: https://affiliate.rokomari.com/
+- Get your **Affiliate ID** (good for Bangladesh book/product niches).
 
 #### AJIO Affiliate
-- ওয়েবসাইট: https://affiliate.ajio.com/
-- আপনার **Affiliate Code** পান
-- ভারতে ফ্যাশন এবং লাইফস্টাইল পণ্যের জন্য আদর্শ
+- Website: https://affiliate.ajio.com/
+- Copy your **Affiliate Code** for fashion/lifestyle in India.
 
-### ধাপ 2: এনভায়রনমেন্ট ভেরিয়েবল কনফিগার করুন
+### Step 2: Configure environment variables
 
-`.env.local` ফাইলে আপনার অ্যাফিলিয়েট আইডি যোগ করুন:
+Add your affiliate IDs to `.env.local`:
 
 ```bash
 # Amazon Associates
@@ -82,38 +84,38 @@ NEXT_PUBLIC_ROKOMARI_AFFILIATE_ID=your-rokomari-id
 NEXT_PUBLIC_AJIO_AFFILIATE_ID=your-ajio-id
 ```
 
-### ধাপ 3: বিদ্যমান পণ্যগুলি মাইগ্রেট করুন
+### Step 3: Migrate existing products
 
-আপনার বিদ্যমান একক অ্যাফিলিয়েট লিংক সহ পণ্যগুলি নতুন মাল্টি-অ্যাফিলিয়েট ফর্ম্যাটে রূপান্তরিত করুন:
+Convert existing single-affiliate links to the multi-affiliate format:
 
 ```bash
 npm run migrate:multi-affiliate
 ```
 
-এই স্ক্রিপ্টটি:
-- আপনার সমস্ত পণ্য খুঁজে পাবে
-- বিদ্যমান অ্যাফিলিয়েট লিংক সনাক্ত করবে
-- সঠিক নেটওয়ার্কের অধীনে তাদের রূপান্তরিত করবে
+This script will:
+- Find all products
+- Detect existing affiliate links
+- Transform them into the multi-affiliate structure
 
-### ধাপ 4: নতুন পণ্যের জন্য অ্যাফিলিয়েট লিংক যোগ করুন
+### Step 4: Add affiliate links for new products
 
-#### বিকল্প A: ম্যানুয়ালি অ্যাডমিন প্যানেল এর মাধ্যমে
+#### Option A: Admin panel (manual)
 
-1. `/admin/products` এ নেভিগেট করুন
-2. একটি নতুন পণ্য তৈরি করুন বা সম্পাদনা করুন
-3. প্রতিটি অ্যাফিলিয়েট নেটওয়ার্কের জন্য লিংক যোগ করুন
+1. Navigate to `/admin/products`
+2. Create or edit a product
+3. Add links for each affiliate network
 
-#### বিকল্প B: স্ক্রিপ্ট দিয়ে
+#### Option B: Script (automated)
 
-`scripts/add-affiliate-links.js` সম্পাদনা করুন এবং চালান:
+Edit and run `scripts/add-affiliate-links.js`:
 
 ```bash
 npm run add:affiliate-links
 ```
 
-## 📊 অ্যাফিলিয়েট লিংক স্ট্রাকচার
+## 📊 Affiliate Link Structure
 
-প্রতিটি পণ্য এখন এই ফর্ম্যাটে অ্যাফিলিয়েট লিংক সংরক্ষণ করে:
+Each product stores affiliate links in this format:
 
 ```javascript
 {
@@ -139,26 +141,26 @@ npm run add:affiliate-links
       clicks: 0,
       conversions: 0
     }
-    // ... আরও অ্যাফিলিয়েট নেটওয়ার্ক
+    // ... other affiliate networks
   }
 }
 ```
 
-## 🎯 অ্যাফিলিয়েট লিংক সেরা অনুশীলন
+## 🎯 Best Practices
 
-### 1. **অগ্রাধিকার সেট করুন**
+### 1. Set priorities
 
-প্রথম অ্যাফিলিয়েট লিংকটি সর্বোচ্চ অগ্রাধিকার সহ "Buy Now" বোতাম হিসাবে প্রদর্শিত হয়।
+The link with the highest priority is shown as the primary "Buy Now" button.
 
 ```javascript
-amazon: { priority: 1 },    // এই প্রথম দেখানো হবে
-aliexpress: { priority: 2 }, // এই দ্বিতীয়
-ebay: { priority: 3 }        // এটি "আরও বিকল্প" মেনুতে থাকবে
+amazon: { priority: 1 },    // primary
+aliexpress: { priority: 2 }, // secondary
+ebay: { priority: 3 }        // in the "more options" menu
 ```
 
-### 2. **সঠিক লিংক ফর্ম্যাট নিশ্চিত করুন**
+### 2. Use correct URL formats
 
-প্রতিটি অ্যাফিলিয়েট প্রোগ্রামের জন্য সঠিক প্যারামিটার ব্যবহার করুন:
+Examples:
 
 ```
 Amazon:     https://amazon.com/dp/ASIN?tag=YOUR-TAG
@@ -170,61 +172,60 @@ Rokomari:   https://rokomari.com/...?aff_id=YOUR-ID
 AJIO:       https://ajio.com/...?utm_source=affiliate&utm_medium=YOUR-ID
 ```
 
-### 3. **নিয়মিত পারফরম্যান্স পর্যবেক্ষণ করুন**
+### 3. Monitor performance regularly
 
-অ্যাফিলিয়েট পরিসংখ্যান চেক করুন:
+Check affiliate stats:
 
 ```bash
-# সমস্ত পণ্যের অ্যাফিলিয়েট পরিসংখ্যান
+# All products affiliate stats
 curl http://localhost:3000/api/affiliate-stats
 
-# একটি নির্দিষ্ট পণ্যের জন্য
+# For a specific product
 curl "http://localhost:3000/api/affiliate-stats?productId=PRODUCT_ID"
 ```
 
-## 🔍 ট্র্যাকিং এবং অ্যানালিটিক্স
+## 🔍 Tracking and Analytics
 
-সিস্টেম স্বয়ংক্রিয়ভাবে ট্র্যাক করে:
+The system tracks:
+- **Clicks**: when a user clicks an affiliate link
+- **Conversions**: when a sale is recorded (manually or via webhook)
 
-- **ক্লিক**: যখন ব্যবহারকারী অ্যাফিলিয়েট লিংকে ক্লিক করে
-- **রূপান্তর**: যখন একটি বিক্রয় হয় (ম্যানুয়ালি রেকর্ড করা হয়)
+### Database structure
 
-### ডেটাবেস স্ট্রাকচার
-
-প্রতিটি অ্যাফিলিয়েট লিংক এর জন্য পরিসংখ্যান সংরক্ষণ করা হয়:
+Affiliate statistics are stored per affiliate link:
 
 ```javascript
 affiliateLinks: {
   amazon: {
     url: "...",
-    clicks: 1250,         // মোট ক্লিক
-    conversions: 45,      // মোট রূপান্তর
+    clicks: 1250,
+    conversions: 45,
     enabled: true
   }
 }
 ```
 
-## 🛠️ ইউটিলিটি ফাংশন
+## 🛠️ Utility functions
 
-### ProductCard এ অ্যাফিলিয়েট লিংক পান
+### Get active affiliate links in ProductCard
 
 ```javascript
 import { getActiveAffiliateLinks } from '@/lib/affiliate-utils';
 
 const links = getActiveAffiliateLinks(product.affiliateLinks);
-// আউটপুট: [{id, name, url, priority, clicks, conversions}, ...]
+// Output: [{id, name, url, priority, clicks, conversions}, ...]
 ```
 
-### সেরা অ্যাফিলিয়েট লিংক নির্বাচন করুন
+### Select the best affiliate link
 
 ```javascript
 import { getBestAffiliateLink } from '@/lib/affiliate-utils';
 
 const primaryLink = getBestAffiliateLink(product.affiliateLinks);
-// সর্বোচ্চ অগ্রাধিকারের সক্রিয় লিংক রিটার্ন করে
+// Returns the highest-priority active link
 ```
 
-### অ্যাফিলিয়েট ক্লিক ট্র্যাক করুন
+### Track affiliate click
 
 ```javascript
 import { trackAffiliateClick } from '@/lib/affiliate-utils';
@@ -232,41 +233,33 @@ import { trackAffiliateClick } from '@/lib/affiliate-utils';
 await trackAffiliateClick(productId, 'amazon');
 ```
 
-## 💰 রাজস্ব অপ্টিমাইজেশন টিপস
+## 💰 Revenue optimization tips
 
-1. **পণ্যের ধরনের জন্য সেরা নেটওয়ার্ক নির্বাচন করুন**
-   - স্মার্ট হোম: Amazon (উচ্চ কমিশন)
-   - সাশ্রয়ী পণ্য: AliExpress, Daraz
-   - মাল্টি-মার্কেট: সব কিছু অন্তর্ভুক্ত করুন
+1. Choose the best network per product type:
+   - Smart Home: Amazon (higher commissions)
+   - Budget products: AliExpress, Daraz
+   - Multi-market: include all networks
 
-2. **বিভিন্ন বাজারের জন্য অপ্টিমাইজ করুন**
-   - বাংলাদেশ: Daraz, Rokomari অগ্রাধিকার দিন
-   - ভারত: Flipkart, AJIO, Amazon
-   - বৈশ্বিক: Amazon, AliExpress, eBay
+2. Optimize by region:
+   - Bangladesh: prioritize Daraz, Rokomari
+   - India: Flipkart, AJIO, Amazon
+   - Global: Amazon, AliExpress, eBay
 
-3. **নিয়মিত লিংক পরীক্ষা করুন**
-   - নিশ্চিত করুন সমস্ত লিংক কাজ করছে
-   - ভাঙা লিংক সরিয়ে দিন
-   - পুরানো লিংক আপডেট করুন
+3. Regularly validate links:
+   - Ensure links work
+   - Remove broken links
+   - Update outdated links
 
-## 🚨 সমস্যা সমাধান
+## 🚨 Troubleshooting
 
-### সমস্যা: অ্যাফিলিয়েট লিংক প্রদর্শিত হচ্ছে না
+### Issue: Affiliate link not showing
 
 ```javascript
-// পণ্য তথ্য চেক করুন
+// Check product data
 db.products.findOne({slug: "product-slug"})
 
-// affiliateLinks ফাংশনালিটি আছে নিশ্চিত করুন
-// এবং কমপক্ষে একটি লিংক enabled: true দিয়ে থাকে
+// Ensure affiliateLinks functionality exists and is enabled
 ```
-
-### সমস্যা: লিংক ট্র্যাকিং কাজ করছে না
-
-- ব্রাউজার কনসোল এ ত্রুটি চেক করুন
-- `/api/track-conversion` এনডপয়েন্ট সক্রিয় আছে নিশ্চিত করুন
-- আপনার প্রোডাক্ট ID সঠিক আছে নিশ্চিত করুন
-
 ## 📁 নতুন ফাইল এবং পরিবর্তন
 
 এই সেটআপে যা যোগ করা হয়েছে:

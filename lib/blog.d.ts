@@ -13,7 +13,7 @@ export interface BlogArticle {
   tags?: string[];
 }
 
-export const blogArticles: BlogArticle[];
+export declare const blogArticles: BlogArticle[];
 
 export function getBlogArticle(slug: string | undefined): BlogArticle | null;
 

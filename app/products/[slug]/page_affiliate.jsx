@@ -48,7 +48,7 @@ export default function ProductDetailsAffiliate() {
         <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-gray-50 to-white">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-teal-200 border-t-teal-600 mx-auto mb-4"></div>
-            <p className="text-gray-700 font-semibold text-lg">পণ্য লোড হচ্ছে...</p>
+            <p className="text-gray-700 font-semibold text-lg">Loading product...</p>
           </div>
         </div>
         <Footer />
@@ -63,10 +63,10 @@ export default function ProductDetailsAffiliate() {
         <div className="min-h-screen flex items-center justify-center bg-white">
           <div className="text-center bg-white p-12 rounded-2xl max-w-md mx-4 border border-gray-200">
             <div className="text-5xl mb-4">❌</div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">পণ্য খুঁজে পাওয়া যায়নি</h1>
-            <p className="text-gray-600 mb-8 text-lg">{error || 'আপনি যে পণ্যটি খুঁজছেন তা বিদ্যমান নেই।'}</p>
-            <Link href="/products" className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-bold transition-all">
-              ← পণ্যে ফিরুন
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">Product Not Found</h1>
+            <p className="text-gray-600 mb-8 text-lg">{error || "The product you are looking for does not exist."}</p>
+              <Link href="/products" className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-bold transition-all">
+              ← Back to Products
             </Link>
           </div>
         </div>
@@ -83,9 +83,9 @@ export default function ProductDetailsAffiliate() {
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Link href="/" className="hover:text-teal-600">হোম</Link>
+              <Link href="/" className="hover:text-teal-600">Home</Link>
               <span>/</span>
-              <Link href="/products" className="hover:text-teal-600">পণ্য</Link>
+              <Link href="/products" className="hover:text-teal-600">Products</Link>
               <span>/</span>
               <span className="text-gray-900 font-semibold">{product.title}</span>
             </div>
@@ -118,7 +118,7 @@ export default function ProductDetailsAffiliate() {
               <div>
                 <div className="flex items-center gap-2 mb-4">
                   <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-sm font-semibold capitalize">
-                    {product.category || 'স্মার্ট হোম'}
+                    {product.category || 'Smart Home'}
                   </span>
                   <span className="text-2xl">⭐ {product.rating || 4.5}/5</span>
                 </div>
@@ -128,20 +128,20 @@ export default function ProductDetailsAffiliate() {
                 </h1>
                 
                 <p className="text-lg text-teal-100 mb-8">
-                  {product.description || 'প্রিমিয়াম স্মার্ট হোম পণ্য'}
+                  {product.description || 'Premium smart home product'}
                 </p>
 
                 {/* Price Section */}
                 <div className="bg-white/10 rounded-lg p-6 mb-8 border border-white/20">
-                  <div className="text-sm text-teal-100 mb-2">বর্তমান মূল্য</div>
+                  <div className="text-sm text-teal-100 mb-2">Current Price</div>
                   <div className="text-4xl font-bold text-white mb-2">
-                    {product.price || 'যোগাযোগ করুন'}
+                    {product.price || 'Contact us'}
                   </div>
                   {product.originalPrice && product.originalPrice > product.price && (
                     <div className="flex items-center gap-4">
-                      <span className="text-teal-100 line-through">আসল মূল্য: {product.originalPrice}</span>
+                      <span className="text-teal-100 line-through">Original price: {product.originalPrice}</span>
                       <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% ছাড়
+                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% off
                       </span>
                     </div>
                   )}
@@ -172,20 +172,20 @@ export default function ProductDetailsAffiliate() {
                           rel="noopener noreferrer"
                           className="block w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-4 rounded-lg text-center transition-all transform hover:scale-105 shadow-lg"
                         >
-                          🛒 এখনই কিনুন ({primary.name})
+                          🛒 Buy Now ({primary.name})
                         </a>
                       );
                     }
 
                     return (
                       <button className="block w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-4 rounded-lg transition-all">
-                        🛒 এখনই কিনুন
+                        🛒 Buy Now
                       </button>
                     );
                   })()}
 
                   <button className="block w-full bg-white/20 hover:bg-white/30 text-white font-bold py-3 rounded-lg border border-white/40 transition-all">
-                    💬 বিক্রেতার সাথে যোগাযোগ করুন
+                    💬 Contact Seller
                   </button>
                 </div>
 
@@ -193,15 +193,15 @@ export default function ProductDetailsAffiliate() {
                 <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-white/20">
                   <div className="text-center">
                     <div className="text-2xl mb-2">✓</div>
-                    <div className="text-sm">সত্যায়িত পণ্য</div>
+                    <div className="text-sm">Verified product</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl mb-2">🚚</div>
-                    <div className="text-sm">দ্রুত ডেলিভারি</div>
+                    <div className="text-sm">Fast delivery</div>
                   </div>
                   <div className="text-center">
                     <div className="text-2xl mb-2">🔒</div>
-                    <div className="text-sm">নিরাপদ লেনদেন</div>
+                    <div className="text-sm">Secure checkout</div>
                   </div>
                 </div>
               </div>
@@ -235,15 +235,15 @@ export default function ProductDetailsAffiliate() {
               {activeTab === 'overview' && (
                 <div className="space-y-6">
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">পণ্য বিবরণ</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Description</h2>
                     <p className="text-gray-700 leading-relaxed text-lg">
-                      {product.description || 'এটি একটি প্রিমিয়াম স্মার্ট হোম পণ্য যা আধুনিক জীবনযাত্রার জন্য ডিজাইন করা হয়েছে।'}
+                      {product.description || 'This is a premium smart home product designed for modern living.'}
                     </p>
                   </div>
 
                   {product.longDescription && (
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-3">বিস্তারিত বর্ণনা</h3>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3">Detailed Description</h3>
                       <p className="text-gray-700 leading-relaxed">
                         {product.longDescription}
                       </p>
@@ -255,15 +255,15 @@ export default function ProductDetailsAffiliate() {
               {/* Features Tab */}
               {activeTab === 'features' && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">মূল বৈশিষ্ট্য</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Key Features</h2>
                   <ul className="space-y-3">
                     {[
-                      'উচ্চ মানের নির্মাণ',
-                      'সহজ ইনস্টলেশন',
-                      'সাশ্রয়ী মূল্য',
-                      'চমৎকার গ্রাহক সেবা',
-                      '২৪/৭ প্রাপ্যতা',
-                      'দ্রুত ডেলিভারি উপলব্ধ'
+                      'High-quality build',
+                      'Easy installation',
+                      'Budget-friendly',
+                      'Excellent customer support',
+                      '24/7 availability',
+                      'Fast delivery available'
                     ].map((feature, idx) => (
                       <li key={idx} className="flex items-center gap-4 p-4 bg-teal-50 rounded-lg border border-teal-200">
                         <span className="text-2xl text-teal-600">✓</span>
@@ -277,14 +277,14 @@ export default function ProductDetailsAffiliate() {
               {/* Specs Tab */}
               {activeTab === 'specs' && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">প্রযুক্তিগত স্পেসিফিকেশন</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Technical Specifications</h2>
                   <div className="space-y-3 border border-gray-200 rounded-lg overflow-hidden">
                     {[
-                      { label: 'ব্র্যান্ড', value: product.brand || 'প্রিমিয়াম' },
-                      { label: 'বিভাগ', value: product.category || 'স্মার্ট হোম' },
-                      { label: 'রঙ', value: 'কালো' },
-                      { label: 'সংযোগ', value: 'ওয়াই-ফাই / ব্লুটুথ' },
-                      { label: 'ওয়ারেন্টি', value: '১ বছর' }
+                      { label: 'Brand', value: product.brand || 'Premium' },
+                      { label: 'Category', value: product.category || 'Smart Home' },
+                      { label: 'Color', value: 'Black' },
+                      { label: 'Connectivity', value: 'Wi-Fi / Bluetooth' },
+                      { label: 'Warranty', value: '1 year' }
                     ].map((spec, idx) => (
                       <div key={idx} className="flex border-b border-gray-200 last:border-b-0">
                         <div className="w-1/3 bg-gray-50 p-4 font-semibold text-gray-900">
@@ -302,15 +302,15 @@ export default function ProductDetailsAffiliate() {
               {/* Reviews Tab */}
               {activeTab === 'reviews' && (
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">গ্রাহক পর্যালোচনা</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Customer Reviews</h2>
                   <div className="space-y-4">
                     {[1, 2, 3].map((rev) => (
                       <div key={rev} className="p-6 border border-gray-200 rounded-lg">
                         <div className="flex items-center gap-2 mb-2">
                           <span className="text-yellow-400">★★★★★</span>
-                          <span className="font-semibold text-gray-900">গ্রাহক {rev}</span>
+                          <span className="font-semibold text-gray-900">Customer {rev}</span>
                         </div>
-                        <p className="text-gray-700">এটি একটি দুর্দান্ত পণ্য! খুব সন্তুষ্ট আছি। সুপারিশ করি।</p>
+                        <p className="text-gray-700">Great product! Very satisfied. Highly recommended.</p>
                       </div>
                     ))}
                   </div>
@@ -322,11 +322,11 @@ export default function ProductDetailsAffiliate() {
             <div className="lg:col-span-1">
               {/* Price Card */}
               <div className="bg-linear-to-br from-teal-600 to-teal-700 text-white p-6 rounded-xl shadow-lg mb-6">
-                <h3 className="text-sm font-bold uppercase mb-4 opacity-90">মূল্য তথ্য</h3>
+                <h3 className="text-sm font-bold uppercase mb-4 opacity-90">Pricing Info</h3>
                 <div className="space-y-3">
                   <div>
-                    <p className="text-sm opacity-90">বর্তমান মূল্য</p>
-                    <p className="text-3xl font-bold">{product.price || 'যোগাযোগ'}</p>
+                    <p className="text-sm opacity-90">Current Price</p>
+                    <p className="text-3xl font-bold">{product.price || 'Contact'}</p>
                   </div>
                   {product.affiliateLink && (
                     <a
@@ -335,7 +335,7 @@ export default function ProductDetailsAffiliate() {
                       rel="noopener noreferrer"
                       className="block w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-3 rounded-lg text-center transition-all"
                     >
-                      এখনই কিনুন
+                      Buy Now
                     </a>
                   )}
                 </div>
@@ -344,14 +344,14 @@ export default function ProductDetailsAffiliate() {
               {/* Product Stats */}
               {product.clicks !== undefined && (
                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 mb-6">
-                  <h3 className="font-bold text-gray-900 mb-4">পণ্য পরিসংখ্যান</h3>
+                  <h3 className="font-bold text-gray-900 mb-4">Product Stats</h3>
                   <div className="space-y-3">
                     <div>
-                      <p className="text-sm text-gray-600">ক্লিক</p>
+                      <p className="text-sm text-gray-600">Clicks</p>
                       <p className="text-2xl font-bold text-gray-900">{product.clicks || 0}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">রূপান্তর</p>
+                      <p className="text-sm text-gray-600">Conversions</p>
                       <p className="text-2xl font-bold text-gray-900">{product.conversions || 0}</p>
                     </div>
                   </div>
@@ -360,7 +360,7 @@ export default function ProductDetailsAffiliate() {
 
               {/* Share Product */}
               <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                <h3 className="font-bold text-gray-900 mb-4">শেয়ার করুন</h3>
+                <h3 className="font-bold text-gray-900 mb-4">Share</h3>
                 <div className="space-y-2">
                   <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition-all">
                     Facebook
@@ -379,7 +379,7 @@ export default function ProductDetailsAffiliate() {
           {/* Related Products */}
           {relatedProducts.length > 0 && (
             <div className="mt-16 pt-12 border-t border-gray-200">
-              <h2 className="text-3xl font-bold text-gray-900 mb-8">সম্পর্কিত পণ্য</h2>
+              <h2 className="text-3xl font-bold text-gray-900 mb-8">Related Products</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {relatedProducts.map((relProduct) => (
                   <Link
@@ -401,7 +401,7 @@ export default function ProductDetailsAffiliate() {
                       <p className="text-teal-600 font-bold text-lg mt-2">{relProduct.price}</p>
                       <div className="mt-3 flex items-center justify-between text-sm">
                         <span className="text-yellow-400">★ {relProduct.rating || 4.5}</span>
-                        <span className="text-teal-600 font-semibold">বিস্তারিত →</span>
+                        <span className="text-teal-600 font-semibold">Details →</span>
                       </div>
                     </div>
                   </Link>

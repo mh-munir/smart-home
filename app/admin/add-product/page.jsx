@@ -189,10 +189,17 @@ export default function AddProductPage() {
             className="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
           >
             <option>Smart Home</option>
+            <option>Smart Locks</option>
             <option>Smart Lock</option>
+            <option>Smart Cameras</option>
             <option>Smart Camera</option>
             <option>Smart Lighting</option>
+            <option>Smart Speakers</option>
+            <option>Smart Thermostats</option>
             <option>Smart Thermostat</option>
+            <option>Smart Sensors</option>
+            <option>Smart Plugs</option>
+            <option>Smart Home Hubs</option>
             <option>Other</option>
           </select>
         </div>

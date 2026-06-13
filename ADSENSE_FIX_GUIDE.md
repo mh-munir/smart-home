@@ -43,82 +43,111 @@ pub-1234567890123456     ❌ ভুল (ca-pub- থাকতে হবে)
 ```bash
 # প্রথমে Ctrl+C দিয়ে সার্ভার বন্ধ করুন
 # তারপর আবার শুরু করুন
+# Google AdSense Script Error Fix Guide
+
+## 🔴 Problem
+
+The AdSense script is failing to load and errors appear in the browser console.
+
+## ✅ Solution
+
+### Step 1: Set environment variables
+
+Add the following to your `.env.local`:
+
+```bash
+NEXT_PUBLIC_ADSENSE_ENABLED=true
+NEXT_PUBLIC_ADSENSE_PUBLISHER_ID=ca-pub-4755389845351116
+NEXT_PUBLIC_ADSENSE_TOP_BANNER_SLOT=1234567890
+NEXT_PUBLIC_ADSENSE_SIDEBAR_SLOT=1234567891
+NEXT_PUBLIC_ADSENSE_IN_CONTENT_SLOT=1234567892
+NEXT_PUBLIC_ADSENSE_BOTTOM_BANNER_SLOT=1234567893
+```
+
+### Step 2: Where to find your Publisher ID
+
+1. Log in to your Google AdSense account: https://www.google.com/adsense/
+2. Go to **Settings → Account**
+3. Find the **Publisher ID** (starts with `ca-pub-`)
+4. Copy the value and add it to `.env.local`
+
+### Step 3: Verify format
+
+Publisher IDs must be in the correct format:
+
+```
+ca-pub-xxxxxxxxxxxxxxxx  ✅ OK
+ca-pub-1234567890123456 ✅ OK
+pub-1234567890123456    ❌ Wrong (must start with ca-pub-)
+1234567890123456        ❌ Wrong (missing ca-pub- prefix)
+```
+
+### Step 4: Restart the server
+
+Stop the dev server (Ctrl+C) and start again:
+
+```bash
 npm run dev
 ```
 
-### ধাপ ৫: Console চেক করুন
+### Step 5: Check the console
 
-এখন browser console খুলুন:
-- **❌ Error দেখলে**: Publisher ID ভুল হতে পারে
-- **✅ সবুজ ম্যাসেজ দেখলে**: সবকিছু ঠিক আছে
+Open the browser console and verify:
+- **❌ If you see errors**: the Publisher ID or config may be incorrect
+- **✅ If you see healthy messages**: the script loaded successfully
 
----
+## 🔍 Debugging tips
 
-## 🔍 ডিবাগিং টিপস
+### Console check
+Run this in the console to inspect the ads object:
 
-### Console দেখুন:
-```javascript
-// কনসোলে এই কমান্ড চালান
-console.log(process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID)
+```js
+console.log(window.adsbygoogle);
 ```
 
-### নেটওয়ার্ক চেক করুন:
-1. Browser DevTools খুলুন (F12)
-2. **Network** ট্যাবে যান
-3. `adsbygoogle.js` খুঁজুন
-4. **Status 200** থাকলে সাফল্য, **৪০৩/৪০৪** থাকলে সমস্যা আছে
+### Network check
+1. Open DevTools (F12)
+2. Go to the **Network** tab
+3. Search for `adsbygoogle.js`
+4. Status 200 = OK; 403/404 indicates an issue
 
-### AdSense Disable থাকতে পারে:
-```env
-# আপনার .env.local এ যদি এটি থাকে:
-NEXT_PUBLIC_ADSENSE_ENABLED=false  # এটি হবে false দিয়ে
+### AdSense may be disabled
+If your `.env.local` contains:
+
 ```
+NEXT_PUBLIC_ADSENSE_ENABLED=false
+```
+then AdSense integration is intentionally disabled.
 
----
+## 📝 Common issues
 
-## 📝 সাধারণ সমস্যা
+### 1. Publisher ID is not set
+**Problem**: `⚠️ AdSense: NEXT_PUBLIC_ADSENSE_PUBLISHER_ID is not set`
+**Fix**: Add the correct Publisher ID to `.env.local`
 
-### ১. Publisher ID সেট নেই
-**সমস্যা**: `⚠️ AdSense: NEXT_PUBLIC_ADSENSE_PUBLISHER_ID is not set`
+### 2. Incorrect Publisher ID format
+**Problem**: Script does not load
+**Fix**: Ensure the ID starts with `ca-pub-`
 
-**সমাধান**: `.env.local` ফাইলে সঠিক Publisher ID যোগ করুন
+### 3. Cross-origin issues
+**Problem**: CORS or cross-origin errors
+**Fix**: We've added `crossOrigin="anonymous"` to the AdSense script tag to address this
 
-### ২. ভুল Publisher ID Format
-**সমস্যা**: Script লোড হয় না
+### 4. AdSense account approval pending
+**Problem**: Script loads but ads do not display
+**Fix**: This is normal while your account is pending approval — wait for Google to approve
 
-**সমাধান**: ID `ca-pub-` দিয়ে শুরু হচ্ছে কি তা যাচাই করুন
+## ✨ Improvements added
 
-### ३. CORS Error
-**সমস্যা**: Cross-Origin সমস্যা
+The updated `GoogleAdSenseScript.tsx` now includes:
+- ✅ Better error logging for detailed diagnostics
+- ✅ Publisher ID validation on load
+- ✅ Extra development-mode logging
+- ✅ onLoad handler to initialize ads when loaded
+- ✅ CORS support (crossOrigin attribute)
 
-**সমাধান**: ইতিমধ্যে ঠিক করা হয়েছে - `crossOrigin="anonymous"` যোগ করা হয়েছে
+## 🚀 Next steps
 
-### ४. AdSense Account Approval পেন্ডিং
-**সমস্যা**: Script লোড হয় কিন্তু ads দেখা যায় না
-
-**সমাধান**: Google AdSense approval pending থাকলে এটি স্বাভাবিক। অপেক্ষা করুন।
-
----
-
-## ✨ উন্নতিসাধিত বৈশিষ্ট্য
-
-আপডেট করা `GoogleAdSenseScript.tsx` এ যোগ করা হয়েছে:
-
-✅ **Better Error Logging**: বিস্তারিত error তথ্য  
-✅ **Publisher ID Validation**: সেট করা আছে কি না তা চেক করা  
-✅ **Development Console**: Dev mode এ বিস্তারিত লগ  
-✅ **onLoad Handler**: সফল লোডিং এর সময় initialize করা  
-✅ **CORS Support**: Cross-origin সমস্যা সমাধান  
-
----
-
-## 🚀 পরবর্তী পদক্ষেপ
-
-1. ✅ `.env.local` ফাইল আপডেট করুন
-2. ✅ ডেভেলপমেন্ট সার্ভার রিস্টার্ট করুন
-3. ✅ Browser console চেক করুন
-4. ✅ Google AdSense approval status যাচাই করুন
-
----
-
-**Need Help?** Google AdSense সাপোর্ট: https://support.google.com/adsense/
+1. ✅ Update `.env.local` with the correct values
+2. ✅ Restart the development server
+3. ✅ Check Console and Network in DevTools

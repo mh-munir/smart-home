@@ -106,7 +106,7 @@ npm run dev
 | **Admin Email** | admin@smartome.local |
 | **Admin Password** | SmartAdmin123!@# |
 | **Login URL** | http://localhost:3000/admin/login |
-| **Role** | Super Admin (সব access) |
+| **Role** | Super Admin (full access) |
 
 **Location:** `.env.local`
 

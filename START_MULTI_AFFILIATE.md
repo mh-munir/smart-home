@@ -1,9 +1,9 @@
-# 🎯 মাল্টি-অ্যাফিলিয়েট সিস্টেম - শুরু করার গাইড
+# 🎯 Multi-Affiliate System - Getting Started Guide
 
-## আজ করতে হবে (5 মিনিট)
+## To Do Today (5 minutes)
 
 ```
-✓ ধাপ 1: এই 7টি সাইটে যাও
+✓ Step 1: Visit these 7 sites
   ├─ https://associates.amazon.com/
   ├─ https://portals.aliexpress.com/
   ├─ https://partnernetwork.ebay.com/
@@ -12,45 +12,45 @@
   ├─ https://affiliate.rokomari.com/
   └─ https://affiliate.ajio.com/
 
-✓ ধাপ 2: প্রতিটি থেকে আপনার অ্যাফিলিয়েট আইডি কপি করো
+✓ Step 2: Copy your affiliate IDs from each
 
-✓ ধাপ 3: এই কমান্ড চালাও (টার্মিনালে):
+✓ Step 3: Run this command (in the terminal):
   npm run migrate:multi-affiliate
 
-✓ ধাপ 4: সার্ভার রিস্টার্ট করো:
+✓ Step 4: Restart the server:
   npm run dev
 
-✓ ধাপ 5: এক্সপেরিমেন্ট করো এবং দেখো!
+✓ Step 5: Experiment and verify!
 ```
 
-## স্টেপ বাই স্টেপ (বিস্তারিত)
+## Step by Step (Detailed)
 
-### ১. অ্যাফিলিয়েট নেটওয়ার্কে সাইন আপ
+### 1. Sign up for affiliate networks
 
 #### Amazon Associates
-- যাও: https://associates.amazon.com/
-- "Sign Up" ক্লিক করো
-- তোমার নাম, ইমেল, পেমেন্ট তথ্য দাও
-- "Associate Tag" খুঁজো (এর মতো দেখায়: `yourname-20`)
-- **এটি কপি করো আপনার নোটপ্যাডে**
+- Visit: https://associates.amazon.com/
+- Click "Sign Up"
+- Provide your name, email, and payment details
+- Find the "Associate Tag" (looks like `yourname-20`)
+- **Copy it to a safe note**
 
 #### AliExpress
-- যাও: https://portals.aliexpress.com/
-- আপনার অ্যাকাউন্ট দিয়ে লগইন করো
-- প্রোমোশনাল URL খোঁজ
-- URL থেকে affiliate ID বের করো
-- **এটি সংরক্ষণ করো**
+- Visit: https://portals.aliexpress.com/
+- Log in with your account
+- Find the promotional URL
+- Extract the affiliate ID from the URL
+- **Save it securely**
 
-*(অন্যান্য নেটওয়ার্কের জন্য একই প্রক্রিয়া)*
+*(Same process for other networks)*
 
-### ২. `.env.local` আপডেট করুন
+### 2. Update `.env.local`
 
-**VS Code এ `.env.local` খুলুন**
+**Open `.env.local` in VS Code**
 
-আপনার আইডি যোগ করুন:
+Add your IDs:
 
 ```bash
-# আমাজন
+# Amazon
 NEXT_PUBLIC_AMAZON_AFFILIATE_TAG=your-tag-20
 
 # AliExpress
@@ -72,17 +72,17 @@ NEXT_PUBLIC_ROKOMARI_AFFILIATE_ID=your-id
 NEXT_PUBLIC_AJIO_AFFILIATE_ID=your-id
 ```
 
-**`Ctrl+S` দিয়ে সেভ করুন**
+**Save with `Ctrl+S`**
 
-### ৩. বিদ্যমান পণ্য মাইগ্রেট করুন
+### 3. Migrate existing products
 
-**টার্মিনালে এই কমান্ড চালান:**
+**Run this command in the terminal:**
 
 ```bash
 npm run migrate:multi-affiliate
 ```
 
-**আউটপুট দেখতে হবে:**
+**Expected output:**
 ```
 🔄 Starting product migration to multi-affiliate format...
 ✓ Connected to database
@@ -93,67 +93,67 @@ Found X products with single affiliate links
 ✓ Migration complete! X products migrated
 ```
 
-### ৪. সার্ভার রিস্টার্ট করুন
+### 4. Restart the server
 
-**যদি সার্ভার চলছে, থামান:**
+**If the server is running, stop it:**
 ```
 Ctrl+C
 ```
 
-**আবার শুরু করুন:**
+**Start again:**
 ```bash
 npm run dev
 ```
 
-**দেখা যাবে:**
+**You should see:**
 ```
 - ready started server on 0.0.0.0:3000
 - Local: http://localhost:3000
 ```
 
-### ৫. এখন পরীক্ষা করুন!
+### 5. Test it now!
 
-**ব্রাউজার খুলুন:**
+**Open your browser:**
 ```
 http://localhost:3000
 ```
 
-**একটি পণ্যে যান**
+**Open a product page**
 
-**দেখবেন:**
-- ✅ "Buy on Amazon" (বড় বোতাম)
-- ✅ "More Options" (অন্যান্য নেটওয়ার্ক)
+**You should see:**
+- ✅ "Buy on Amazon" (primary button)
+- ✅ "More Options" (other networks)
 
-**ড্রপডাউন খুলুন এবং দেখো:**
+**Open the dropdown and you should see:**
 - AliExpress
 - eBay
 - Flipkart
-- ইত্যাদি...
+- etc...
 
-## যাচাইকরণ চেকলিস্ট
+## Verification Checklist
 
 ```
-□ সমস্ত 7টি অ্যাফিলিয়েট নেটওয়ার্কে সাইন আপ করেছেন
-□ আপনার আইডি .env.local এ যোগ করেছেন
-□ migration স্ক্রিপ্ট চালিয়েছেন (সফলভাবে সম্পন্ন)
-□ সার্ভার রিস্টার্ট করেছেন
-□ ওয়েবসাইটে "Buy on" বোতাম দেখতে পারছেন
-□ "More Options" ড্রপডাউন কাজ করছে
-□ অ্যানালিটিক্স API এ: curl http://localhost:3000/api/affiliate-stats
+□ Signed up for all 7 affiliate networks
+□ Added your IDs to .env.local
+□ Ran the migration script (completed successfully)
+□ Restarted the server
+□ See the "Buy on" button on the site
+□ "More Options" dropdown is working
+□ Check analytics API: curl http://localhost:3000/api/affiliate-stats
 ```
 
-## নতুন পণ্যে অ্যাফিলিয়েট লিংক যোগ করুন
+## Add affiliate links to new products
 
-### অপশন A: ম্যানুয়ালি (সহজ)
+### Option A: Manually (easy)
 
-1. `/admin/products` যান
-2. নতুন পণ্য তৈরি করুন
-3. প্রতিটি নেটওয়ার্কের জন্য লিংক পেস্ট করুন
-4. সেভ করুন
+1. Go to `/admin/products`
+2. Create a new product
+3. Paste links for each network
+4. Save
 
-### অপশন B: স্ক্রিপ্ট (দ্রুত)
+### Option B: Script (fast)
 
-`scripts/add-affiliate-links.js` সম্পাদনা করুন:
+Edit `scripts/add-affiliate-links.js`:
 
 ```javascript
 const exampleProductUpdate = {
@@ -169,99 +169,99 @@ const exampleProductUpdate = {
       enabled: true,
       priority: 2,
     },
-    // আরও নেটওয়ার্ক যোগ করুন
+    // Add more networks
   },
 };
 ```
 
-তারপর চালান:
+Then run:
 ```bash
 npm run add:affiliate-links
 ```
 
-## সাধারণ সমস্যা এবং সমাধান
+## Common Issues and Solutions
 
-### সমস্যা: বোতাম দেখা যাচ্ছে না
+### Issue: Button not visible
 
-**সমাধান:**
+**Solution:**
 ```bash
-# 1. .env.local চেক করুন
-#    - সব ভেরিয়েবল যোগ করা আছে?
-#    - কমপক্ষে একটি ভেরিয়েবল সেট করা আছে?
+# 1. Check .env.local
+#    - Are all variables added?
+#    - Is at least one affiliate variable set?
 
-# 2. সার্ভার রিস্টার্ট করুন
+# 2. Restart the server
 #    Ctrl+C
 #    npm run dev
 
-# 3. ব্রাউজার রিফ্রেশ করুন
-#    Ctrl+R (Windows) বা Cmd+R (Mac)
+# 3. Refresh the browser
+#    Ctrl+R (Windows) or Cmd+R (Mac)
 ```
 
-### সমস্যা: মাইগ্রেশন ব্যর্থ
+### Issue: Migration failed
 
-**সমাধান:**
+**Solution:**
 ```bash
-# MongoDB কানেকশন চেক করুন
-# .env.local এ MONGODB_URI আছে কিনা যাচাই করুন
+# Check MongoDB connection
+# Verify MONGODB_URI in .env.local
 
-# আবার চেষ্টা করুন:
+# Retry:
 npm run migrate:multi-affiliate
 ```
 
-### সমস্যা: লিংক কাজ করছে না
+### Issue: Links not working
 
-**সমাধান:**
+**Solution:**
 ```bash
-# ব্রাউজার কনসোল খুলুন (F12)
-# "More Options" ড্রপডাউনে লিংক ক্লিক করুন
-# ত্রুটি দেখতে পাবেন
+# Open the browser console (F12)
+# Click a link in the "More Options" dropdown
+# Inspect the error
 ```
 
-## পরবর্তী পদক্ষেপ (একবার সেটআপ সম্পূর্ণ)
+## Next steps (once setup is complete)
 
-1. **অ্যানালিটিক্স দেখুন**
-   ```bash
-   curl http://localhost:3000/api/affiliate-stats
-   ```
+1. **View analytics**
+  ```bash
+  curl http://localhost:3000/api/affiliate-stats
+  ```
 
-2. **অগ্রাধিকার অপ্টিমাইজ করুন**
-   - সর্বোচ্চ কনভার্টিং নেটওয়ার্ক প্রথম রাখুন
+2. **Optimize priorities**
+  - Put the highest-converting networks first
 
-3. **বাজার-ভিত্তিক কৌশল**
-   - বাংলাদেশ: Daraz/Rokomari প্রথম
-   - ভারত: Flipkart/AJIO প্রথম
-   - বিশ্বব্যাপী: Amazon প্রথম
+3. **Market-specific strategy**
+  - Bangladesh: Daraz/Rokomari first
+  - India: Flipkart/AJIO first
+  - Global: Amazon first
 
-4. **নিয়মিত পর্যবেক্ষণ**
-   - প্রতি সপ্তাহে অ্যানালিটিক্স চেক করুন
-   - সেরা পারফরমার খুঁজুন
-   - খারাপ লিংক সরান
+4. **Monitor regularly**
+  - Check analytics weekly
+  - Identify top performers
+  - Remove broken/low-performing links
 
-## শেষ টিপস
+## Final tips
 
 ```
 ✅ DO:
-   - সমস্ত অ্যাফিলিয়েট আইডি সংরক্ষণ করুন
-   - নিয়মিত লিংক পরীক্ষা করুন
-   - অ্যানালিটিক্স ট্র্যাক করুন
-   - নতুন পণ্যে লিংক যোগ করুন
+  - Save all affiliate IDs securely
+  - Check links regularly
+  - Track analytics
+  - Add links to new products
 
 ❌ DON'T:
-   - আপনার আইডি হার্ডকোড করবেন না
-   - env ফাইল গিট এ কমিট করবেন না
-   - নিষ্ক্রিয় অ্যাফিলিয়েট ব্যবহার করবেন না
-   - নিয়মিত লিংক চেক না করা
+  - Hard-code your IDs
+  - Commit env files to git
+  - Use inactive affiliate accounts
+  - Skip regular link checks
 ```
 
-## সহায়তা
+## Help
 
-যদি সমস্যা থাকে:
+If you run into issues:
 
-1. `MULTI_AFFILIATE_QUICK_REF.md` পড়ুন
-2. `MULTI_AFFILIATE_SETUP.md` পড়ুন
-3. সার্ভার লগ চেক করুন
-4. ব্রাউজার কনসোল চেক করুন (F12)
+1. Read `MULTI_AFFILIATE_QUICK_REF.md`
+2. Read `MULTI_AFFILIATE_SETUP.md`
+3. Check server logs
+4. Check browser console (F12)
 
 ---
 
-**এখনই শুরু করুন এবং আপনার আয় বাড়ান!** 🚀💰
+**Start now and increase your earnings!** 🚀💰

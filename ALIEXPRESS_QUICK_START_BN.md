@@ -1,194 +1,194 @@
 # AliExpress Affiliate Program - Quick Start Guide
 
-## 🎯 আপনার ওয়েবসাইট AliExpress অ্যাফিলিয়েট এর জন্য প্রস্তুত!
+## 🎯 Your website is ready for the AliExpress affiliate program!
 
-সব প্রয়োজনীয় আপডেট সম্পন্ন হয়েছে। এখন শুরু করুন:
-
----
-
-## 📋 আপনার ওয়েবসাইটের অবস্থা
-
-✅ **প্রয়োজনীয় পৃষ্ঠাগুলি সম্পূর্ণ:**
-- Privacy Policy (গোপনীয়তা নীতি)
-- Terms & Conditions (শর্তাবলী) 
-- Affiliate Disclosure (অ্যাফিলিয়েট প্রকাশ)
-- Disclaimer (দায়বদ্ধতা অস্বীকৃতি)
-- Cookie Policy (কুকি নীতি)
-
-✅ **AliExpress অ্যাফিলিয়েট প্রোগ্রাম যোগ করা হয়েছে:**
-- Affiliate Disclosure পৃষ্ঠায় AliExpress বিবরণ যুক্ত
-
-✅ **পেশাদার মান:**
-- ডোমেইন: smart-home-products.vercel.app
-- ডিজাইন: প্রফেশনাল এবং মোবাইল-বান্ধব
-- সামগ্রী: মূল এবং উচ্চমানের
+All required updates are complete. Get started now:
 
 ---
 
-## 🚀 AliExpress Affiliate এর জন্য আবেদন করুন
+## 📋 Website Status
 
-### ধাপ 1: Admitad এ সাইন আপ করুন
-1. যান: https://admitad.com/en/
-2. "Sign Up" এ ক্লিক করুন
-3. আপনার ইমেল দিয়ে নিবন্ধন করুন
-4. অ্যাকাউন্ট যাচাই করুন
+✅ **Required pages in place:**
+- Privacy Policy
+- Terms & Conditions
+- Affiliate Disclosure
+- Disclaimer
+- Cookie Policy
 
-### ধাপ 2: আবেদন জমা দিন
-1. Admitad ড্যাশবোর্ডে লগইন করুন
-2. "Affiliate Programs" এ যান
-3. "AliExpress" খুঁজুন এবং বেছে নিন
-4. আপনার ওয়েবসাইটের তথ্য পূরণ করুন:
-   - **ওয়েবসাইট URL**: https://smart-home-products.vercel.app
-   - **ওয়েবসাইট নাম**: SmartHome Affiliate
-   - **বিভাগ**: Smart Home, IoT, Technology
-   - **ট্রাফিক উৎস**: Organic Search, Social Media
-   - **মাসিক দর্শক**: [আপনার পরিসংখ্যান দিন]
+✅ **AliExpress affiliate integration added:**
+- AliExpress details added to the Affiliate Disclosure page
 
-### ধাপ 3: অনুমোদনের জন্য অপেক্ষা করুন
-- সাধারণত ১-৭ দিন লাগে
-- অনুমোদিত হলে ইমেল পাবেন
-- আপনার Admitad ড্যাশবোর্ড চেক করুন
+✅ **Professional readiness:**
+- Domain: smart-home-products.vercel.app
+- Design: Professional and mobile-friendly
+- Content: Original and high-quality
 
 ---
 
-## 💰 AliExpress অ্যাফিলিয়েট কমিশন
+## 🚀 Apply for AliExpress Affiliate
 
-- **কমিশন রেট**: ২-১০% (পণ্য ধরন অনুযায়ী)
-- **ট্র্যাকিং**: কুকি-ভিত্তিক (সাধারণত ৩০ দিন)
-- **পেমেন্ট**: মাসিক (সর্বনিম্ন $৫০ হলে)
-- **পেমেন্ট পদ্ধতি**: PayPal, Wire Transfer, Webmoney
+### Step 1: Sign up on Admitad
+1. Visit: https://admitad.com/en/
+2. Click "Sign Up"
+3. Register with your email
+4. Verify your account
+
+### Step 2: Submit your application
+1. Log in to your Admitad dashboard
+2. Go to "Affiliate Programs"
+3. Find and select "AliExpress"
+4. Fill in your website details:
+   - **Website URL**: https://smart-home-products.vercel.app
+   - **Website name**: SmartHome Affiliate
+   - **Category**: Smart Home, IoT, Technology
+   - **Traffic sources**: Organic Search, Social Media
+   - **Monthly visitors**: [enter your stats]
+
+### Step 3: Wait for approval
+- Typically takes 1-7 days
+- You'll receive an email upon approval
+- Check your Admitad dashboard
 
 ---
 
-## 🔗 অ্যাফিলিয়েট লিংক তৈরি করুন
+## 💰 AliExpress Affiliate Commission
 
-### উপায় 1: Admitad এর মাধ্যমে
-1. Admitad ড্যাশবোর্ডে যান
-2. "Tools" > "Links" বেছে নিন
-3. AliExpress পণ্য খুঁজুন
-4. আপনার অ্যাফিলিয়েট লিংক কপি করুন
-
-### উপায় 2: AliExpress সরাসরি
-1. AliExpress এ পণ্য খুঁজুন
-2. পণ্য শেয়ার করুন
-3. আপনার অ্যাফিলিয়েট লিংক পান
-
-### উপায় 3: Deep Link Generator
-Admitad এর গভীর লিংক জেনারেটর ব্যবহার করুন
+- **Commission rate**: 2-10% (varies by product)
+- **Tracking**: Cookie-based (typically 30 days)
+- **Payments**: Monthly (paid when minimum $50 reached)
+- **Payment methods**: PayPal, Wire Transfer, WebMoney
 
 ---
 
-## 📝 আপনার সাইটে লিংক যোগ করুন
+## 🔗 Generating Affiliate Links
 
-### উদাহরণ 1: পণ্য পর্যালোচনায়
+### Method 1: Via Admitad
+1. Open your Admitad dashboard
+2. Go to "Tools" > "Links"
+3. Search for AliExpress products
+4. Copy your affiliate link
+
+### Method 2: Direct from AliExpress
+1. Find the product on AliExpress
+2. Use the share option
+3. Obtain your affiliate link
+
+### Method 3: Deep Link Generator
+Use Admitad's deep link generator for product-level links
+
+---
+
+## 📝 Adding Links to Your Site
+
+### Example 1: In a product review
 ```
-[বর্তমান মূল্য AliExpress এ দেখুন](your-aliexpress-affiliate-link)*
-*অ্যাফিলিয়েট লিংক
-```
-
-### উদাহরণ 2: পণ্য গাইডে
-```
-**ক্রয় করুন**: [Smart Home ডিভাইস - AliExpress](your-aliexpress-affiliate-link)
+[View current price on AliExpress](your-aliexpress-affiliate-link)*
+*affiliate link
 ```
 
-### উদাহরণ 3: পণ্য তুলনায়
+### Example 2: In a product guide
 ```
-**AliExpress এ পান**: [এখানে কিনুন](your-aliexpress-affiliate-link)
+**Buy now**: [Smart Home Device - AliExpress](your-aliexpress-affiliate-link)
+```
+
+### Example 3: In a comparison
+```
+**Get it on AliExpress**: [Buy here](your-aliexpress-affiliate-link)
 ```
 
 ---
 
-## ⚠️ গুরুত্বপূর্ণ মনে রাখবেন
+## ⚠️ Important Notes
 
-1. **প্রতিটি লিংকে প্রকাশ করুন**
-   - "অ্যাফিলিয়েট লিংক" লেবেল ব্যবহার করুন
-   - আপনার গোপনীয়তা নীতিতে উল্লেখ করুন
-   - স্বচ্ছতা বজায় রাখুন
+1. **Disclose affiliate links**
+   - Use an "affiliate link" label
+   - Mention it in your privacy policy
+   - Maintain transparency
 
-2. **সৎ সুপারিশ করুন**
-   - শুধুমাত্র পণ্য প্রচার করুন যা আপনি বিশ্বাস করেন
-   - মিথ্যা দাবি করবেন না
-   - বাস্তব পর্যালোচনা লিখুন
+2. **Recommend honestly**
+   - Promote only products you trust
+   - Avoid false claims
+   - Write genuine reviews
 
-3. **নীতি মেনে চলুন**
-   - AliExpress নীতি পড়ুন
-   - FTC নির্দেশিকা অনুসরণ করুন
-   - স্প্যাম এড়ান
+3. **Follow policies**
+   - Read AliExpress program rules
+   - Follow FTC guidelines
+   - Avoid spam
 
-4. **পারফরম্যান্স ট্র্যাক করুন**
-   - Admitad ড্যাশবোর্ড নিয়মিত চেক করুন
-   - শীর্ষ পণ্য বিশ্লেষণ করুন
-   - রূপান্তর হার উন্নত করুন
-
----
-
-## 📊 সাফল্যের জন্য টিপস
-
-### সামগ্রী কৌশল
-- **মূল্য-সচেতন দর্শক লক্ষ্য করুন**: "Best Budget Smart Home Devices"
-- **তুলনামূলক পোস্ট তৈরি করুন**: "AliExpress vs Amazon"
-- **ঋতুভিত্তিক গাইড**: ছুটির দিনে বিশেষ অফার
-- **জনপ্রিয় ট্রেন্ড অনুসরণ করুন**: নতুন স্মার্ট ডিভাইস
-
-### প্রচার চ্যানেল
-- **ব্লগ**: বিস্তারিত পণ্য পর্যালোচনা
-- **সোশ্যাল মিডিয়া**: পিন্টারেস্ট, ফেসবুক, টুইটার
-- **ইমেল**: নিউজলেটারে নতুন পণ্য শেয়ার করুন
-- **YouTube**: ভিডিও পর্যালোচনা (যদি প্রযোজ্য)
-
-### লিংক অপ্টিমাইজেশন
-- আকর্ষণীয় anchor text ব্যবহার করুন
-- লিংকটি প্রাকৃতিকভাবে স্থাপন করুন
-- প্রতিটি নিবন্ধে ১-৩টি লিংক রাখুন
-- কল-টু-অ্যাকশন পরিষ্কার করুন
+4. **Track performance**
+   - Check the Admitad dashboard regularly
+   - Analyze top products
+   - Improve conversion rates
 
 ---
 
-## 🎯 প্রথম মাসের লক্ষ্য
+## 📊 Tips for Success
 
-- [ ] Admitad এ অনুমোদিত হন
-- [ ] প্রথম ১০টি অ্যাফিলিয়েট লিংক তৈরি করুন
-- [ ] ৫-১০টি নতুন পণ্য পর্যালোচনা লিখুন
-- [ ] সোশ্যাল মিডিয়ায় প্রচার করুন
-- [ ] প্রথম বিক্রয় ট্র্যাক করুন
-- [ ] পারফরম্যান্স বিশ্লেষণ করুন
+### Content strategy
+- Target value-seeking audiences: "Best Budget Smart Home Devices"
+- Create comparison posts: "AliExpress vs Amazon"
+- Seasonal guides: holiday deals and roundups
+- Follow trending smart home devices
 
----
+### Promotion channels
+- Blog: in-depth product reviews
+- Social media: Pinterest, Facebook, Twitter
+- Email: share new products in newsletters
+- YouTube: video reviews (if applicable)
 
-## 💡 প্রায়শই জিজ্ঞাসিত প্রশ্ন
-
-**Q: কত সময়ে অনুমোদন পাব?**  
-A: সাধারণত ১-৭ দিন। কখনও কখনও ২-৩ সপ্তাহ পর্যন্ত হতে পারে।
-
-**Q: লিংক কীভাবে ট্র্যাক করা হয়?**  
-A: কুকি-ভিত্তিক। ক্লিক করার পর ৩০ দিনের মধ্যে ক্রয় গণনা করা হয়।
-
-**Q: প্রতিটি বিক্রয়ে কত অর্থ পাব?**  
-A: ২-১০% পণ্যের উপর নির্ভর করে। উচ্চ মূল্যের পণ্য সাধারণত কম শতাংশ।
-
-**Q: কখন অর্থ পাব?**  
-A: মাসিক। সর্বনিম্ন $৫০ হলে পরের মাসে পাবেন।
-
-**Q: কত ট্রাফিক প্রয়োজন?**  
-A: ন্যূনতম প্রয়োজনীয়তা নেই, তবে ২০০+ মাসিক দর্শক ভাল।
+### Link optimization
+- Use compelling anchor text
+- Place links naturally in content
+- Keep 1-3 links per article
+- Make CTAs clear
 
 ---
 
-## 📞 সাহায্যের জন্য যোগাযোগ করুন
+## 🎯 First Month Goals
 
-- **আমাদের যোগাযোগ পৃষ্ঠা**: /contact
-- **Admitad সহায়তা**: https://support.admitad.com/
-- **আমাদের ইমেল**: support@smart-home-products.vercel.app
-
----
-
-## ✨ আপনি প্রস্তুত!
-
-আপনার ওয়েবসাইট AliExpress অ্যাফিলিয়েট প্রোগ্রামের জন্য **সম্পূর্ণভাবে প্রস্তুত**।  
-এখনই Admitad এ আবেদন করুন এবং আয় করা শুরু করুন!
-
-**পরবর্তী ধাপ**: https://admitad.com/en/ এ যান এবং আবেদন করুন।
+- [ ] Get approved on Admitad
+- [ ] Create your first 10 affiliate links
+- [ ] Publish 5-10 new product reviews
+- [ ] Promote on social media
+- [ ] Track first sales
+- [ ] Analyze performance
 
 ---
 
-*আপডেট: জুন ২০২৬*
+## 💡 FAQ
+
+**Q: How long does approval take?**  
+A: Typically 1-7 days; occasionally 2-3 weeks.
+
+**Q: How are links tracked?**  
+A: Cookie-based. Purchases within 30 days of click are counted.
+
+**Q: How much do I earn per sale?**  
+A: 2-10% depending on the product.
+
+**Q: When do I get paid?**  
+A: Monthly; payments are made when the minimum $50 threshold is met.
+
+**Q: How much traffic is needed?**  
+A: No strict minimum, but 200+ monthly visitors is a good starting point.
+
+---
+
+## 📞 Contact / Support
+
+- **Contact page**: /contact
+- **Admitad Support:** https://support.admitad.com/
+- **Email:** support@smart-home-products.vercel.app
+
+---
+
+## ✨ You're ready!
+
+Your website is fully prepared for the AliExpress affiliate program.  
+Apply on Admitad and start earning today!
+
+**Next step**: Visit https://admitad.com/en/ and submit your application.
+
+---
+
+*Updated: June 2026*

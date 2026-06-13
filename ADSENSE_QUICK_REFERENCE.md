@@ -1,8 +1,8 @@
 # Google AdSense Quick Reference
 
-## আপনার AdSense Setup Complete! ✅
+## Your AdSense Setup Complete! ✅
 
-### কি কি Setup করা হয়েছে?
+### What has been set up?
 
 **Files Created:**
 - ✅ `lib/adsense-config.js` - AdSense configuration
@@ -39,27 +39,27 @@ import { ResponsiveAdUnit } from "@/components/AdUnits";
 
 ## করার কাজ: Step-by-Step
 
-### 1️⃣ Google AdSense Account Create করুন
+### 1️⃣ Create a Google AdSense account
 ```
 https://www.google.com/adsense/start/
-→ আপনার website URL: https://smart-home-products.vercel.app
-→ Approval পেতে 1-2 দিন অপেক্ষা করুন
+→ Your website URL: https://smart-home-products.vercel.app
+→ Wait 1-2 days for approval
 ```
 
-### 2️⃣ Publisher ID এবং Ad Slots পান
+### 2️⃣ Get Publisher ID and Ad Slots
 ```
 AdSense Dashboard:
 → Settings > Account
-→ Publisher ID: ca-pub-xxxxxxxxxxxxxxxx (copy করুন)
+→ Publisher ID: ca-pub-xxxxxxxxxxxxxxxx (copy)
 
 Ads > Ad units:
-→ 4টি new ad unit create করুন
-→ প্রতিটির Slot ID copy করুন
+→ Create 4 new ad units
+→ Copy each Slot ID
 ```
 
-### 3️⃣ .env.local Update করুন
+### 3️⃣ Update `.env.local`
 ```bash
-# .env.local এ এই lines uncomment করুন:
+# Uncomment or add the following lines in `.env.local`:
 
 NEXT_PUBLIC_ADSENSE_PUBLISHER_ID=ca-pub-xxxxxxxxxxxxxxxx
 NEXT_PUBLIC_ADSENSE_TOP_BANNER_SLOT=1234567890
@@ -68,7 +68,7 @@ NEXT_PUBLIC_ADSENSE_IN_CONTENT_SLOT=1234567892
 NEXT_PUBLIC_ADSENSE_BOTTOM_BANNER_SLOT=1234567893
 ```
 
-### 4️⃣ Pages এ Ads Add করুন
+### 4️⃣ Add ads to pages
 ```jsx
 // app/page.tsx (Homepage)
 import { HorizontalAdUnit } from "@/components/AdUnits";
@@ -83,13 +83,13 @@ export default function Home() {
 }
 ```
 
-### 5️⃣ Deploy করুন
+### 5️⃣ Deploy
 ```bash
-npm run dev  # local test (ads দেখা না যেতে পারে)
-git push    # Vercel এ deploy করুন
+npm run dev  # local test (ads might not show locally)
+git push    # Deploy to Vercel
 ```
 
-### 6️⃣ Vercel Environment Variables Set করুন
+### 6️⃣ Set Vercel Environment Variables
 ```
 Vercel Dashboard > Project Settings > Environment Variables
 → NEXT_PUBLIC_ADSENSE_PUBLISHER_ID
@@ -103,20 +103,20 @@ Vercel Dashboard > Project Settings > Environment Variables
 
 ## Earnings Timeline
 
-| টাইম | কি হয় |
-|------|--------|
-| Day 1 | AdSense setup করুন |
-| Day 2 | Approval pending (1-2 দিন) |
-| Day 3-4 | Approval হলে setup করুন |
-| Day 5-6 | Production এ deploy করুন |
-| Week 2-3 | Ads serve হতে শুরু করে |
-| Month end | Earnings দেখা যায় (Page সংখ্যা অনুযায়ী) |
+| Time | What happens |
+|------|---------------|
+| Day 1 | Create AdSense account and start setup |
+| Day 2 | Approval pending (typically 1-2 days) |
+| Day 3-4 | Configure settings after approval |
+| Day 5-6 | Deploy to production |
+| Week 2-3 | Ads begin serving |
+| Month end | Earnings appear (depends on pageviews) |
 
 ---
 
 ## Expected RPM Ranges
 
-**Smart Home Content এর জন্য:**
+**For Smart Home content:**
 - **Low Traffic:** $1-5 RPM
 - **Medium Traffic:** $5-15 RPM
 - **High Traffic:** $15-50+ RPM
@@ -138,34 +138,34 @@ Vercel Dashboard > Project Settings > Environment Variables
 
 ## Troubleshooting Checklist
 
-- [ ] Google AdSense account approved?
-- [ ] Publisher ID এ `ca-pub-` থাকে?
-- [ ] All 4 Ad Slots created?
-- [ ] `.env.local` update করেছেন?
-- [ ] Vercel environment variables set করেছেন?
-- [ ] Vercel redeploy করেছেন?
-- [ ] Console এ errors আছে?
-- [ ] 24-48 hours অপেক্ষা করেছেন?
+- [ ] Is the Google AdSense account approved?
+- [ ] Does the Publisher ID start with `ca-pub-`?
+- [ ] Are all 4 ad slots created?
+- [ ] Have you updated `.env.local`?
+- [ ] Have you set Vercel environment variables?
+- [ ] Have you redeployed to Vercel?
+- [ ] Any errors in the browser console?
+- [ ] Have you waited 24-48 hours for propagation?
 
 ---
 
-## সেরা Practices
+## Best Practices
 
 ✅ **Do's:**
-- Natural placement এ রাখুন
-- Too many ads না রাখলেন ভালো
-- Content quality maintain করুন
-- নিয়মিত traffic generate করুন
+- Use natural placements
+- Avoid excessive ads
+- Maintain high content quality
+- Generate regular organic traffic
 
 ❌ **Don'ts:**
-- Click fraud করবেন না
-- Auto-clicking tools ব্যবহার করবেন না
-- Misleading content রাখবেন না
-- Multiple ad units এক জায়গায় না রাখলেন
+- Do not engage in click fraud
+- Do not use auto-clicking tools
+- Avoid misleading content
+- Do not cluster multiple ad units in one spot
 
 ---
 
-## সাহায্য প্রয়োজন?
+## Need help?
 
 📧 **Google Support:** https://adsense.google.com/gethelp
 📚 **Documentation:** `ADSENSE_SETUP_GUIDE.md`
@@ -173,4 +173,4 @@ Vercel Dashboard > Project Settings > Environment Variables
 
 ---
 
-**আপনার website এখন Monetize করার জন্য সম্পূর্ণভাবে প্রস্তুত! 🚀**
+**Your website is now fully ready to be monetized! 🚀**
