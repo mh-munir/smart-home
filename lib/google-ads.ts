@@ -1,12 +1,15 @@
 /**
- * Google Ads Integration
+ * Google Analytics Integration
  * GTM (Google Tag Manager) + GA4 (Google Analytics 4) Setup
+ * 
+ * Note: Google Ads (Paid Ads) has been removed. Only AdSense is used for monetization.
+ * AdSense is configured separately in GoogleAdSenseScript component.
  */
 
 // Google Tag Manager Configuration
 export const GTM_CONFIG = {
   // Your GTM Container ID (Get from: https://tagmanager.google.com/)
-  GTM_ID: 'GTM-NGWRC7R4', // Replace with your GTM ID
+  GTM_ID: process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NGWRC7R4',
   
   // Environment
   ENVIRONMENT: process.env.NODE_ENV || 'production',
@@ -15,7 +18,7 @@ export const GTM_CONFIG = {
 // Google Analytics 4 Configuration
 export const GA4_CONFIG = {
   // Your GA4 Measurement ID (Get from: https://analytics.google.com/)
-  MEASUREMENT_ID: 'G-XXXXXXXXXX', // Replace with your GA4 ID
+  MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-XXXXXXXXXX',
   
   // Enable debug mode in development
   DEBUG_MODE: process.env.NODE_ENV === 'development',
@@ -28,21 +31,6 @@ export const GA4_CONFIG = {
   
   // Track engagement
   TRACK_ENGAGEMENT: true,
-};
-
-// Google Ads Conversion Configuration
-export const GOOGLE_ADS_CONFIG = {
-  // Your Google Ads Conversion ID (Get from: https://ads.google.com/)
-  CONVERSION_ID: 'AW-XXXXXXXXXX', // Replace with your Conversion ID
-  
-  // Conversion labels for different actions
-  CONVERSION_LABELS: {
-    VIEW_PRODUCT: 'AW-XXXXXXXXXX/XXXXXXXXXXXXXX_XXXXXXXXXX',
-    ADD_TO_CART: 'AW-XXXXXXXXXX/XXXXXXXXXXXXXX_XXXXXXXXXX',
-    PURCHASE: 'AW-XXXXXXXXXX/XXXXXXXXXXXXXX_XXXXXXXXXX',
-    CONTACT: 'AW-XXXXXXXXXX/XXXXXXXXXXXXXX_XXXXXXXXXX',
-    NEWSLETTER_SIGNUP: 'AW-XXXXXXXXXX/XXXXXXXXXXXXXX_XXXXXXXXXX',
-  },
 };
 
 // Event tracking configuration
@@ -145,29 +133,6 @@ export function generateGA4Script(): string {
 }
 
 /**
- * Generate Google Ads Conversion Script
- * Place this in <head> tag
- */
-export function generateGoogleAdsScript(): string {
-  return `
-    <!-- Google Ads Conversion Tracking -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_CONFIG.CONVERSION_ID}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${GOOGLE_ADS_CONFIG.CONVERSION_ID}');
-      
-      // Track conversions
-      gtag('config', '${GOOGLE_ADS_CONFIG.CONVERSION_ID}', {
-        'conversion_linker': true
-      });
-    </script>
-    <!-- End Google Ads Conversion Tracking -->
-  `;
-}
-
-/**
  * Track event with GTM/GA4
  */
 export function trackEvent(
@@ -178,25 +143,6 @@ export function trackEvent(
     window.dataLayer.push({
       event: eventName,
       ...eventData,
-    });
-  }
-}
-
-/**
- * Track purchase/conversion
- */
-export function trackConversion(
-  conversionId: string,
-  conversionLabel: string,
-  value: number,
-  currency: string = 'USD'
-): void {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'conversion', {
-      allow_custom_scripts: true,
-      send_to: `${conversionId}/${conversionLabel}`,
-      value: value,
-      currency: currency,
     });
   }
 }
@@ -320,4 +266,11 @@ export function trackContactForm(contactType: string): void {
   trackEvent(TRACKING_EVENTS.CONTACT, {
     contact_type: contactType,
   });
+}
+
+declare global {
+  interface Window {
+    dataLayer?: any[];
+    gtag?: (...args: any[]) => void;
+  }
 }

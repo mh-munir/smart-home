@@ -2,23 +2,22 @@
 
 import Script from 'next/script';
 import { useEffect } from 'react';
-import { GTM_CONFIG, GA4_CONFIG, GOOGLE_ADS_CONFIG } from '@/lib/google-ads';
+import { GTM_CONFIG, GA4_CONFIG } from '@/lib/google-ads';
 
-interface GoogleAdsProps {
+interface GoogleAnalyticsProps {
   gtmId?: string;
   ga4Id?: string;
-  conversionId?: string;
 }
 
 /**
- * Google Analytics & Ads Tracking Component
- * Integrates GTM, GA4, and Google Ads conversion tracking
+ * Google Analytics Tracking Component
+ * Integrates GTM (Google Tag Manager) and GA4 (Google Analytics 4)
+ * AdSense is handled separately in GoogleAdSenseScript component
  */
 export function GoogleAnalyticsComponent({
   gtmId = GTM_CONFIG.GTM_ID,
   ga4Id = GA4_CONFIG.MEASUREMENT_ID,
-  conversionId = GOOGLE_ADS_CONFIG.CONVERSION_ID,
-}: GoogleAdsProps) {
+}: GoogleAnalyticsProps) {
   useEffect(() => {
     // Initialize dataLayer if not already present
     if (typeof window !== 'undefined' && !window.dataLayer) {
@@ -27,11 +26,7 @@ export function GoogleAnalyticsComponent({
   }, []);
 
   // Don't render if tracking IDs are not configured
-  if (
-    gtmId === 'GTM-XXXXXXXXX' &&
-    ga4Id === 'G-XXXXXXXXXX' &&
-    conversionId === 'AW-XXXXXXXXXX'
-  ) {
+  if (gtmId === 'GTM-XXXXXXXXX' && ga4Id === 'G-XXXXXXXXXX') {
     return null;
   }
 
@@ -72,28 +67,6 @@ export function GoogleAnalyticsComponent({
               allow_ad_personalization_signals: true,
               'anonymize_ip': false,
               'cookie_flags': 'SameSite=None;Secure'
-            });
-          `,
-        }}
-      />
-
-      {/* Google Ads Conversion Tracking */}
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${conversionId}`}
-        strategy="afterInteractive"
-      />
-      <Script
-        id="ga-ads-script"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${conversionId}');
-            gtag('config', '${conversionId}', {
-              'conversion_linker': true,
-              'send_page_view': true
             });
           `,
         }}

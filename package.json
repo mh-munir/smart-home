@@ -11,7 +11,9 @@
     "seed": "node scripts/seed.js",
     "seed:admin": "node scripts/seed-admin.js",
     "reset:products": "node scripts/reset-products.js",
-    "update:products:amazon": "node scripts/update-products-amazon.js"
+    "update:products:amazon": "node scripts/update-products-amazon.js",
+    "migrate:multi-affiliate": "node scripts/migrate-multi-affiliate.js",
+    "add:affiliate-links": "node scripts/add-affiliate-links.js"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

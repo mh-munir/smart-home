@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import Script from 'next/script';
 import { isAdSenseEnabled } from '@/lib/adsense-config';
 
@@ -19,34 +20,59 @@ export default function GoogleAdSenseScript() {
     return null;
   }
 
-  const adSenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${publisherId}`;
+  // Ensure publisher ID has correct format
+  const formattedPublisherId = publisherId.startsWith('pub-') ? publisherId : `pub-${publisherId}`;
+  const adSenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${formattedPublisherId}`;
+
+  useEffect(() => {
+    // Monitor script loading status
+    const checkScriptLoaded = () => {
+      if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
+        if (isDev) {
+          console.log('✅ AdSense library loaded successfully');
+        }
+        return true;
+      }
+      return false;
+    };
+
+    // Check periodically for script availability
+    const interval = setInterval(checkScriptLoaded, 500);
+    return () => clearInterval(interval);
+  }, [isDev]);
 
   const handleScriptLoad = () => {
     if (isDev) {
-      console.log('✅ AdSense script loaded successfully');
-    }
-    // Initialize ads if window object has adsbygoogle
-    if (typeof window !== 'undefined' && (window as any).adsbygoogle) {
-      try {
-        ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({
-          google_ad_client: `ca-${publisherId}`,
-          enable_page_level_ads: true,
-        });
-      } catch (error) {
-        if (isDev) {
-          console.error('Error initializing AdSense:', error);
-        }
-      }
+      console.log('✅ AdSense script tag loaded');
     }
   };
 
-  const handleScriptError = (error: any) => {
-    console.error('❌ AdSense script failed to load:', {
-      message: error?.message || 'Unknown error',
+  const handleScriptError = () => {
+    console.error('❌ AdSense script failed to load', {
       url: adSenseUrl,
       publisher: publisherId ? '***' + publisherId.slice(-8) : 'not-set',
       timestamp: new Date().toISOString(),
+      suggestions: [
+        'Verify NEXT_PUBLIC_ADSENSE_PUBLISHER_ID is correct',
+        'Check if AdSense account is approved',
+        'Verify no CSP policy is blocking the script',
+        'Check browser console for CORS/network errors',
+        'Ensure you are not using ad blockers',
+      ],
     });
+
+    // Add fallback retry mechanism
+    if (isDev) {
+      setTimeout(() => {
+        const script = document.createElement('script');
+        script.src = adSenseUrl;
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        script.onload = () => console.log('✅ AdSense retried load succeeded');
+        script.onerror = () => console.error('❌ AdSense retry failed');
+        document.head.appendChild(script);
+      }, 2000);
+    }
   };
 
   return (
@@ -57,6 +83,8 @@ export default function GoogleAdSenseScript() {
       onLoad={handleScriptLoad}
       onError={handleScriptError}
       crossOrigin="anonymous"
+      suppressHydrationWarning
+      data-publisher-id={formattedPublisherId}
     />
   );
 }

@@ -27,9 +27,40 @@ const ProductSchema = new mongoose.Schema(
       default: 4.5,
       index: true, // Index for sorting by rating
     },
+    // Legacy support - single affiliate link
     affiliateLink: {
       type: String,
       default: null,
+    },
+    // Multi-affiliate links support
+    affiliateLinks: {
+      type: Map,
+      of: new mongoose.Schema(
+        {
+          url: {
+            type: String,
+            required: true,
+          },
+          enabled: {
+            type: Boolean,
+            default: true,
+          },
+          priority: {
+            type: Number,
+            default: 0,
+          },
+          clicks: {
+            type: Number,
+            default: 0,
+          },
+          conversions: {
+            type: Number,
+            default: 0,
+          },
+        },
+        { _id: false }
+      ),
+      default: {},
     },
     category: {
       type: String,
