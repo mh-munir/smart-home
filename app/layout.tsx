@@ -80,6 +80,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <meta name="google-adsense-account" content="ca-pub-8998788891126313" />
       </head>
       <body className="min-h-full flex flex-col">
         <GoogleTagManager />
