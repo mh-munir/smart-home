@@ -4,6 +4,12 @@ import { revalidatePath } from "next/cache";
 import Product from "@/models/Product";
 
 function serializeProduct(product) {
+  let affiliateLinks = {};
+  if (product.affiliateLinks) {
+    if (product.affiliateLinks instanceof Map) affiliateLinks = Object.fromEntries(product.affiliateLinks);
+    else affiliateLinks = product.affiliateLinks;
+  }
+
   return {
     _id: product._id.toString(),
     title: product.title,
@@ -12,6 +18,7 @@ function serializeProduct(product) {
     price: product.price || null,
     rating: product.rating || 4.5,
     affiliateLink: product.affiliateLink || null,
+    affiliateLinks: affiliateLinks,
     category: product.category || null,
     description: product.description || null,
     clicks: product.clicks || 0,

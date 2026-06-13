@@ -44,7 +44,7 @@ export default function ProductDetailsAffiliate() {
     return (
       <>
         <Navbar />
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-gray-50 to-white">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-teal-200 border-t-teal-600 mx-auto mb-4"></div>
             <p className="text-gray-700 font-semibold text-lg">পণ্য লোড হচ্ছে...</p>
@@ -77,7 +77,7 @@ export default function ProductDetailsAffiliate() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
         {/* Breadcrumb */}
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -145,20 +145,41 @@ export default function ProductDetailsAffiliate() {
 
                 {/* CTA Buttons */}
                 <div className="space-y-3">
-                  {product.affiliateLink ? (
-                    <a
-                      href={product.affiliateLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="block w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-4 rounded-lg text-center transition-all transform hover:scale-105 shadow-lg"
-                    >
-                      🛒 এখনই কিনুন (বিশেষ মূল্যে)
-                    </a>
-                  ) : (
-                    <button className="block w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-4 rounded-lg transition-all">
-                      🛒 এখনই কিনুন
-                    </button>
-                  )}
+                  {(() => {
+                    let primary = null;
+                    if (product.affiliateLinks && typeof product.affiliateLinks === 'object') {
+                      const entries = Object.entries(product.affiliateLinks)
+                        .filter(([k, v]) => v && v.url && v.enabled)
+                        .map(([k, v]) => ({ id: k, url: v.url, priority: v.priority || 0, name: (v.name || (k.charAt(0).toUpperCase() + k.slice(1))) }));
+                      if (entries.length > 0) {
+                        entries.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+                        primary = entries[0];
+                      }
+                    }
+                    if (!primary && product.affiliateLink) {
+                      primary = { id: 'legacy', url: product.affiliateLink, name: 'Vendor' };
+                    }
+
+                    if (primary) {
+                      return (
+                        <a
+                          href={primary.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="block w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-4 rounded-lg text-center transition-all transform hover:scale-105 shadow-lg"
+                        >
+                          🛒 এখনই কিনুন ({primary.name})
+                        </a>
+                      );
+                    }
+
+                    return (
+                      <button className="block w-full bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold py-4 rounded-lg transition-all">
+                        🛒 এখনই কিনুন
+                      </button>
+                    );
+                  })()}
+
                   <button className="block w-full bg-white/20 hover:bg-white/30 text-white font-bold py-3 rounded-lg border border-white/40 transition-all">
                     💬 বিক্রেতার সাথে যোগাযোগ করুন
                   </button>
@@ -296,7 +317,7 @@ export default function ProductDetailsAffiliate() {
             {/* Right Sidebar */}
             <div className="lg:col-span-1">
               {/* Price Card */}
-              <div className="bg-gradient-to-br from-teal-600 to-teal-700 text-white p-6 rounded-xl shadow-lg mb-6">
+              <div className="bg-linear-to-br from-teal-600 to-teal-700 text-white p-6 rounded-xl shadow-lg mb-6">
                 <h3 className="text-sm font-bold uppercase mb-4 opacity-90">মূল্য তথ্য</h3>
                 <div className="space-y-3">
                   <div>
@@ -362,7 +383,7 @@ export default function ProductDetailsAffiliate() {
                     href={`/products/${relProduct.slug}`}
                     className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-xl transition-all hover:-translate-y-1"
                   >
-                    <div className="bg-gradient-to-br from-teal-500 to-teal-600 h-40 flex items-center justify-center text-4xl">
+                    <div className="bg-linear-to-br from-teal-500 to-teal-600 h-40 flex items-center justify-center text-4xl">
                       {relProduct.image ? (
                         <img src={relProduct.image} alt={relProduct.title} className="w-full h-full object-cover" />
                       ) : (

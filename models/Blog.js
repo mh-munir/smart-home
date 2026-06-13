@@ -16,6 +16,14 @@ const BlogSchema = new mongoose.Schema(
     category: String,
     keywords: [String],
     image: String,
+    images: {
+      type: [String],
+      default: [],
+    },
+    affiliateLink: {
+      type: String,
+      default: null,
+    },
     views: {
       type: Number,
       default: 0,

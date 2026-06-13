@@ -19,10 +19,12 @@ export async function generateMetadata({
     };
   }
 
+  const tags = article.tags || [];
+
   return {
     title: `${article.title} | ${SITE_NAME}`,
     description: article.excerpt,
-    keywords: article.tags.join(", "),
+    keywords: tags.join(", "),
     alternates: {
       canonical: `${SITE_URL}/blog/${article.slug}`,
     },
@@ -31,14 +33,14 @@ export async function generateMetadata({
       description: article.excerpt,
       url: `${SITE_URL}/blog/${article.slug}`,
       type: "article",
-      publishedTime: article.date,
-      authors: [article.author],
-      tags: article.tags,
+      publishedTime: article.date ?? undefined,
+      authors: article.author ? [article.author] : undefined,
+      tags: tags.length ? tags : undefined,
     },
     article: {
-      publishedTime: article.date,
-      authors: [article.author],
-      tags: article.tags,
+      publishedTime: article.date ?? undefined,
+      authors: article.author ? [article.author] : undefined,
+      tags: tags.length ? tags : undefined,
     },
   };
 }
@@ -79,7 +81,7 @@ export default function BlogPostAffiliate({
         <div className="bg-linear-to-r from-teal-600 via-teal-500 to-cyan-500 text-white py-12 sm:py-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Meta */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <div className="flex flex-wrap items-center gap-3 mb-6">
               <span className="inline-block px-4 py-2 bg-white/20 rounded-full text-sm font-semibold capitalize">
                 {article.category}
               </span>
@@ -87,11 +89,13 @@ export default function BlogPostAffiliate({
               <span className="text-white/90">{article.readTime} মিনিট পড়ুন</span>
               <span className="text-white/70">•</span>
               <span className="text-white/90">
-                {new Date(article.date).toLocaleDateString("bn-BD", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                {article.date
+                  ? new Date(article.date).toLocaleDateString("bn-BD", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
+                  : ""}
               </span>
             </div>
 
@@ -136,7 +140,7 @@ export default function BlogPostAffiliate({
 
               {/* Article Content */}
               <article className="prose prose-lg max-w-none mb-12">
-                {article.content.split("\n").map((paragraph, index) => {
+                {(article.content || "").split("\n").map((paragraph, index) => {
                   if (paragraph.startsWith("##")) {
                     const heading = paragraph.replace("## ", "");
                     const id = heading.toLowerCase().replace(/\s+/g, '-');
@@ -198,7 +202,7 @@ export default function BlogPostAffiliate({
               <div className="border-t border-gray-200 py-8 mb-8">
                 <h3 className="text-sm font-bold text-gray-900 mb-4 uppercase">বিষয়গুলি</h3>
                 <div className="flex flex-wrap gap-3">
-                  {article.tags.map((tag) => (
+                  {(article.tags || []).map((tag) => (
                     <Link
                       key={tag}
                       href={`/blog?tag=${tag}`}
@@ -311,7 +315,7 @@ export default function BlogPostAffiliate({
                         {relArticle.title}
                       </h4>
                       <div className="flex items-center justify-between text-xs text-gray-600">
-                        <span>⏱️ {relArticle.readTime} মিনিট</span>
+                          <span>⏱️ {relArticle.readTime} মিনিট</span>
                         <span className="text-teal-600 group-hover:text-teal-700 font-bold">→</span>
                       </div>
                     </Link>

@@ -1,6 +1,8 @@
 import { connectDB } from "@/lib/db";
 import { requireAdminSession } from "@/lib/admin-auth";
 import Blog from "@/models/Blog";
+import fs from "fs/promises";
+import path from "path";
 
 function serializeBlog(blog) {
   return {
@@ -9,6 +11,8 @@ function serializeBlog(blog) {
     slug: blog.slug,
     content: blog.content || null,
     image: blog.image || null,
+    images: blog.images || [],
+    affiliateLink: blog.affiliateLink || null,
     affiliateProducts: blog.affiliateProducts?.map(product => 
       typeof product === 'object' && product._id 
         ? {
@@ -50,10 +54,34 @@ export async function POST(req) {
       .replace(/\s+/g, "-")
       .replace(/[^\w-]/g, "");
 
-    const blog = await Blog.create({
-      ...data,
-      slug: slug,
-    });
+    // Process images (accept URLs or data URLs). Limit to 5 images.
+    const processedImages = [];
+    if (Array.isArray(data.images)) {
+      for (let i = 0; i < data.images.length && processedImages.length < 5; i++) {
+        const img = data.images[i];
+        if (typeof img === "string" && img.startsWith("data:")) {
+          const match = img.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/);
+          if (match) {
+            const mime = match[1];
+            const base64Data = match[2];
+            const ext = mime.split("/")[1].split("+")[0] || "jpg";
+            const uploadsDir = path.join(process.cwd(), "public", "uploads", "blogs");
+            await fs.mkdir(uploadsDir, { recursive: true });
+            const filename = `${slug}-${Date.now()}-${i}.${ext}`;
+            const filePath = path.join(uploadsDir, filename);
+            await fs.writeFile(filePath, Buffer.from(base64Data, "base64"));
+            processedImages.push(`/uploads/blogs/${filename}`);
+          }
+        } else if (typeof img === "string" && img.trim()) {
+          processedImages.push(img);
+        }
+      }
+    }
+
+    const blogData = { ...data, slug: slug };
+    if (processedImages.length > 0) blogData.images = processedImages;
+
+    const blog = await Blog.create(blogData);
 
     // Populate to get full product details
     await blog.populate("affiliateProducts");

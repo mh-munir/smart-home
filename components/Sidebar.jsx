@@ -6,6 +6,7 @@ const navItems = [
   { href: "/admin/add-product", label: "Add Product" },
   { href: "/admin/hero-slider", label: "Hero Slider" },
   { href: "/admin/blogs", label: "Blogs" },
+  { href: "/admin/add-blog", label: "Add Blog" },
   { href: "/admin/analytics", label: "Analytics" },
 ];
 

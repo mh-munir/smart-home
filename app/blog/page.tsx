@@ -92,11 +92,11 @@ export default function Blog() {
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-500">{article.author}</span>
                     <span className="text-gray-500">
-                      {new Date(article.date).toLocaleDateString()}
+                      {article.date ? new Date(article.date).toLocaleDateString() : ""}
                     </span>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {article.tags.slice(0, 2).map((tag) => (
+                    {(article.tags ?? []).slice(0, 2).map((tag) => (
                       <span
                         key={tag}
                         className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"

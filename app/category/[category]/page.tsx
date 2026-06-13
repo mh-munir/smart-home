@@ -12,11 +12,12 @@ import { notFound } from "next/navigation";
 export async function generateMetadata({
   params,
 }: {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 }) {
+  const { category } = await params;
   const validCategories = getAllBlogCategories();
 
-  if (!validCategories.includes(params.category)) {
+  if (!validCategories.includes(category)) {
     return {
       title: "Category Not Found",
       description: "The category you're looking for doesn't exist.",
@@ -24,32 +25,33 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${params.category.charAt(0).toUpperCase() + params.category.slice(1)} Articles | ${SITE_NAME}`,
-    description: `Browse all ${params.category} articles on ${SITE_NAME}. Expert guides, reviews, and tutorials.`,
+    title: `${category.charAt(0).toUpperCase() + category.slice(1)} Articles | ${SITE_NAME}`,
+    description: `Browse all ${category} articles on ${SITE_NAME}. Expert guides, reviews, and tutorials.`,
     alternates: {
-      canonical: `${SITE_URL}/category/${params.category}`,
+      canonical: `${SITE_URL}/category/${category}`,
     },
     openGraph: {
-      title: `${params.category.charAt(0).toUpperCase() + params.category.slice(1)} Articles`,
-      description: `Browse all ${params.category} articles on ${SITE_NAME}.`,
-      url: `${SITE_URL}/category/${params.category}`,
+      title: `${category.charAt(0).toUpperCase() + category.slice(1)} Articles`,
+      description: `Browse all ${category} articles on ${SITE_NAME}.`,
+      url: `${SITE_URL}/category/${category}`,
       type: "website",
     },
   };
 }
 
-export default function CategoryPage({
+export default async function CategoryPage({
   params,
 }: {
-  params: { category: string };
+  params: Promise<{ category: string }>;
 }) {
+  const { category } = await params;
   const validCategories = getAllBlogCategories();
 
-  if (!validCategories.includes(params.category)) {
+  if (!validCategories.includes(category)) {
     notFound();
   }
 
-  const articles = getBlogArticlesByCategory(params.category);
+  const articles = getBlogArticlesByCategory(category);
   const allCategories = getAllBlogCategories();
 
   return (
@@ -60,10 +62,10 @@ export default function CategoryPage({
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6 capitalize">
-              {params.category} Articles
+              {category} Articles
             </h1>
             <p className="text-xl text-teal-100 max-w-2xl">
-              Explore our collection of {articles.length} articles on {params.category}
+              Explore our collection of {articles.length} articles on {category}
             </p>
           </div>
         </div>
@@ -85,7 +87,7 @@ export default function CategoryPage({
                   key={cat}
                   href={`/category/${cat}`}
                   className={`px-4 py-2 rounded-lg transition capitalize ${
-                    cat === params.category
+                    cat === category
                       ? "bg-teal-600 text-white"
                       : "bg-gray-200 text-gray-900 hover:bg-gray-300"
                   }`}
@@ -100,7 +102,7 @@ export default function CategoryPage({
           <div className="mb-8">
             <p className="text-gray-600">
               Showing {articles.length} article{articles.length !== 1 ? "s" : ""} in{" "}
-              <span className="font-bold capitalize text-gray-900">{params.category}</span>
+              <span className="font-bold capitalize text-gray-900">{category}</span>
             </p>
           </div>
 
@@ -132,11 +134,11 @@ export default function CategoryPage({
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-500">{article.author}</span>
                       <span className="text-gray-500">
-                        {new Date(article.date).toLocaleDateString()}
+                        {article.date ? new Date(article.date).toLocaleDateString() : ""}
                       </span>
                     </div>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {article.tags.slice(0, 2).map((tag) => (
+                      {(article.tags ?? []).slice(0, 2).map((tag) => (
                         <span
                           key={tag}
                           className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"

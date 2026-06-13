@@ -227,14 +227,36 @@ export default function ProductDetails() {
             <p className="text-gray-700 mb-6">
               Ready to upgrade your smart home? Click below to purchase this product at the best price.
             </p>
-            <a
-              href={product.affiliateLink || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition font-semibold"
-            >
-              Buy Now on Amazon
-            </a>
+            {(() => {
+              // Determine primary affiliate link
+              let primary = null;
+              if (product.affiliateLinks && typeof product.affiliateLinks === 'object') {
+                const entries = Object.entries(product.affiliateLinks)
+                  .filter(([k, v]) => v && v.url && v.enabled)
+                  .map(([k, v]) => ({ id: k, url: v.url, priority: v.priority || 0, name: (v.name || (k.charAt(0).toUpperCase() + k.slice(1))) }));
+                if (entries.length > 0) {
+                  entries.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+                  primary = entries[0];
+                }
+              }
+              if (!primary && product.affiliateLink) {
+                primary = { id: 'legacy', url: product.affiliateLink, name: 'Vendor' };
+              }
+
+              const href = primary?.url || '#';
+              const label = primary ? `Buy on ${primary.name}` : 'Buy Now';
+
+              return (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-teal-600 text-white px-8 py-3 rounded-lg hover:bg-teal-700 transition font-semibold"
+                >
+                  {label}
+                </a>
+              );
+            })()}
           </section>
 
           {/* Back Link */}

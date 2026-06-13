@@ -19,6 +19,15 @@ export async function GET(request) {
       }
       
       // Convert to plain serializable object
+      let affiliateLinks = {};
+      if (product.affiliateLinks) {
+        if (product.affiliateLinks instanceof Map) {
+          affiliateLinks = Object.fromEntries(product.affiliateLinks);
+        } else {
+          affiliateLinks = product.affiliateLinks;
+        }
+      }
+
       const serializedProduct = {
         _id: product._id.toString(),
         title: product.title,
@@ -27,6 +36,7 @@ export async function GET(request) {
         price: product.price || null,
         rating: product.rating || 4.5,
         affiliateLink: product.affiliateLink || null,
+        affiliateLinks: affiliateLinks,
         category: product.category || null,
         description: product.description || null,
         clicks: product.clicks || 0,
@@ -66,6 +76,12 @@ export async function POST(req) {
     });
 
     // Convert to plain serializable object
+    let createdAffiliateLinks = {};
+    if (product.affiliateLinks) {
+      if (product.affiliateLinks instanceof Map) createdAffiliateLinks = Object.fromEntries(product.affiliateLinks);
+      else createdAffiliateLinks = product.affiliateLinks;
+    }
+
     const serializedProduct = {
       _id: product._id.toString(),
       title: product.title,
@@ -74,6 +90,7 @@ export async function POST(req) {
       price: product.price || null,
       rating: product.rating || 4.5,
       affiliateLink: product.affiliateLink || null,
+      affiliateLinks: createdAffiliateLinks,
       category: product.category || null,
       description: product.description || null,
       clicks: product.clicks || 0,

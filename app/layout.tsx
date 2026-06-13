@@ -81,6 +81,11 @@ export default function RootLayout({
     >
       <head>
         <meta name="google-adsense-account" content="ca-pub-8998788891126313" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8998788891126313"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body className="min-h-full flex flex-col">
         <GoogleTagManager />

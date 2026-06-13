@@ -12,9 +12,11 @@ export default function AddProductPage() {
     image: "",
     rating: "4.5",
     category: "Smart Home",
+    // legacy single link kept for backwards compatibility
     affiliateLink: "",
     description: "",
   });
+  const [affiliates, setAffiliates] = useState([]);
 
   const handleChange = (e) => {
     setForm({
@@ -28,10 +30,25 @@ export default function AddProductPage() {
     setLoading(true);
 
     try {
+      // Build affiliateLinks object from affiliates array
+      const affiliateLinksPayload = {};
+      for (let i = 0; i < affiliates.length; i++) {
+        const a = affiliates[i];
+        if (!a.network || !a.url) continue;
+        const key = a.network.toLowerCase().replace(/\s+/g, "-");
+        affiliateLinksPayload[key] = {
+          url: a.url,
+          enabled: a.enabled !== false,
+          priority: typeof a.priority === 'number' ? a.priority : i,
+        };
+      }
+
+      const payload = { ...form, affiliateLinks: affiliateLinksPayload };
+
       const res = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
 
       if (res.ok) {
@@ -45,6 +62,7 @@ export default function AddProductPage() {
           affiliateLink: "",
           description: "",
         });
+        setAffiliates([]);
         router.push("/admin/products");
       } else {
         alert("Error adding product");
@@ -88,6 +106,54 @@ export default function AddProductPage() {
             />
           </div>
 
+            <div>
+              <label className="block text-gray-700 font-semibold mb-2">Affiliate Links (multiple)</label>
+              <div className="space-y-2">
+                {affiliates.map((a, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Network (e.g., Amazon, AliExpress, eBay or 'Other')"
+                      value={a.network}
+                      onChange={(e) => {
+                        const next = [...affiliates];
+                        next[idx] = { ...next[idx], network: e.target.value };
+                        setAffiliates(next);
+                      }}
+                      className="flex-1 border rounded px-3 py-2"
+                    />
+                    <input
+                      type="url"
+                      placeholder="https://..."
+                      value={a.url}
+                      onChange={(e) => {
+                        const next = [...affiliates];
+                        next[idx] = { ...next[idx], url: e.target.value };
+                        setAffiliates(next);
+                      }}
+                      className="flex-1 border rounded px-3 py-2"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setAffiliates(affiliates.filter((_, i) => i !== idx))}
+                      className="bg-red-500 text-white px-3 rounded"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setAffiliates([...affiliates, { network: '', url: '', enabled: true }])}
+                    className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700"
+                  >
+                    + Add Affiliate Link
+                  </button>
+                </div>
+              </div>
+            </div>
           <div>
             <label className="block text-gray-700 font-semibold mb-2">Rating</label>
             <input
