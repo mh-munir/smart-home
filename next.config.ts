@@ -1,8 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Enable React strict mode for development
-  reactStrictMode: true,
   
   // High-traffic performance optimization
   compress: true,
@@ -81,7 +79,12 @@ const nextConfig: NextConfig = {
           // Performance headers
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com; img-src 'self' https: data: https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https: https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
+            value:
+              "default-src 'self' https:; " +
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://pagead.googlesyndication.com; " +
+              "img-src 'self' https: data: https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com; " +
+              "connect-src 'self' https: https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com; " +
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
           },
           // Aggressive cache for high traffic scenarios
           {
