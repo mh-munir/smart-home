@@ -57,6 +57,9 @@ export const metadata: Metadata = {
       "Discover the best home smart products with expert reviews and recommendations.",
     images: [DEFAULT_OG_IMAGE],
   },
+  other: {
+    "google-adsense-account": "ca-pub-8998788891126313",
+  },
 };
 
 export const viewport: Viewport = {
