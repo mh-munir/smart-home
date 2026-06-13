@@ -20,9 +20,11 @@ export default function GoogleAdSenseScript() {
     return null;
   }
 
-  // Ensure publisher ID has correct format
+  // Ensure publisher ID has correct format and build ad client id
   const formattedPublisherId = publisherId.startsWith('pub-') ? publisherId : `pub-${publisherId}`;
-  const adSenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${formattedPublisherId}`;
+  const adClient = formattedPublisherId.startsWith('pub-') ? `ca-${formattedPublisherId}` : formattedPublisherId;
+  // Use the canonical AdSense script URL and specify client via `data-ad-client`
+  const adSenseUrl = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js`;
 
   useEffect(() => {
     // Monitor script loading status
@@ -47,13 +49,14 @@ export default function GoogleAdSenseScript() {
     }
   };
 
-  const handleScriptError = () => {
-    console.error('❌ AdSense script failed to load', {
+  const handleScriptError = (err?: any) => {
+    console.error('❌ AdSense script failed to load', err || {}, {
       url: adSenseUrl,
+      adClient,
       publisher: publisherId ? '***' + publisherId.slice(-8) : 'not-set',
       timestamp: new Date().toISOString(),
       suggestions: [
-        'Verify NEXT_PUBLIC_ADSENSE_PUBLISHER_ID is correct',
+        'Verify NEXT_PUBLIC_ADSENSE_PUBLISHER_ID is correct in Vercel env',
         'Check if AdSense account is approved',
         'Verify no CSP policy is blocking the script',
         'Check browser console for CORS/network errors',
@@ -61,15 +64,16 @@ export default function GoogleAdSenseScript() {
       ],
     });
 
-    // Add fallback retry mechanism
+    // Dev-only retry: re-insert the canonical script element with data-ad-client
     if (isDev) {
       setTimeout(() => {
         const script = document.createElement('script');
         script.src = adSenseUrl;
         script.async = true;
         script.crossOrigin = 'anonymous';
+        script.setAttribute('data-ad-client', adClient);
         script.onload = () => console.log('✅ AdSense retried load succeeded');
-        script.onerror = () => console.error('❌ AdSense retry failed');
+        script.onerror = (e) => console.error('❌ AdSense retry failed', e);
         document.head.appendChild(script);
       }, 2000);
     }
@@ -81,10 +85,10 @@ export default function GoogleAdSenseScript() {
       src={adSenseUrl}
       strategy="afterInteractive"
       onLoad={handleScriptLoad}
-      onError={handleScriptError}
+      onError={(e) => handleScriptError(e)}
       crossOrigin="anonymous"
       suppressHydrationWarning
-      data-publisher-id={formattedPublisherId}
+      data-ad-client={adClient}
     />
   );
 }
