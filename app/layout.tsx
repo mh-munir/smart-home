@@ -83,7 +83,6 @@ export default function RootLayout({
         <GoogleAnalyticsComponent
           gtmId={process.env.NEXT_PUBLIC_GTM_ID}
           ga4Id={process.env.NEXT_PUBLIC_GA4_ID}
-          conversionId={process.env.NEXT_PUBLIC_GOOGLE_ADS_ID}
         />
         <GoogleAdSenseScript />
         {children}

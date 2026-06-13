@@ -85,9 +85,6 @@ export async function GET(request: NextRequest) {
       };
     });
 
-      return stats;
-    });
-
     return NextResponse.json({
       success: true,
       data: allStats,
