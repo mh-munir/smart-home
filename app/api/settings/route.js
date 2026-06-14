@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { ADMIN_SESSION_COOKIE, verifySessionToken } from "@/lib/admin-session";
+import { saveBufferToStorage } from "@/lib/storage";
 
 const SETTINGS_PATH = path.join(process.cwd(), "data", "site-settings.json");
 const PUBLIC_DIR = path.join(process.cwd(), "public");
@@ -23,6 +26,19 @@ export async function GET() {
 }
 
 export async function POST(request) {
+  // Protect POST: require valid admin session cookie
+  try {
+    const cookieStore = cookies();
+    const tokenCookie = cookieStore.get(ADMIN_SESSION_COOKIE);
+    const token = tokenCookie && tokenCookie.value ? tokenCookie.value : null;
+    const session = token ? verifySessionToken(token) : null;
+    if (!session) {
+      return NextResponse.json({ success: false, error: "not_authorized" }, { status: 401 });
+    }
+  } catch (e) {
+    return NextResponse.json({ success: false, error: "not_authorized" }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { subtitle = "", logoBase64, faviconBase64 } = body || {};
@@ -46,7 +62,9 @@ export async function POST(request) {
       const parsed = parseDataUrl(logoBase64);
       let ext = "png";
       let buffer;
+      let mime = "image/png";
       if (parsed) {
+        mime = parsed.mime;
         ext = parsed.mime.split("/")[1] || "png";
         if (ext === "jpeg") ext = "jpg";
         buffer = Buffer.from(parsed.base64, "base64");
@@ -55,15 +73,23 @@ export async function POST(request) {
       }
 
       const logoFilename = `logo.${ext}`;
-      fs.writeFileSync(path.join(PUBLIC_DIR, logoFilename), buffer);
-      newSettings.logo = `/${logoFilename}`;
+      try {
+        const res = await saveBufferToStorage(buffer, logoFilename, mime);
+        newSettings.logo = res.url;
+      } catch (e) {
+        // Fallback to local write
+        fs.writeFileSync(path.join(PUBLIC_DIR, logoFilename), buffer);
+        newSettings.logo = `/${logoFilename}`;
+      }
     }
 
     if (faviconBase64) {
       const parsed = parseDataUrl(faviconBase64);
       let ext = "ico";
       let buffer;
+      let mime = "image/x-icon";
       if (parsed) {
+        mime = parsed.mime;
         ext = parsed.mime.split("/")[1] || "ico";
         if (ext === "jpeg") ext = "jpg";
         buffer = Buffer.from(parsed.base64, "base64");
@@ -72,8 +98,13 @@ export async function POST(request) {
       }
 
       const favFilename = `favicon.${ext}`;
-      fs.writeFileSync(path.join(PUBLIC_DIR, favFilename), buffer);
-      newSettings.favicon = `/${favFilename}`;
+      try {
+        const res = await saveBufferToStorage(buffer, favFilename, mime);
+        newSettings.favicon = res.url;
+      } catch (e) {
+        fs.writeFileSync(path.join(PUBLIC_DIR, favFilename), buffer);
+        newSettings.favicon = `/${favFilename}`;
+      }
     }
 
     // Persist settings file

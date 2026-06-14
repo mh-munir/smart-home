@@ -138,59 +138,114 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </div>
         </div>
 
-        {article.images && article.images.length > 0 && (
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {article.images.slice(0, 5).map((img: string, idx: number) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`${article.title} image ${idx + 1}`}
-                  className="w-full h-64 object-cover rounded"
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Images will be rendered inline with content below (interleaved) */}
 
         {/* Main Content */}
         <div className="max-w-3xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
           {/* Article Content */}
           <article className="prose prose-lg max-w-none mb-16">
-            {article.content.split("\n").map((paragraph: string, index: number) => {
-              if (paragraph.startsWith("##")) {
-                return (
-                  <h2 key={index} className="text-3xl font-bold mt-8 mb-4 text-gray-900">
-                    {paragraph.replace("## ", "")}
-                  </h2>
-                );
+            {(() => {
+              const content = article.content || "";
+              const paragraphs = content
+                .split(/\n\s*\n/)
+                .map((p: string) => p.trim())
+                .filter(Boolean);
+              const images = (article.images ?? []) as string[];
+              const blocks: any[] = [];
+              const max = Math.max(paragraphs.length, images.length);
+
+              const renderLines = (para: string, keyPrefix: string) => {
+                const lines = para.split("\n").map((l: string) => l.trim()).filter(Boolean);
+                if (lines.length === 1) {
+                  const line = lines[0];
+                  if (line.startsWith("## ")) {
+                    return [
+                      <h2 key={`${keyPrefix}-h2`} className="text-3xl font-bold mt-8 mb-4 text-gray-900">
+                        {line.replace(/^##\s*/, "")}
+                      </h2>,
+                    ];
+                  }
+                  if (line.startsWith("### ")) {
+                    return [
+                      <h3 key={`${keyPrefix}-h3`} className="text-2xl font-bold mt-6 mb-3 text-gray-900">
+                        {line.replace(/^###\s*/, "")}
+                      </h3>,
+                    ];
+                  }
+                  if (line.startsWith("**")) {
+                    return [
+                      <p key={`${keyPrefix}-p-bold`} className="text-gray-700 mb-4 font-semibold">
+                        {line.replace(/^\*\*/, "")}
+                      </p>,
+                    ];
+                  }
+                  return [<p key={`${keyPrefix}-p`} className="text-gray-700 mb-4">{line}</p>];
+                }
+
+                if (lines.every((l: string) => l.startsWith("- "))) {
+                  return [
+                    <ul key={`${keyPrefix}-ul`} className="list-disc pl-6 mb-4 text-gray-700">
+                      {lines.map((l: string, idx: number) => (
+                        <li key={idx}>{l.replace(/^-+\s*/, "")}</li>
+                      ))}
+                    </ul>,
+                  ];
+                }
+
+                return [<p key={`${keyPrefix}-pjoin`} className="text-gray-700 mb-4">{lines.join(" ")}</p>];
+              };
+
+              for (let i = 0; i < max; i++) {
+                const img = images[i];
+                const para = paragraphs[i];
+
+                // When we have both image and paragraph for the same index, render them side-by-side on desktop
+                if (img && para) {
+                  blocks.push(
+                    <div
+                      key={`block-${i}`}
+                      className={`flex flex-col md:items-center md:gap-6 mb-8 md:flex-row ${i % 2 === 1 ? "md:flex-row-reverse" : "md:flex-row"}`}
+                    >
+                      <figure className="md:w-1/2 w-full mb-4 md:mb-0">
+                        <img
+                          src={img}
+                          alt={`${article.title} image ${i + 1}`}
+                          className="w-full h-64 md:h-96 object-cover rounded"
+                          loading="lazy"
+                        />
+                      </figure>
+
+                      <div className="md:w-1/2 w-full prose max-w-none">
+                        {renderLines(para, `para-${i}`)}
+                      </div>
+                    </div>
+                  );
+                  continue;
+                }
+
+                // Image only
+                if (img && !para) {
+                  blocks.push(
+                    <figure key={`img-${i}`} className="mb-8">
+                      <img src={img} alt={`${article.title} image ${i + 1}`} className="w-full rounded object-cover" loading="lazy" />
+                    </figure>
+                  );
+                  continue;
+                }
+
+                // Paragraph only
+                if (para && !img) {
+                  blocks.push(
+                    <div key={`para-${i}`} className="mb-6 prose prose-lg max-w-none">
+                      {renderLines(para, `para-${i}`)}
+                    </div>
+                  );
+                }
               }
-              if (paragraph.startsWith("###")) {
-                return (
-                  <h3 key={index} className="text-2xl font-bold mt-6 mb-3 text-gray-900">
-                    {paragraph.replace("### ", "")}
-                  </h3>
-                );
-              }
-              if (paragraph.startsWith("- ")) {
-                return null;
-              }
-              if (paragraph.trim() === "") {
-                return <br key={index} />;
-              }
-              if (paragraph.startsWith("**")) {
-                return (
-                  <p key={index} className="text-gray-700 mb-4 font-semibold">
-                    {paragraph}
-                  </p>
-                );
-              }
-              return (
-                <p key={index} className="text-gray-700 mb-4">
-                  {paragraph}
-                </p>
-              );
-            })}
+
+              // If there are extra paragraphs beyond images (or vice versa), they are already handled.
+              return blocks;
+            })()}
           </article>
 
           {/* Tags */}

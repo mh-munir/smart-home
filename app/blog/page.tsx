@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import BlogList from "@/components/BlogList";
 import { getLatestArticles, getAllBlogCategories } from "@/lib/blog";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -66,49 +67,7 @@ export default function Blog() {
           </div>
 
           {/* Articles Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {latestArticles.map((article) => (
-              <Link
-                key={article.id}
-                href={`/blog/${article.slug}`}
-                className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition"
-              >
-                <div className="bg-linear-to-r from-teal-500 to-teal-500 h-40 flex items-center justify-center text-4xl">
-                  📚
-                </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-semibold text-teal-600 capitalize">
-                      {article.category}
-                    </span>
-                    <span className="text-sm text-gray-600">{article.readTime} min read</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition">
-                    {article.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">
-                    {article.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-500">{article.author}</span>
-                    <span className="text-gray-500">
-                      {article.date ? new Date(article.date).toLocaleDateString() : ""}
-                    </span>
-                  </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {(article.tags ?? []).slice(0, 2).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <BlogList articles={latestArticles as any} pageSize={12} />
 
           {/* Newsletter Section */}
           <section className="mt-16 bg-linear-to-r from-teal-600 to-teal-600 text-white rounded-lg p-8 md:p-12">

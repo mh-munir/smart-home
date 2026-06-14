@@ -3,6 +3,7 @@ import { requireAdminSession } from "@/lib/admin-auth";
 import Blog from "@/models/Blog";
 import fs from "fs/promises";
 import path from "path";
+import { saveBufferToStorage } from "@/lib/storage";
 
 function serializeBlog(blog) {
   return {
@@ -54,7 +55,7 @@ export async function PUT(req, { params }) {
     const { id } = await params;
     const data = await req.json();
 
-    // If images are included as data URLs, save them to public/uploads/blogs
+    // If images are included as data URLs, save them to storage (S3 if configured) or public/uploads/blogs
     const processedImages = [];
     if (Array.isArray(data.images)) {
       for (let i = 0; i < data.images.length && processedImages.length < 5; i++) {
@@ -65,12 +66,19 @@ export async function PUT(req, { params }) {
             const mime = match[1];
             const base64Data = match[2];
             const ext = mime.split("/")[1].split("+")[0] || "jpg";
-            const uploadsDir = path.join(process.cwd(), "public", "uploads", "blogs");
-            await fs.mkdir(uploadsDir, { recursive: true });
             const filename = `blog-${id}-${Date.now()}-${i}.${ext}`;
-            const filePath = path.join(uploadsDir, filename);
-            await fs.writeFile(filePath, Buffer.from(base64Data, "base64"));
-            processedImages.push(`/uploads/blogs/${filename}`);
+            const key = `uploads/blogs/${filename}`;
+            const buffer = Buffer.from(base64Data, "base64");
+            try {
+              const res = await saveBufferToStorage(buffer, key, mime);
+              processedImages.push(res.url);
+            } catch (e) {
+              const uploadsDir = path.join(process.cwd(), "public", "uploads", "blogs");
+              await fs.mkdir(uploadsDir, { recursive: true });
+              const filePath = path.join(uploadsDir, filename);
+              await fs.writeFile(filePath, buffer);
+              processedImages.push(`/uploads/blogs/${filename}`);
+            }
           }
         } else if (typeof img === "string" && img.trim()) {
           processedImages.push(img);

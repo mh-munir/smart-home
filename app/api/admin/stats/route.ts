@@ -1,9 +1,13 @@
 import { NextResponse } from 'next/server';
 import { connectDB, hasMongoDBConfig } from '@/lib/db';
+import { requireAdminSession } from '@/lib/admin-auth';
 import Product from '@/models/Product';
 import Blog from '@/models/Blog';
 
 export async function GET() {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
+
   if (!hasMongoDBConfig()) {
     return NextResponse.json({ error: 'MONGODB_URI not configured' }, { status: 500 });
   }
