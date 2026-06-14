@@ -16,6 +16,7 @@
     "add:affiliate-links": "node scripts/add-affiliate-links.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.514.0",
     "bcryptjs": "^2.4.3",
     "dotenv": "^17.4.2",
     "mongoose": "^9.6.2",
