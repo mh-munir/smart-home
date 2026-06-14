@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import Product from '@/models/Product';
+import { requireAdminSession } from '@/lib/admin-auth';
 
 /**
  * API Route for Affiliate Statistics
  * Get affiliate performance data for products
  */
 export async function GET(request: NextRequest) {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
+
   try {
     const { searchParams } = new URL(request.url);
     const productId = searchParams.get('productId');

@@ -3,6 +3,8 @@ import Footer from "@/components/Footer";
 import Link from "next/link";
 import BlogList from "@/components/BlogList";
 import { getLatestArticles, getAllBlogCategories } from "@/lib/blog";
+import { connectDB } from "@/lib/db";
+import Blog from "@/models/Blog";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
@@ -22,9 +24,33 @@ export const metadata = {
   },
 };
 
-export default function Blog() {
-  const latestArticles = getLatestArticles(12);
-  const categories = getAllBlogCategories();
+export default async function BlogPage() {
+  let latestArticles = [];
+  let categories = [];
+
+  try {
+    await connectDB();
+    const docs = await Blog.find({ published: true }).sort({ createdAt: -1 }).limit(100).lean();
+    latestArticles = docs.map((a: any) => ({
+      id: a._id?.toString?.() ?? a.slug,
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.description || "",
+      content: a.content,
+      author: a.author || "",
+      date: a.createdAt?.toISOString() || a.date || null,
+      category: a.category,
+      readTime: a.readTime || 5,
+      featured: a.featured || false,
+      image: a.image || (a.images && a.images[0]) || null,
+      tags: a.tags || [],
+    }));
+    categories = Array.from(new Set(docs.map((d: any) => d.category).filter(Boolean))).sort();
+  } catch (e) {
+    // fallback to static articles when DB isn't available
+    latestArticles = getLatestArticles(12);
+    categories = getAllBlogCategories();
+  }
 
   return (
     <>

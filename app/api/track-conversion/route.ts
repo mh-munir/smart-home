@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import Product from '@/models/Product';
+import { requireAdminSession } from '@/lib/admin-auth';
 
 /**
  * API Route for Multi-Affiliate Conversion Tracking
  * Handles server-side conversion tracking for affiliate networks
  */
 export async function POST(request: NextRequest) {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
   try {
     const body = await request.json();
     const { eventType, eventData, productId, affiliateId, type } = body;
