@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db';
 import Blog from '@/models/Blog';
 
-export async function POST(req: NextRequest, { params }) {
-  const { id } = params;
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   try {
     await connectDB();
     await Blog.deleteOne({ _id: id });
