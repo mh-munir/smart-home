@@ -39,12 +39,12 @@ export default function Navbar() {
             >
               Best Deals
             </Link>
-            <a
-              href="#"
+            <Link
+              href="/about"
               className="text-gray-700 hover:text-teal-600 font-semibold transition-colors text-xs uppercase tracking-wide"
             >
               About
-            </a>
+            </Link>
           </div>
         </div>
       </div>

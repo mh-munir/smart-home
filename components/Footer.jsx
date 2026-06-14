@@ -13,9 +13,9 @@ export default function Footer() {
               Expert smart home reviews and buying guides to help you make the best decisions for your home.
             </p>
             <div className="flex gap-4 text-lg">
-              <a href="#" className="hover:text-teal-400 transition-colors">f</a>
-              <a href="#" className="hover:text-teal-400 transition-colors">𝕏</a>
-              <a href="#" className="hover:text-teal-400 transition-colors">📷</a>
+              <Link href="#" className="hover:text-teal-400 transition-colors">f</Link>
+              <Link href="#" className="hover:text-teal-400 transition-colors">𝕏</Link>
+              <Link href="#" className="hover:text-teal-400 transition-colors">📷</Link>
             </div>
           </div>
 
@@ -48,7 +48,7 @@ export default function Footer() {
               <li><Link href="/author" className="hover:text-teal-400 transition-colors">Our Team</Link></li>
               <li><Link href="/cookie-policy" className="hover:text-teal-400 transition-colors">Cookie Policy</Link></li>
               <li><Link href="/affiliate-disclosure" className="hover:text-teal-400 transition-colors">Affiliate Disclosure</Link></li>
-              <li><Link href="/" className="hover:text-teal-400 transition-colors">Sitemap</Link></li>
+              <li><Link href="/sitemap" className="hover:text-teal-400 transition-colors">Sitemap</Link></li>
             </ul>
           </div>
 
