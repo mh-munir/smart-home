@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 
 const navItems = [
@@ -7,6 +9,7 @@ const navItems = [
   { href: "/admin/hero-slider", label: "Hero Slider" },
   { href: "/admin/blogs", label: "Blogs" },
   { href: "/admin/add-blog", label: "Add Blog" },
+  { href: "/admin/settings", label: "Settings" },
   { href: "/admin/analytics", label: "Analytics" },
 ];
 

@@ -6,6 +6,20 @@ import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAdSenseScript from "@/components/GoogleAdSenseScript";
 import { generateHrefLangLinks } from "@/lib/multi-country-seo";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
+import fs from "fs";
+import path from "path";
+
+let faviconPath = "/favicon.ico";
+try {
+  const settingsPath = path.join(process.cwd(), "data", "site-settings.json");
+  if (fs.existsSync(settingsPath)) {
+    const raw = fs.readFileSync(settingsPath, "utf8");
+    const settings = JSON.parse(raw || "{}");
+    if (settings?.favicon) faviconPath = settings.favicon;
+  }
+} catch (e) {
+  // ignore
+}
 
 const alternateLanguages = Object.fromEntries(
   generateHrefLangLinks().map((link) => [link.hrefLang, link.href])
@@ -85,6 +99,7 @@ export default function RootLayout({
         ></script>
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="icon" href={faviconPath} />
       </head>
       <body className="min-h-full flex flex-col">
         <GoogleTagManager />
