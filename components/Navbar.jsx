@@ -88,7 +88,7 @@ export default function Navbar() {
               width={160}
               height={40}
               priority
-              className="h-9 w-auto object-contain transition-transform group-hover:scale-105"
+              className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
             />
             {settings.subtitle && (
               <span className="hidden lg:block text-xs text-gray-400 font-serif italic border-l border-gray-200 pl-3">
@@ -102,7 +102,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-600 hover:text-teal-600 font-medium transition-colors text-sm"
+                className="text-gray-900 hover:border-be-rose-500 font-normal transition-transform text-lg"
               >
                 {link.label}
               </Link>
@@ -153,15 +153,6 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-4 mt-2 border-t border-gray-100">
-                <Link
-                  href="/admin"
-                  onClick={() => setOpen(false)}
-                  className="block py-3 px-4 rounded-xl text-center font-bold text-white bg-teal-600"
-                >
-                  Go to Dashboard
-                </Link>
-              </div>
             </div>
           </nav>
         </>
