@@ -8,6 +8,8 @@ import { generateHrefLangLinks } from "@/lib/multi-country-seo";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import fs from "fs";
 import path from "path";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 let faviconPath = "/favicon.ico";
 try {
@@ -106,9 +108,11 @@ export default function RootLayout({
         <a href="#main-content" className="sr-only focus:not-sr-only">
           Skip to content
         </a>
+        <Navbar/>
         <main id="main-content" className="flex-1">
           {children}
         </main>
+        <Footer/>
       </body>
     </html>
   );

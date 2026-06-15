@@ -53,8 +53,7 @@ export default async function BlogPage() {
   }
 
   return (
-    <>
-      <Navbar />
+
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
@@ -120,7 +119,5 @@ export default async function BlogPage() {
           </section>
         </div>
       </div>
-      <Footer />
-    </>
   );
 }

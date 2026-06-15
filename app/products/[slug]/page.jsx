@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { SITE_URL } from '@/lib/site';
 
 export default function ProductDetails() {
@@ -74,8 +72,7 @@ export default function ProductDetails() {
   }
 
   return (
-    <>
-      <Navbar />
+
       <div className="min-h-screen bg-white">
         {/* Product Header - Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-12 sm:py-16">
@@ -268,7 +265,5 @@ export default function ProductDetails() {
           </Link>
         </div>
       </div>
-      <Footer />
-    </>
   );
 }

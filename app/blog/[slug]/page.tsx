@@ -1,5 +1,3 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Link from "next/link";
 import { getBlogArticle, getLatestArticles } from "@/lib/blog";
 import { connectDB } from "@/lib/db";
@@ -112,8 +110,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   const articleTags = article.tags ?? [];
 
   return (
-    <>
-      <Navbar />
+
       <div className="min-h-screen bg-white">
         {/* Article Header */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-12 sm:py-16">
@@ -344,8 +341,6 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </section>
         </div>
       </div>
-      <Footer />
-    </>
   );
 }
 

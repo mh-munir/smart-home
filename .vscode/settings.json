@@ -1,0 +1,8 @@
+{
+    "chat.agent.enabled": true,
+    "chat.agent.allowedNetworkDomains": [
+        ""
+    ],
+    "geminicodeassist.agentDebugMode": true,
+    "geminicodeassist.agentYoloMode": true
+}

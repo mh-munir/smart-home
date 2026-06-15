@@ -1,8 +1,4 @@
 'use client';
-
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-
 export default function GuidesPage() {
   const guides = [
     {
@@ -72,8 +68,6 @@ export default function GuidesPage() {
   ];
 
   return (
-    <>
-      <Navbar />
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-gray-50 border-b border-gray-200 py-16 px-4">
@@ -202,7 +196,5 @@ export default function GuidesPage() {
           </div>
         </section>
       </main>
-      <Footer />
-    </>
   );
 }

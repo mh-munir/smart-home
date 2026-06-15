@@ -1,5 +1,4 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+
 import { SITE_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
@@ -20,8 +19,6 @@ export const metadata = {
 
 export default function PrivacyPolicy() {
   return (
-    <>
-      <Navbar />
       <div className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold mb-8 text-gray-900">Privacy Policy</h1>
@@ -169,7 +166,5 @@ export default function PrivacyPolicy() {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
   );
 }

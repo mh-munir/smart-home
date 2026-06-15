@@ -60,7 +60,6 @@ export default async function Home() {
         url={SITE_URL}
         type="WebSite"
       />
-      <Navbar />
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
         <HeroSlider slides={heroSlides} />
@@ -212,7 +211,6 @@ export default async function Home() {
           </div>
         </section>
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,5 +1,4 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+
 import { SITE_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
@@ -20,8 +19,6 @@ export const metadata = {
 
 export default function Contact() {
   return (
-    <>
-      <Navbar />
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
@@ -203,7 +200,5 @@ export default function Contact() {
           </section>
         </div>
       </div>
-      <Footer />
-    </>
   );
 }

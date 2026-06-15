@@ -1,5 +1,3 @@
-import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 import { SITE_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
@@ -26,8 +24,6 @@ const prohibitedConduct = [
 
 export default function Terms() {
   return (
-    <>
-      <Navbar />
       <main className="min-h-screen bg-white">
         <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold mb-4 text-gray-900">
@@ -121,7 +117,6 @@ export default function Terms() {
           </div>
         </div>
       </main>
-      <Footer />
-    </>
+    
   );
 }
