@@ -87,7 +87,7 @@ export async function GET(request) {
     httpOnly: true,
     maxAge: SESSION_MAX_AGE_SECONDS,
     path: "/",
-    sameSite: "lax",
+    sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
   });
 

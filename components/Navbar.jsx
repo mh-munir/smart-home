@@ -41,8 +41,8 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4">
+    <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link href="/" className="flex items-center gap-4">
             {settings.logo ? (
@@ -52,18 +52,19 @@ export default function Navbar() {
                 <div className="text-2xl font-serif font-bold text-gray-900">SmartHome</div>
               </div>
             )}
-
             <div className="hidden sm:flex flex-col">
               <div className="text-xs text-gray-600 font-serif italic mt-0.5">{settings.subtitle}</div>
             </div>
+            {/* show subtitle on very small screens under title */}
+            <div className="sm:hidden text-xs text-gray-600 font-serif italic mt-0.5">{settings.subtitle}</div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-10" aria-label="Primary">
+          <nav className="hidden md:flex items-center gap-10" aria-label="Primary Navigation">
             {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-gray-700 hover:text-teal-600 font-semibold transition-colors text-xs uppercase tracking-wide"
+                className="text-gray-700 hover:text-teal-600 font-semibold transition-colors text-xs uppercase tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 rounded"
               >
                 {l.label}
               </Link>
@@ -85,7 +86,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       <div className={`md:hidden ${open ? "block" : "hidden"}`} id="mobile-menu">
-        <div className="absolute inset-x-0 top-20 bg-white border-t border-gray-200 z-50 p-4">
+        <div className="fixed inset-x-0 top-20 bg-white border-t border-gray-200 z-50 p-4">
           <div className="flex flex-col gap-3">
             {links.map((l) => (
               <Link

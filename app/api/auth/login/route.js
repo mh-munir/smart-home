@@ -74,7 +74,7 @@ export async function POST(request) {
         httpOnly: true,
         maxAge: SESSION_MAX_AGE_SECONDS,
         path: "/",
-        sameSite: "lax",
+        sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
       });
       console.log("[LOGIN] Cookie set, redirecting to:", nextPath);
@@ -100,7 +100,7 @@ export async function POST(request) {
         httpOnly: true,
         maxAge: SESSION_MAX_AGE_SECONDS,
         path: "/",
-        sameSite: "lax",
+        sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
       });
 
@@ -123,7 +123,7 @@ export async function POST(request) {
         httpOnly: true,
         maxAge: SESSION_MAX_AGE_SECONDS,
         path: "/",
-        sameSite: "lax",
+        sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
       });
 
