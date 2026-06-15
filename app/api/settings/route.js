@@ -28,7 +28,7 @@ export async function GET() {
 export async function POST(request) {
   // Protect POST: require valid admin session cookie
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const tokenCookie = cookieStore.get(ADMIN_SESSION_COOKIE);
     const token = tokenCookie && tokenCookie.value ? tokenCookie.value : null;
     const session = token ? verifySessionToken(token) : null;

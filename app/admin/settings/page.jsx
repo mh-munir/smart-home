@@ -13,7 +13,7 @@ export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch("/api/settings")
+    fetch("/api/settings", { credentials: "same-origin" })
       .then((r) => r.json())
       .then((data) => {
         if (data) {
@@ -43,6 +43,7 @@ export default function AdminSettingsPage() {
 
       const res = await fetch("/api/settings", {
         method: "POST",
+        credentials: "same-origin",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -83,7 +84,7 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-8 max-w-3xl min-h-screen">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">⚙️ Site Settings</h1>
       </div>

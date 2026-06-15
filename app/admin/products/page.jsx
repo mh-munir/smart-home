@@ -8,7 +8,7 @@ export default async function ProductsPage() {
   const products = await Product.find({}).sort({ createdAt: -1 }).lean().exec();
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-6">🛒 Products</h1>
 
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">

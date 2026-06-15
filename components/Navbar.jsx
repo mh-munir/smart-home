@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [settings, setSettings] = useState({ subtitle: "Make your home smarter", logo: null, favicon: null });
+  const [settings, setSettings] = useState({ subtitle: "Make your home smarter", logo: "/logo.png", favicon: "/favicon.ico" });
 
   useEffect(() => {
     let cancelled = false;
@@ -45,18 +45,8 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <Link href="/" className="flex items-center gap-4">
-            {settings.logo ? (
-              <img src={settings.logo} alt="logo" className="h-10 w-auto object-contain" />
-            ) : (
-              <div className="flex flex-col">
-                <div className="text-2xl font-serif font-bold text-gray-900">SmartHome</div>
-              </div>
-            )}
-            <div className="hidden sm:flex flex-col">
-              <div className="text-xs text-gray-600 font-serif italic mt-0.5">{settings.subtitle}</div>
-            </div>
-            {/* show subtitle on very small screens under title */}
-            <div className="sm:hidden text-xs text-gray-600 font-serif italic mt-0.5">{settings.subtitle}</div>
+            <img src={settings.logo || "/logo.png"} alt="Logo" className="h-10 w-auto" />
+            <div className="text-xs sm:text-sm text-gray-600 font-serif italic -mt-0.5">{settings.subtitle}</div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-10" aria-label="Primary Navigation">

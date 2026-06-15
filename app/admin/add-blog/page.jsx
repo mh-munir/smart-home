@@ -80,7 +80,7 @@ export default function AddBlogPage() {
   };
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-8 max-w-3xl min-h-screen">
       <h1 className="text-3xl font-bold mb-6">➕ Add New Blog</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-lg">
