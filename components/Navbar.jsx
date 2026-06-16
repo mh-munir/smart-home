@@ -52,7 +52,6 @@ export default function Navbar() {
   const [settings, setSettings] = useState({
     subtitle: "Make your home smarter",
     logo: "/logo.png",
-    favicon: "/favicon.ico",
   });
 
   useEffect(() => {
@@ -80,15 +79,15 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <Link href="/" className="flex items-center gap-3 group">
+        <div className="flex justify-between items-center h-16 sm:h-20">
+          <Link href="/" className="flex items-center gap-3">
             <Image
               src={settings.logo || "/logo.png"}
               alt="Logo"
               width={160}
               height={40}
               priority
-              className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
+              className="h-8 w-auto object-contain"
             />
             {settings.subtitle && (
               <span className="hidden lg:block text-xs text-gray-400 font-serif italic border-l border-gray-200 pl-3">
@@ -102,27 +101,14 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray-900 hover:border-be-rose-500 font-normal transition-transform text-lg"
+                className="text-gray-600 hover:text-teal-600 font-medium transition-colors text-sm"
               >
                 {link.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2 sm:gap-5">
-            {/* Search Icon */}
-            <button className="p-2 text-gray-500 hover:text-teal-600 transition-colors" aria-label="Search">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-
-            {/* Admin/Login Button */}
-            <Link href="/admin" className="hidden sm:inline-flex items-center justify-center px-5 py-2 text-sm font-semibold rounded-full text-white bg-teal-600 hover:bg-teal-700 shadow-md hover:shadow-teal-200/50 transition-all">
-              Admin
-            </Link>
-
-            <div className="md:hidden">
+          <div className="md:hidden flex items-center">
             <button
               onClick={() => setOpen(!open)}
               className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all"
@@ -130,7 +116,6 @@ export default function Navbar() {
             >
               {open ? <CloseIcon /> : <MenuIcon />}
             </button>
-            </div>
           </div>
         </div>
       </div>

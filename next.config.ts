@@ -80,12 +80,12 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             value:
-              "default-src 'self' https:; " +
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://pagead.googlesyndication.com https://*.adtrafficquality.google https://koro; " +
-              "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://pagead.googlesyndication.com https://*.adtrafficquality.google https://koro; " +
+              "default-src 'self' https: data:; " +
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
+              "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
               "img-src 'self' https: data: https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com; " +
               "connect-src 'self' https: https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com;",
           },
           // Aggressive cache for high traffic scenarios
           {
@@ -128,31 +128,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-
-  // Redirects for SEO (keep old URLs working)
-  async redirects() {
-    return [
-      // Add any necessary redirects here
-      // Example: old URLs to new URLs (301 redirects)
-    ];
-  },
-
-  // Rewrites for clean URLs
-  async rewrites() {
-    return {
-      beforeFiles: [],
-    };
-  },
-
-  // Optimize CSS and JavaScript (swcMinify removed in Next.js 16+)
-
-  // Experimental features (most are now automatic in Next.js 16+)
-  experimental: {
-    // next/font optimization is automatic
-  },
-
-  // Turbopack configuration (for next dev and build)
-  turbopack: {},
 };
 
 export default nextConfig;
