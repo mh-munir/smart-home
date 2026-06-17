@@ -1,6 +1,4 @@
 import HeroSlider from "@/components/HeroSlider";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import NewsletterForm from "@/components/NewsletterForm";
@@ -99,9 +97,9 @@ export default async function Home() {
                 </p>
               </div>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                {featuredProducts.map((product) => (
+                {featuredProducts.map((product, idx) => (
                   <div key={product._id} className="transition-transform duration-300 hover:-translate-y-1">
-                    <ProductCard product={product} showBuyButton={false} />
+                    <ProductCard product={product} showBuyButton={false} priority={idx === 0} />
                   </div>
                 ))}
               </div>

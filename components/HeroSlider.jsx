@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 export default function HeroSlider({ slides }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [brokenMap, setBrokenMap] = useState({});
+  const LOCAL_FALLBACK = "/logo.png";
 
   useEffect(() => {
     if (!slides?.length || slides.length === 1) return;
@@ -37,23 +39,29 @@ export default function HeroSlider({ slides }) {
     <section className="relative overflow-hidden bg-gray-950 text-white">
       <div className="absolute inset-0 bg-black/45 z-10" />
 
-      {slides.map((slide, index) => (
-        <div
-          key={slide._id}
-          className={`absolute inset-0 transition-opacity duration-700 ${
-            index === activeIndex ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <Image
-            src={slide.image}
-            alt={slide.title}
-            fill
-            sizes="100vw"
-            className="object-cover"
-            unoptimized
-          />
-        </div>
-      ))}
+      {slides.map((slide, index) => {
+        const src = brokenMap[slide._id] ? LOCAL_FALLBACK : slide.image;
+        const isFallbackLogo = src === LOCAL_FALLBACK;
+
+        return (
+          <div
+            key={slide._id}
+            className={`absolute inset-0 transition-opacity duration-700 ${
+              index === activeIndex ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <Image
+              src={src}
+              alt={slide.title}
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority={index === 0 || isFallbackLogo}
+              onError={() => setBrokenMap((s) => ({ ...s, [slide._id]: true }))}
+            />
+          </div>
+        );
+      })}
 
       <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 `min-h-[420px]` flex items-center">
         <div className="max-w-3xl">
@@ -69,16 +77,10 @@ export default function HeroSlider({ slides }) {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
               href={slides[activeIndex].ctaLink || "/blog"}
-              className="inline-flex items-center rounded-full bg-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-400"
-            >
+              className="inline-flex items-center rounded-full bg-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-400">
               {slides[activeIndex].ctaText || "Explore Products"}
             </Link>
-            <Link
-              href="/admin/hero-slider"
-              className="inline-flex items-center rounded-full border border-white/30 px-6 py-3 font-semibold text-white transition-colors hover:bg-white/10"
-            >
-              Manage Slider
-            </Link>
+            {/* Admin link removed: Manage Slider */}
           </div>
         </div>
       </div>

@@ -30,6 +30,30 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.aliexpress.com",
       },
+      {
+        protocol: "https",
+        hostname: "smart-home-products.vercel.app",
+      },
+      // Local development hosts (allow images served from the local Next server)
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3000",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "3000",
+      },
+      // Match localhost/127.0.0.1 on any port (useful when dev server switches ports)
+      {
+        protocol: "http",
+        hostname: "localhost",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+      },
     ],
     // Modern image formats for better Core Web Vitals
     formats: ["image/avif", "image/webp"],

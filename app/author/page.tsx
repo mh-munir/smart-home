@@ -1,5 +1,3 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata = {
@@ -51,9 +49,7 @@ export default function Author() {
   ];
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -205,7 +201,5 @@ export default function Author() {
           </section>
         </div>
       </div>
-      <Footer />
-    </>
   );
 }

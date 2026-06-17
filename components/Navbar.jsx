@@ -18,7 +18,6 @@ const MenuIcon = ({ className = "w-6 h-6" }) => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    aria-hidden
   >
     <path
       strokeLinecap="round"
@@ -35,7 +34,6 @@ const CloseIcon = ({ className = "w-6 h-6" }) => (
     fill="none"
     viewBox="0 0 24 24"
     stroke="currentColor"
-    aria-hidden
   >
     <path
       strokeLinecap="round"
@@ -48,43 +46,38 @@ const CloseIcon = ({ className = "w-6 h-6" }) => (
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+
   const [settings, setSettings] = useState({
     subtitle: "Make your home smarter",
     logo: "/logo.png",
   });
 
   useEffect(() => {
-    setMounted(true);
-    let cancelled = false;
+    const loadSettings = async () => {
+      try {
+        const res = await fetch("/api/settings");
 
-    fetch("/api/settings")
-      .then((r) => {
-        if (!r.ok) throw new Error("Failed to load settings");
-        const ct = r.headers.get("content-type") || "";
-        if (!ct.includes("application/json")) throw new Error("Not JSON");
-        return r.json();
-      })
-      .then((data) => {
-        if (!cancelled && data) {
-          setSettings(data);
-        }
-      })
-      .catch(() => {});
+        if (!res.ok) return;
 
-    return () => {
-      cancelled = true;
+        const ct = res.headers.get("content-type") || "";
+        if (!ct.includes("application/json")) return;
+
+        const data = await res.json();
+        if (data) setSettings(data);
+      } catch (err) {
+        console.log("Settings load failed");
+      }
     };
-  }, []);
 
-  if (!mounted) {
-    return null;
-  }
+    loadSettings();
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
+
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
             <Image
               src={settings.logo || "/logo.png"}
@@ -92,8 +85,10 @@ export default function Navbar() {
               width={160}
               height={40}
               priority
+              loading="eager"
               className="h-8 w-auto object-contain"
             />
+
             {settings.subtitle && (
               <span className="hidden lg:block text-xs text-gray-400 font-serif italic border-l border-gray-200 pl-3">
                 {settings.subtitle}
@@ -101,6 +96,7 @@ export default function Navbar() {
             )}
           </Link>
 
+          {/* Desktop Menu */}
           <nav className="hidden md:flex items-center gap-8">
             {links.map((link) => (
               <Link
@@ -113,6 +109,7 @@ export default function Navbar() {
             ))}
           </nav>
 
+          {/* Mobile Button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setOpen(!open)}
@@ -122,16 +119,19 @@ export default function Navbar() {
               {open ? <CloseIcon /> : <MenuIcon />}
             </button>
           </div>
+
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {open && (
         <>
           <div
             className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-40 md:hidden"
             onClick={() => setOpen(false)}
           />
-          <nav className="fixed top-20 left-0 right-0 bg-white border-b border-gray-100 z-50 p-4 md:hidden animate-in slide-in-from-top duration-300">
+
+          <nav className="fixed top-20 left-0 right-0 bg-white border-b border-gray-100 z-50 p-4 md:hidden">
             <div className="flex flex-col gap-1">
               {links.map((link) => (
                 <Link

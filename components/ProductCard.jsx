@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-export default function ProductCard({ product, showBuyButton = true }) {
+export default function ProductCard({ product, showBuyButton = true, priority = false }) {
   const [formattedDate, setFormattedDate] = useState(null);
   const [showAffiliateMenu, setShowAffiliateMenu] = useState(false);
 
@@ -39,21 +39,24 @@ export default function ProductCard({ product, showBuyButton = true }) {
   const otherLinks = affiliateLinks.slice(1);
 
   return (
-    <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col" suppressHydrationWarning>
+    <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col">
       <Link
         href={`/products/${product.slug}`}
         className="flex flex-1 flex-col"
         aria-label={`View ${product.title}`}
       >
         {/* Image Header */}
-        <div className="relative w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
+        <div className="w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
           {product.image ? (
             <Image
               src={product.image}
               alt={product.title}
-              fill
+              width={640}
+              height={256}
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 group-hover:scale-105 w-full h-full"
+              style={{ objectFit: 'cover' }}
+              priority={priority}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-4xl">

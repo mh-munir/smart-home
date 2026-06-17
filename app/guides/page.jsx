@@ -1,61 +1,8 @@
-'use client';
+import Link from "next/link";
+import { getAllGuides } from "@/lib/guides";
+
 export default function GuidesPage() {
-  const guides = [
-    {
-      id: 1,
-      title: "Complete Beginner's Guide to Smart Locks",
-      category: 'Smart Locks',
-      excerpt: 'Learn everything you need to know about choosing and installing smart locks for your home.',
-      image: '🔒',
-      readTime: '8 min read',
-      date: '2 days ago',
-    },
-    {
-      id: 2,
-      title: "Smart Lighting 101: Create the Perfect Ambiance",
-      category: 'Smart Lighting',
-      excerpt: 'Discover how smart bulbs can transform your home lighting and save energy.',
-      image: '💡',
-      readTime: '6 min read',
-      date: '3 days ago',
-    },
-    {
-      id: 3,
-      title: 'Security Cameras: Installation & Best Practices',
-      category: 'Smart Cameras',
-      excerpt: 'A comprehensive guide to choosing, installing, and using smart security cameras effectively.',
-      image: '📹',
-      readTime: '10 min read',
-      date: '5 days ago',
-    },
-    {
-      id: 4,
-      title: "Smart Thermostat Setup Guide",
-      category: 'Smart Thermostats',
-      excerpt: 'Save money on energy bills with a smart thermostat. Learn setup and optimization tips.',
-      image: '🌡️',
-      readTime: '7 min read',
-      date: '1 week ago',
-    },
-    {
-      id: 5,
-      title: "Choosing Smart Speakers for Your Home",
-      category: 'Smart Speakers',
-      excerpt: 'Compare the best smart speakers and find the perfect one for your needs.',
-      image: '🔊',
-      readTime: '9 min read',
-      date: '1 week ago',
-    },
-    {
-      id: 6,
-      title: 'Smart Plugs 101: Control Everything',
-      category: 'Smart Plugs',
-      excerpt: 'Turn any device into a smart device with smart plugs. Learn how to use them.',
-      image: '⚡',
-      readTime: '5 min read',
-      date: '2 weeks ago',
-    },
-  ];
+  const guides = getAllGuides();
 
   const categories = [
     'All Guides',
@@ -124,9 +71,9 @@ export default function GuidesPage() {
                   <span>•</span>
                   <span>Updated 3 days ago</span>
                 </div>
-                <button className="mt-6 bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 font-semibold transition-colors">
+                <Link href="/guides/beginner-smart-locks" className="mt-6 inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 font-semibold transition-colors">
                   Read Guide
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -139,7 +86,7 @@ export default function GuidesPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {guides.map((guide) => (
-                <article key={guide.id} className="border border-gray-200 hover:shadow-md transition-shadow">
+                <article key={guide.slug} className="border border-gray-200 hover:shadow-md transition-shadow">
                   {/* Guide Image */}
                   <div className="bg-gray-100 h-48 flex items-center justify-center text-5xl border-b border-gray-200">
                     {guide.image}
@@ -151,7 +98,7 @@ export default function GuidesPage() {
                       {guide.category}
                     </div>
                     <h3 className="text-lg font-serif font-bold text-gray-900 mb-3 hover:text-teal-600 cursor-pointer transition-colors line-clamp-2">
-                      {guide.title}
+                      <Link href={`/guides/${guide.slug}`} className="block">{guide.title}</Link>
                     </h3>
                     <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                       {guide.excerpt}
@@ -160,9 +107,9 @@ export default function GuidesPage() {
                       <span>{guide.readTime}</span>
                       <span>{guide.date}</span>
                     </div>
-                    <a href="#" className="text-teal-600 font-semibold text-sm hover:text-teal-700 transition-colors">
+                    <Link href={`/guides/${guide.slug}`} className="text-teal-600 font-semibold text-sm hover:text-teal-700 transition-colors">
                       Read Guide →
-                    </a>
+                    </Link>
                   </div>
                 </article>
               ))}

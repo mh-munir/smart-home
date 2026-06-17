@@ -112,6 +112,9 @@ export default function RootLayout({
         {seoData.appleMobileWebAppCapable && <meta name="apple-mobile-web-app-capable" content={seoData.appleMobileWebAppCapable} />}
         {seoData.appleMobileWebAppStatusBarStyle && <meta name="apple-mobile-web-app-status-bar-style" content={seoData.appleMobileWebAppStatusBarStyle} />}
         {seoData.appleMobileWebAppTitle && <meta name="apple-mobile-web-app-title" content={seoData.appleMobileWebAppTitle} />}
+        {(seoData.mobileWebAppCapable || seoData.appleMobileWebAppCapable) && (
+          <meta name="mobile-web-app-capable" content={seoData.mobileWebAppCapable || seoData.appleMobileWebAppCapable} />
+        )}
         {seoData.geoRegion && <meta name="geo.region" content={seoData.geoRegion} />}
         {seoData.geoPlacename && <meta name="geo.placename" content={seoData.geoPlacename} />}
         {seoData.geoPosition && <meta name="geo.position" content={seoData.geoPosition} />}

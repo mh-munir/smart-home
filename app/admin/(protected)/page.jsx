@@ -129,6 +129,12 @@ export default async function AdminDashboard() {
             >
               📝 Write New Blog
             </Link>
+              <Link
+                href="/admin/guides"
+                className="block w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded transition-colors text-center"
+              >
+                📚 Manage Guides
+              </Link>
             <Link
               href="/admin/settings"
               className="block w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded transition-colors text-center"

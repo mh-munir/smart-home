@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard" },
@@ -10,6 +9,7 @@ const navItems = [
   { href: "/admin/add-product", label: "Add Product" },
   { href: "/admin/hero-slider", label: "Hero Slider" },
   { href: "/admin/blogs", label: "Blogs" },
+  { href: "/admin/guides", label: "Guides" },
   { href: "/admin/add-blog", label: "Add Blog" },
   { href: "/admin/subscribers", label: "Subscribers" },
   { href: "/admin/settings", label: "Settings" },
@@ -18,11 +18,6 @@ const navItems = [
 
 export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <>
@@ -54,16 +49,15 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
             </button>
           </div>
 
-          <nav className="space-y-2 flex-1" suppressHydrationWarning>
+          <nav className="space-y-2 flex-1">
             {navItems.map((item) => {
-              const active = mounted && pathname?.startsWith(item.href);
+              const active = pathname === item.href || (item.href !== "/admin" && pathname?.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={`block rounded px-4 py-2 transition-colors ${active ? 'bg-teal-600 text-white' : 'text-gray-200 hover:bg-gray-800'}`}
                   aria-current={active ? 'page' : undefined}
-                  suppressHydrationWarning
                 >
                   {item.label}
                 </Link>

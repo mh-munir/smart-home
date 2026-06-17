@@ -1,13 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 
 export default function NotFound() {
   return (
     <>
-      <Navbar />
       <main className="min-h-screen bg-linear-to-br from-slate-50 via-white to-primary-50 flex items-center justify-center px-4">
         <div className="max-w-lg w-full">
           {/* 404 Animation */}
@@ -53,7 +50,6 @@ export default function NotFound() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary-600 font-bold">✓</span>
-                    <span>The URL is incorrect or misspelled</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-primary-600 font-bold">✓</span>
@@ -116,7 +112,6 @@ export default function NotFound() {
           animation: bounce 2s infinite;
         }
       `}</style>
-      <Footer />
     </>
   );
 }
