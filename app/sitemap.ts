@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const products = await getProducts().catch(() => []);
     const now = new Date();
 
-    let entries: MetadataRoute.Sitemap = [];
+    const entries: MetadataRoute.Sitemap = [];
 
     // Main static pages
     entries.push(
