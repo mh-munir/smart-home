@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/db";
 import { requireAdminSession } from "@/lib/admin-auth";
-import { getHeroSlides } from "@/lib/hero-slides";
+import { getHeroSlides, invalidateHeroSlidesCache } from "@/lib/hero-slides";
 import HeroSlide from "@/models/HeroSlide";
 import { revalidatePath } from "next/cache";
 
@@ -69,6 +69,7 @@ export async function POST(req) {
       updatedAt: slide.updatedAt?.toISOString() || null,
     };
 
+    invalidateHeroSlidesCache();
     revalidatePath("/");
     return Response.json(serialized);
   } catch (error) {

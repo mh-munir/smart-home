@@ -1,6 +1,28 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Schema, model, models } from "mongoose";
 
-const BlogSchema = new mongoose.Schema(
+export interface IBlog extends Document {
+  title: string;
+  slug: string;
+  description?: string;
+  content?: string;
+  category?: string;
+  keywords?: string[];
+  image?: string;
+  images: string[];
+  imageUrls: string[];
+  author?: string;
+  tags: string[];
+  readTime: number;
+  affiliateLink?: string | null;
+  views: number;
+  clicks: number;
+  affiliateProducts: mongoose.Types.ObjectId[];
+  published: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const BlogSchema = new Schema<IBlog>(
   {
     title: {
       type: String,
@@ -62,5 +84,4 @@ const BlogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Blog ||
-  mongoose.model("Blog", BlogSchema);
+export default models.Blog || model<IBlog>("Blog", BlogSchema);

@@ -2,9 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import SeoModal from "@/components/SeoModal";
 
 export default function AdminSettingsPage() {
+  const [seoOpen, setSeoOpen] = useState(false);
   const router = useRouter();
+  const [siteTitle, setSiteTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [logoFile, setLogoFile] = useState(null);
   const [faviconFile, setFaviconFile] = useState(null);
@@ -14,9 +17,15 @@ export default function AdminSettingsPage() {
 
   useEffect(() => {
     fetch("/api/settings", { credentials: "same-origin" })
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load settings");
+        const ct = r.headers.get("content-type") || "";
+        if (!ct.includes("application/json")) throw new Error("Not JSON");
+        return r.json();
+      })
       .then((data) => {
         if (data) {
+          setSiteTitle(data.title || "");
           setSubtitle(data.subtitle || "");
           if (data.logo) setLogoPreview(data.logo);
           if (data.favicon) setFavPreview(data.favicon);
@@ -37,7 +46,7 @@ export default function AdminSettingsPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const payload = { subtitle };
+      const payload = { title: siteTitle, subtitle };
       if (logoFile) payload.logoBase64 = await readFileAsDataUrl(logoFile);
       if (faviconFile) payload.faviconBase64 = await readFileAsDataUrl(faviconFile);
 
@@ -87,9 +96,27 @@ export default function AdminSettingsPage() {
     <div className="p-8 max-w-3xl min-h-screen">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold">⚙️ Site Settings</h1>
+        <button
+          onClick={() => setSeoOpen(true)}
+           className="flex items-center gap-2 bg-linear-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow-md transition-all hover:shadow-lg"
+        >
+          🔍 SEO Settings
+        </button>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-lg">
+        <div>
+          <label className="block text-gray-700 font-semibold mb-2">Site Title</label>
+          <input
+            type="text"
+            value={siteTitle}
+            onChange={(e) => setSiteTitle(e.target.value)}
+            placeholder="The main title of your website"
+            className="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <p className="text-sm text-gray-500 mt-1">This title appears in the browser tab and search engines.</p>
+        </div>
+
         <div>
           <label className="block text-gray-700 font-semibold mb-2">Site Subtitle</label>
           <input
@@ -133,6 +160,14 @@ export default function AdminSettingsPage() {
           </button>
         </div>
       </form>
+
+      <SeoModal
+        isOpen={seoOpen}
+        onClose={() => setSeoOpen(false)}
+        onSave={(updatedSeo) => {
+          // SEO settings saved
+        }}
+      />
     </div>
   );
 }

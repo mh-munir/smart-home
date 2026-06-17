@@ -25,8 +25,14 @@ export default function ProductDetailsAffiliate() {
         setProduct(data);
 
         // Fetch related products
-        const allProducts = await fetch('/api/products').then(r => r.json());
-        setRelatedProducts(allProducts.filter(p => p.category === data.category && p.slug !== params.slug).slice(0, 4));
+        const allRes = await fetch('/api/products');
+        if (allRes.ok) {
+          const ct = allRes.headers.get("content-type") || "";
+          if (ct.includes("application/json")) {
+            const allProducts = await allRes.json();
+            setRelatedProducts(allProducts.filter(p => p.category === data.category && p.slug !== params.slug).slice(0, 4));
+          }
+        }
       } catch (err) {
         setError(err.message);
       } finally {

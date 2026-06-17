@@ -1,5 +1,47 @@
 {
+  "title": "SmartHome Affiliate - Best Smart Home Products & Reviews",
   "subtitle": "Cox's It Solution",
   "logo": "/logo.png",
-  "favicon": "/favicon.png"
+  "favicon": "/favicon.png",
+  "seo": {
+    "metaTitle": "",
+    "metaDescription": "",
+    "keywords": "",
+    "ogTitle": "",
+    "ogDescription": "",
+    "ogImage": "",
+    "ogType": "website",
+    "ogUrl": "",
+    "twitterCard": "summary_large_image",
+    "twitterTitle": "",
+    "twitterDescription": "",
+    "twitterImage": "",
+    "twitterSite": "",
+    "twitterCreator": "",
+    "canonicalUrl": "",
+    "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+    "author": "",
+    "googleSiteVerification": "",
+    "bingVerification": "",
+    "yandexVerification": "",
+    "themeColor": "#4F46E5",
+    "appleMobileWebAppCapable": "yes",
+    "appleMobileWebAppStatusBarStyle": "black-translucent",
+    "appleMobileWebAppTitle": "SmartHome",
+    "applicationName": "SmartHome Affiliate",
+    "msTileColor": "#4F46E5",
+    "articleAuthor": "",
+    "articlePublisher": "",
+    "geoRegion": "",
+    "geoPlacename": "",
+    "geoPosition": "",
+    "icbm": "",
+    "extraMetaTags": [],
+    "structuredData": {
+      "organizationName": "",
+      "organizationLogo": "",
+      "organizationUrl": "",
+      "sameAs": []
+    }
+  }
 }

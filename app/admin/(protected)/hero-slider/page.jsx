@@ -27,6 +27,9 @@ export default function HeroSliderAdminPage() {
   async function fetchSlides() {
     try {
       const res = await fetch("/api/hero-slides?all=true");
+      if (!res.ok) throw new Error("Failed to fetch slides");
+      const ct = res.headers.get("content-type") || "";
+      if (!ct.includes("application/json")) throw new Error("Not JSON");
       const data = await res.json();
       setSlides(Array.isArray(data) ? data : []);
     } catch (error) {

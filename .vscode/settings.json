@@ -4,5 +4,6 @@
         ""
     ],
     "geminicodeassist.agentDebugMode": true,
-    "geminicodeassist.agentYoloMode": true
+    "geminicodeassist.agentYoloMode": true,
+    "Codegeex.CommitMessageStyle": "ConventionalCommits"
 }

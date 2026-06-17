@@ -2,20 +2,54 @@ import Link from "next/link";
 import {
   getBlogArticlesByCategory,
   getAllBlogCategories,
-  getLatestArticles,
 } from "@/lib/blog";
+import { connectDB } from "@/lib/db";
+import Blog from "@/models/Blog";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { notFound } from "next/navigation";
+
+export const dynamic = "force-dynamic";
+
+type CategoryArticle = {
+  _id?: { toString?: () => string };
+  id?: string;
+  slug?: string;
+  title?: string;
+  excerpt?: string;
+  description?: string;
+  author?: string;
+  date?: string | null;
+  createdAt?: Date;
+  category?: string;
+  readTime?: number;
+  image?: string;
+  images?: string[];
+  imageUrls?: string[];
+  tags?: string[];
+};
+
+type CategoryDoc = {
+  category?: string;
+};
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ category: string }>;
 }) {
-  const { category } = await params;
+  const { category: rawCategory } = await params;
+  const category = decodeURIComponent(rawCategory);
   const validCategories = getAllBlogCategories();
+  let hasDbArticles = false;
 
-  if (!validCategories.includes(category)) {
+  try {
+    await connectDB();
+    hasDbArticles = (await Blog.countDocuments({ published: true, category })) > 0;
+  } catch {
+    // ignore DB errors and fallback to static categories
+  }
+
+  if (!hasDbArticles && !validCategories.includes(category)) {
     return {
       title: "Category Not Found",
       description: "The category you're looking for doesn't exist.",
@@ -42,15 +76,46 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ category: string }>;
 }) {
-  const { category } = await params;
-  const validCategories = getAllBlogCategories();
+  const { category: rawCategory } = await params;
+  const category = decodeURIComponent(rawCategory);
+  let articles: CategoryArticle[] = [];
+  let allCategories: string[] = [];
 
-  if (!validCategories.includes(category)) {
-    notFound();
+  try {
+    await connectDB();
+    const docs = (await Blog.find({ published: true, category })
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .lean()) as CategoryArticle[];
+    const categoryDocs = (await Blog.find({ published: true })
+      .select("category")
+      .lean()) as CategoryDoc[];
+
+    articles = docs.map((a) => ({
+      id: a._id?.toString?.() ?? a.slug,
+      slug: a.slug,
+      title: a.title,
+      excerpt: a.description || "",
+      author: a.author || "",
+      date: a.createdAt?.toISOString() || a.date || null,
+      category: a.category,
+      readTime: a.readTime || 5,
+      image: a.image || a.images?.[0] || a.imageUrls?.[0] || undefined,
+      tags: a.tags || [],
+    }));
+    allCategories = Array.from(
+      new Set(categoryDocs.map((d) => d.category).filter(Boolean) as string[])
+    ).sort();
+  } catch {
+    const validCategories = getAllBlogCategories();
+
+    if (!validCategories.includes(category)) {
+      notFound();
+    }
+
+    articles = getBlogArticlesByCategory(category);
+    allCategories = validCategories;
   }
-
-  const articles = getBlogArticlesByCategory(category);
-  const allCategories = getAllBlogCategories();
 
   return (
 
@@ -82,7 +147,7 @@ export default async function CategoryPage({
               {allCategories.map((cat) => (
                 <Link
                   key={cat}
-                  href={`/category/${cat}`}
+                  href={`/category/${encodeURIComponent(cat)}`}
                   className={`px-4 py-2 rounded-lg transition capitalize ${
                     cat === category
                       ? "bg-teal-600 text-white"
@@ -135,7 +200,7 @@ export default async function CategoryPage({
                       </span>
                     </div>
                     <div className="mt-4 flex flex-wrap gap-2">
-                      {(article.tags ?? []).slice(0, 2).map((tag) => (
+                      {(article.tags ?? []).slice(0, 2).map((tag: string) => (
                         <span
                           key={tag}
                           className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
@@ -162,7 +227,7 @@ export default async function CategoryPage({
           {/* CTA Section */}
           <section className="bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-8 md:p-12">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl font-bold mb-4">Don't miss out on new content</h2>
+              <h2 className="text-3xl font-bold mb-4">Don&apos;t miss out on new content</h2>
               <p className="text-blue-100 mb-6">
                 Subscribe to our newsletter to get the latest guides and reviews delivered to your inbox.
               </p>
@@ -187,9 +252,3 @@ export default async function CategoryPage({
   );
 }
 
-export async function generateStaticParams() {
-  const categories = getAllBlogCategories();
-  return categories.map((category) => ({
-    category,
-  }));
-}

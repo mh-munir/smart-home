@@ -1,11 +1,12 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Link from "next/link";
 import BlogList from "@/components/BlogList";
+import type { BlogArticle } from "@/components/BlogCard";
 import { getLatestArticles, getAllBlogCategories } from "@/lib/blog";
 import { connectDB } from "@/lib/db";
 import Blog from "@/models/Blog";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Blog - Smart Home Guides & Reviews",
@@ -24,29 +25,48 @@ export const metadata = {
   },
 };
 
+type DbBlogDoc = {
+  _id?: { toString?: () => string };
+  slug?: string;
+  title?: string;
+  description?: string;
+  content?: string;
+  author?: string;
+  createdAt?: Date;
+  date?: string | null;
+  category?: string;
+  readTime?: number;
+  featured?: boolean;
+  image?: string;
+  images?: string[];
+  imageUrls?: string[];
+  tags?: string[];
+};
+
 export default async function BlogPage() {
-  let latestArticles = [];
-  let categories = [];
+  let latestArticles: BlogArticle[] = [];
+  let categories: string[] = [];
 
   try {
     await connectDB();
     const docs = await Blog.find({ published: true }).sort({ createdAt: -1 }).limit(100).lean();
-    latestArticles = docs.map((a: any) => ({
+    latestArticles = docs.map((a: DbBlogDoc) => ({
       id: a._id?.toString?.() ?? a.slug,
       slug: a.slug,
       title: a.title,
       excerpt: a.description || "",
-      content: a.content,
       author: a.author || "",
       date: a.createdAt?.toISOString() || a.date || null,
       category: a.category,
       readTime: a.readTime || 5,
       featured: a.featured || false,
-      image: a.image || (a.images && a.images[0]) || null,
+      image: a.image || a.images?.[0] || a.imageUrls?.[0] || undefined,
       tags: a.tags || [],
     }));
-    categories = Array.from(new Set(docs.map((d: any) => d.category).filter(Boolean))).sort();
-  } catch (e) {
+    categories = Array.from(
+      new Set(docs.map((d: DbBlogDoc) => d.category).filter(Boolean) as string[])
+    ).sort();
+  } catch {
     // fallback to static articles when DB isn't available
     latestArticles = getLatestArticles(12);
     categories = getAllBlogCategories();
@@ -82,7 +102,7 @@ export default async function BlogPage() {
               {categories.map((category) => (
                 <Link
                   key={category}
-                  href={`/category/${category}`}
+                  href={`/category/${encodeURIComponent(category)}`}
                   className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-teal-100 hover:text-teal-600 transition capitalize"
                 >
                   {category}
@@ -92,7 +112,7 @@ export default async function BlogPage() {
           </div>
 
           {/* Articles Grid */}
-          <BlogList articles={latestArticles as any} pageSize={12} />
+          <BlogList articles={latestArticles} pageSize={12} />
 
           {/* Newsletter Section */}
           <section className="mt-16 bg-linear-to-r from-teal-600 to-teal-600 text-white rounded-lg p-8 md:p-12">

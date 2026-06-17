@@ -1,5 +1,6 @@
 import { connectDB } from "@/lib/db";
 import { requireAdminSession } from "@/lib/admin-auth";
+import { invalidateHeroSlidesCache } from "@/lib/hero-slides";
 import HeroSlide from "@/models/HeroSlide";
 import { revalidatePath } from "next/cache";
 
@@ -41,6 +42,7 @@ export async function PUT(req, { params }) {
       { new: true }
     );
 
+    invalidateHeroSlidesCache();
     revalidatePath("/");
     return Response.json(serializeSlide(slide));
   } catch (error) {
@@ -57,6 +59,7 @@ export async function DELETE(req, { params }) {
     const { id } = await params;
 
     await HeroSlide.findByIdAndDelete(id);
+    invalidateHeroSlidesCache();
     revalidatePath("/");
     return Response.json({ message: "Slide deleted" });
   } catch (error) {

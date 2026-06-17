@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard" },
@@ -10,12 +11,18 @@ const navItems = [
   { href: "/admin/hero-slider", label: "Hero Slider" },
   { href: "/admin/blogs", label: "Blogs" },
   { href: "/admin/add-blog", label: "Add Blog" },
+  { href: "/admin/subscribers", label: "Subscribers" },
   { href: "/admin/settings", label: "Settings" },
   { href: "/admin/analytics", label: "Analytics" },
 ];
 
 export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -23,13 +30,15 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
       <div
         className={`fixed inset-0 z-40 md:hidden transition-opacity ${mobileOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
         aria-hidden={!mobileOpen}
+        suppressHydrationWarning
       >
         <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       </div>
 
       <aside
         className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-gray-900 text-white transition-transform duration-200 md:static md:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
-        aria-hidden={!mobileOpen && typeof window !== 'undefined' && window.innerWidth < 768}
+        aria-hidden={!mobileOpen}
+        suppressHydrationWarning
       >
         <div className="p-6 h-full flex flex-col">
           <div className="flex items-center justify-between mb-6">
@@ -45,15 +54,16 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
             </button>
           </div>
 
-          <nav className="space-y-2 flex-1">
+          <nav className="space-y-2 flex-1" suppressHydrationWarning>
             {navItems.map((item) => {
-              const active = pathname?.startsWith(item.href);
+              const active = mounted && pathname?.startsWith(item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={`block rounded px-4 py-2 transition-colors ${active ? 'bg-teal-600 text-white' : 'text-gray-200 hover:bg-gray-800'}`}
                   aria-current={active ? 'page' : undefined}
+                  suppressHydrationWarning
                 >
                   {item.label}
                 </Link>

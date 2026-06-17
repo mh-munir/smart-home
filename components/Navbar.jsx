@@ -59,7 +59,12 @@ export default function Navbar() {
     let cancelled = false;
 
     fetch("/api/settings")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("Failed to load settings");
+        const ct = r.headers.get("content-type") || "";
+        if (!ct.includes("application/json")) throw new Error("Not JSON");
+        return r.json();
+      })
       .then((data) => {
         if (!cancelled && data) {
           setSettings(data);

@@ -3,6 +3,7 @@
 ## Project Overview
 
 This is a **DEPLOY-READY** affiliate marketing platform built with:
+
 - **Next.js 16** (App Router)
 - **MongoDB** (Database)
 - **Tailwind CSS** (Styling)
@@ -11,7 +12,7 @@ This is a **DEPLOY-READY** affiliate marketing platform built with:
 
 ## 📋 Project Structure
 
-```
+```text
 smart-home-affiliate/
 ├── app/
 │   ├── page.tsx                 # Home page with products
@@ -62,14 +63,16 @@ npm install
 ### Step 2: Setup MongoDB
 
 #### Option A: MongoDB Atlas (Cloud - Recommended)
-1. Go to https://www.mongodb.com/cloud/atlas
+
+1. Go to <https://www.mongodb.com/cloud/atlas>
 2. Sign up (free account)
 3. Create a cluster
 4. Get connection string (looks like: `mongodb+srv://username:password@cluster.mongodb.net/dbname`)
 5. Copy to `.env.local` as `MONGODB_URI`
 
 #### Option B: Local MongoDB
-1. Install MongoDB from https://www.mongodb.com/try/download/community
+
+1. Install MongoDB from <https://www.mongodb.com/try/download/community>
 2. Run MongoDB service
 3. Connection string: `mongodb://localhost:27017/smart-home-affiliate`
 
@@ -77,7 +80,7 @@ npm install
 
 Edit `.env.local`:
 
-```
+```env
 MONGODB_URI=your_mongodb_connection_string
 NEXT_PUBLIC_API_URL=http://localhost:3000
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -91,13 +94,13 @@ ADMIN_PASSWORD=your_admin_password
 
 For Google admin login, create a Google OAuth Web Client and add this redirect URI:
 
-```
+```text
 http://localhost:3000/api/auth/google/callback
 ```
 
 For production, also add:
 
-```
+```text
 https://your-domain.com/api/auth/google/callback
 ```
 
@@ -107,36 +110,36 @@ https://your-domain.com/api/auth/google/callback
 npm run dev
 ```
 
-Visit http://localhost:3000
+Visit <http://localhost:3000>
 
 ## 🎯 Usage Guide
 
 ### Add Products
 
-1. Go to http://localhost:3000/admin/add-product
+1. Go to <http://localhost:3000/admin/add-product>
 2. Fill in product details:
    - Title
    - Price
    - Image URL
    - Rating
-   - Affiliate Link (Amazon)
+   - Affiliate Link
    - Description
 3. Click "Add Product"
 
 ### View Admin Dashboard
 
-- **Dashboard**: http://localhost:3000/admin (analytics & stats)
-- **Products**: http://localhost:3000/admin/products (list all products)
-- **Blogs**: http://localhost:3000/admin/blogs (list all blogs)
-- **Analytics**: http://localhost:3000/admin/analytics (detailed stats)
+- **Dashboard**: <http://localhost:3000/admin> (analytics & stats)
+- **Products**: <http://localhost:3000/admin/products> (list all products)
+- **Blogs**: <http://localhost:3000/admin/blogs> (list all blogs)
+- **Analytics**: <http://localhost:3000/admin/analytics> (detailed stats)
 
 ### Home Page
 
-- http://localhost:3000 (displays featured products)
+- <http://localhost:3000> (displays featured products)
 
 ### Review Page
 
-- http://localhost:3000/review (detailed review page)
+- <http://localhost:3000/review> (detailed review page)
 
 ## 🚀 Deploy to Vercel
 
@@ -153,7 +156,7 @@ git push -u origin main
 
 ### Step 2: Deploy on Vercel
 
-1. Go to https://vercel.com
+1. Go to <https://vercel.com>
 2. Click "New Project"
 3. Import your GitHub repository
 4. Click "Continue"
@@ -218,6 +221,7 @@ git push -u origin main
 ## 💰 Monetization
 
 This system is ready for:
+
 - Amazon Affiliate Links
 - Google AdSense
 - Sponsored content
@@ -226,15 +230,18 @@ This system is ready for:
 ## 🆘 Troubleshooting
 
 ### MongoDB Connection Error
+
 - Check `MONGODB_URI` in `.env.local`
 - Verify MongoDB service is running
 - Check firewall/network access
 
 ### Images Not Loading
+
 - Ensure image URLs are valid
 - Add domain to `next.config.ts` image optimization
 
 ### Admin Panel Not Working
+
 - Clear browser cache
 - Check browser console for errors
 - Verify API connection
@@ -242,16 +249,15 @@ This system is ready for:
 ## 📞 Support
 
 For issues:
+
 1. Check error logs in terminal
 2. Review browser console (F12)
 3. Check MongoDB Atlas/Local database connection
 
 ## 🎓 Learning Resources
 
-- Next.js Docs: https://nextjs.org/docs
-- MongoDB: https://docs.mongodb.com/
-- Tailwind CSS: https://tailwindcss.com/docs
+- Next.js Docs: <https://nextjs.org/docs>
+- MongoDB: <https://docs.mongodb.com/>
+- Tailwind CSS: <https://tailwindcss.com/docs>
 
 ---
-
-**Ready to deploy and earn? Let's build your affiliate empire! 🚀**

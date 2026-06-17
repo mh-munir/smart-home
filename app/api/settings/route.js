@@ -41,7 +41,7 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { subtitle = "", logoBase64, faviconBase64 } = body || {};
+    const { title = "", subtitle = "", logoBase64, faviconBase64, seo } = body || {};
 
     // Load existing settings if present
     let existing = {};
@@ -51,7 +51,10 @@ export async function POST(request) {
       existing = {};
     }
 
-    const newSettings = { ...existing, subtitle: subtitle || existing.subtitle || "" };
+    const newSettings = { ...existing, title: title || existing.title || "", subtitle: subtitle || existing.subtitle || "" };
+    if (seo) {
+      newSettings.seo = { ...(existing.seo || {}), ...seo };
+    }
 
     // Ensure public dir exists
     try {

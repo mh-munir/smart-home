@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import NewsletterForm from "@/components/NewsletterForm";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -176,20 +177,7 @@ export default async function Home() {
             <p className="text-gray-700 mb-6">
               Subscribe to get the latest smart home reviews and buying guides delivered to your inbox.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-gray-300 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-100"
-                required
-              />
-              <button
-                type="submit"
-                className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 font-bold transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
+            <NewsletterForm source="homepage" />
           </div>
         </section>
 
