@@ -22,7 +22,7 @@ export default function SchemaMarkup({
   dateModified = new Date().toISOString(),
   type = 'WebSite',
 }: SchemaMarkupProps) {
-  const schemas = [
+  const schemas: any[] = [
     // Organization Schema
     {
       '@context': 'https://schema.org',
@@ -51,7 +51,7 @@ export default function SchemaMarkup({
           '@type': 'EntryPoint',
           urlTemplate: `${(url || SITE_URL)}/search?q={search_term_string}`,
         },
-        query_input: 'required name=search_term_string',
+        'query-input': 'required name=search_term_string',
       },
     },
     // BreadcrumbList Schema
@@ -92,21 +92,6 @@ export default function SchemaMarkup({
             text: 'The best home smart products for beginners include smart speakers, smart plugs, and smart bulbs. These are affordable and easy to set up.',
           },
         },
-      ];
-
-      // If an article type is requested, add a NewsArticle schema using provided dates
-      if (type === 'NewsArticle' || datePublished) {
-        schemas.push({
-          '@context': 'https://schema.org',
-          '@type': 'NewsArticle',
-          headline: title,
-          description: description,
-          image: image ? [image] : undefined,
-          datePublished: datePublished,
-          dateModified: dateModified,
-          author: { '@type': 'Person', name: author },
-          mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-        });
         {
           '@type': 'Question',
           name: 'How much do home smart products cost?',
@@ -126,6 +111,21 @@ export default function SchemaMarkup({
       ],
     },
   ];
+
+  // If an article type is requested, add a NewsArticle schema using provided dates
+  if (type === 'NewsArticle' || datePublished) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'NewsArticle',
+      headline: title,
+      description: description,
+      image: image ? [image] : undefined,
+      datePublished: datePublished,
+      dateModified: dateModified,
+      author: { '@type': 'Person', name: author },
+      mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    });
+  }
 
   return (
     <>
