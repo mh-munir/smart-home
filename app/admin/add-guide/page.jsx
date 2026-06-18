@@ -20,7 +20,8 @@ export default function AddGuidePage() {
       if (!res.ok) throw new Error('Failed');
       alert('Guide created');
       setTitle(''); setSlug(''); setCategory('Guides'); setContent('');
-    } catch (err) {
+    } catch (error) {
+      console.error('Create guide error:', error);
       alert('Failed to create guide');
     } finally {
       setLoading(false);

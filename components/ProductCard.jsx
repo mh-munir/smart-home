@@ -2,19 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export default function ProductCard({ product, showBuyButton = true, priority = false }) {
-  const [formattedDate, setFormattedDate] = useState(null);
   const [showAffiliateMenu, setShowAffiliateMenu] = useState(false);
 
-  useEffect(() => {
-    if (product.createdAt) {
-      const date = new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(
-        new Date(product.createdAt),
-      );
-      setFormattedDate(date);
-    }
+  const formattedDate = useMemo(() => {
+    if (!product?.createdAt) return null;
+    return new Intl.DateTimeFormat('en-US', { timeZone: 'UTC' }).format(new Date(product.createdAt));
   }, [product.createdAt]);
 
   // Get active affiliate links

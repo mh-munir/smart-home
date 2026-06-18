@@ -22,7 +22,7 @@ try {
     if (settings?.title) siteTitle = settings.title;
     if (settings?.seo) seoData = settings.seo;
   }
-} catch (e) {
+} catch {
   // ignore
 }
 

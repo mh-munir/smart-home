@@ -27,10 +27,10 @@ export default function SchemaMarkup({
     {
       '@context': 'https://schema.org',
       '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-      logo: DEFAULT_LOGO,
-      description: 'Expert reviews and buying guides for home smart products',
+      name: author || SITE_NAME,
+      url: url || SITE_URL,
+      logo: image || DEFAULT_LOGO,
+      description: description || 'Expert reviews and buying guides for home smart products',
       sameAs: [
         'https://www.facebook.com/smarthomeaffiliate',
         'https://twitter.com/smarthomeaffiliate',
@@ -42,14 +42,14 @@ export default function SchemaMarkup({
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
-      name: SITE_NAME,
-      url: SITE_URL,
-      description: 'Home Smart Products Reviews & Buying Guides',
+      name: title || SITE_NAME,
+      url: url || SITE_URL,
+      description: description || 'Home Smart Products Reviews & Buying Guides',
       potentialAction: {
         '@type': 'SearchAction',
         target: {
           '@type': 'EntryPoint',
-          urlTemplate: `${url}/search?q={search_term_string}`,
+          urlTemplate: `${(url || SITE_URL)}/search?q={search_term_string}`,
         },
         query_input: 'required name=search_term_string',
       },
@@ -92,6 +92,21 @@ export default function SchemaMarkup({
             text: 'The best home smart products for beginners include smart speakers, smart plugs, and smart bulbs. These are affordable and easy to set up.',
           },
         },
+      ];
+
+      // If an article type is requested, add a NewsArticle schema using provided dates
+      if (type === 'NewsArticle' || datePublished) {
+        schemas.push({
+          '@context': 'https://schema.org',
+          '@type': 'NewsArticle',
+          headline: title,
+          description: description,
+          image: image ? [image] : undefined,
+          datePublished: datePublished,
+          dateModified: dateModified,
+          author: { '@type': 'Person', name: author },
+          mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+        });
         {
           '@type': 'Question',
           name: 'How much do home smart products cost?',

@@ -109,21 +109,30 @@ export function useTracking() {
  * Product tracking hook
  */
 export function useProductTracking(product: Record<string, unknown> | null) {
+  type TrackedProduct = {
+    price?: number | string;
+    currency?: string;
+    _id?: string;
+    name?: string;
+    category?: string;
+  } | null;
+
   useEffect(() => {
     if (!product || typeof window === 'undefined' || !window.gtag) return;
 
-    const price = (product as any).price;
-    const currency = (product as any).currency || 'USD';
+    const p = product as TrackedProduct;
+    const price = p?.price;
+    const currency = p?.currency || 'USD';
 
     window.gtag('event', 'view_item', {
       value: price,
       currency,
       items: [
         {
-          item_id: (product as any)._id,
-          item_name: (product as any).name,
+          item_id: p?._id,
+          item_name: p?.name,
           price,
-          item_category: (product as any).category,
+          item_category: p?.category,
         },
       ],
     });

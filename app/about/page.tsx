@@ -1,4 +1,5 @@
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import Link from "next/link";
 
 export const metadata = {
   title: "About Us - Home Smart Products | Smart Home Experts",
@@ -41,7 +42,7 @@ export default function About() {
                 At {SITE_NAME}, our mission is to empower people to make informed decisions about smart home technology. We believe that everyone deserves access to honest, comprehensive information about the latest smart home devices, from budget-friendly options to premium systems.
               </p>
               <p className="text-gray-700">
-                We're dedicated to simplifying the complex world of home automation and helping our readers find the perfect devices for their lifestyle and budget.
+                We&apos;re dedicated to simplifying the complex world of home automation and helping our readers find the perfect devices for their lifestyle and budget.
               </p>
             </div>
           </section>
@@ -132,10 +133,10 @@ export default function About() {
                 Our team consists of experienced technology writers, product reviewers, and smart home enthusiasts. Each team member brings unique expertise and perspectives to our content.
               </p>
               <p className="text-gray-700 mb-4">
-                We're united by a common passion: making smart home technology accessible and understandable for everyone.
+                We&apos;re united by a common passion: making smart home technology accessible and understandable for everyone.
               </p>
               <p className="text-gray-700">
-                Learn more about our team members on our <a href="/author" className="text-primary-600 hover:underline">Author Profile</a> page.
+                Learn more about our team members on our <Link href="/author" className="text-primary-600 hover:underline">Author Profile</Link> page.
               </p>
             </div>
           </section>
@@ -164,10 +165,10 @@ export default function About() {
             <h2 className="text-3xl font-bold mb-6 text-gray-900">Get in Touch</h2>
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 mb-4">
-                Have questions, suggestions, or feedback? We'd love to hear from you!
+                Have questions, suggestions, or feedback? We&apos;d love to hear from you!
               </p>
               <p className="text-gray-700">
-                <a href="/contact" className="text-primary-600 hover:underline font-semibold">Contact us here</a> or email us at <strong>support@smarthomeproducts.com</strong>
+                <Link href="/contact" className="text-primary-600 hover:underline font-semibold">Contact us here</Link> or email us at <strong>support@smarthomeproducts.com</strong>
               </p>
             </div>
           </section>

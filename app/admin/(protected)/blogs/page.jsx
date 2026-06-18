@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { connectDB } from "@/lib/db";
 import Blog from "@/models/Blog";
+import Link from "next/link";
 
 export default async function BlogsPage() {
   await connectDB();

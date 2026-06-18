@@ -1,4 +1,5 @@
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { SITE_URL } from "@/lib/site";
+import Link from "next/link";
 
 export const metadata = {
   title: "Author Profile - Home Smart Products",
@@ -102,7 +103,7 @@ export default function Author() {
                 Our team is united by a simple philosophy: provide honest, in-depth reviews that help people make informed decisions about smart home products.
               </p>
               <p className="text-gray-700 mb-4">
-                Every article, guide, and review is backed by thorough research, real-world testing, and genuine expertise. We don't cut corners, and we don't compromise our integrity.
+                Every article, guide, and review is backed by thorough research, real-world testing, and genuine expertise. We don&apos;t cut corners, and we don&apos;t compromise our integrity.
               </p>
               <p className="text-gray-700">
                 Whether you're a smart home beginner or an advanced enthusiast, you can trust that our recommendations are based on merit, not affiliate potential.
@@ -190,14 +191,14 @@ export default function Author() {
           <section className="bg-linear-to-r from-blue-600 to-indigo-600 text-white p-8 rounded-lg">
             <h2 className="text-2xl font-bold mb-4">Have a Question for Our Team?</h2>
             <p className="mb-6">
-              Get in touch with our team directly. We're here to help answer your questions about smart home devices and technology.
+              Get in touch with our team directly. We&apos;re here to help answer your questions about smart home devices and technology.
             </p>
-            <a
+            <Link
               href="/contact"
               className="inline-block bg-white text-blue-600 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition"
             >
               Contact Us
-            </a>
+            </Link>
           </section>
         </div>
       </div>

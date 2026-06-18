@@ -204,6 +204,8 @@ function FacebookPreview({ title, description, image, url }) {
       <p className="text-xs text-gray-500 px-4 pt-3 pb-1 font-medium">📘 Facebook Preview</p>
       <div className="bg-gray-200 h-40 flex items-center justify-center">
         {image ? (
+          // using <img> here for preview of arbitrary external URLs — disable rule
+          // eslint-disable-next-line @next/next/no-img-element
           <img src={image} alt="OG" className="w-full h-full object-cover" />
         ) : (
           <span className="text-gray-400 text-sm">No Image</span>
@@ -230,6 +232,7 @@ function TwitterPreview({ title, description, image, card }) {
         <div className={`flex ${card === "summary" ? "" : ""} gap-3`}>
            <div className={`bg-gray-200 rounded-lg overflow-hidden ${card === "summary" ? "w-16 h-16 shrink-0" : "w-full h-48"}`}>
             {image ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={image} alt="Twitter" className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
@@ -258,18 +261,22 @@ export default function SeoModal({ isOpen, onClose, onSave }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+
+    const loadSettings = async () => {
       setLoading(true);
-      fetch("/api/settings", { credentials: "same-origin" })
-        .then((r) => r.json())
-        .then((data) => {
-          if (data?.seo) {
-            setSeo({ ...DEFAULT_SEO, ...data.seo });
-          }
-        })
-        .catch(() => {})
-        .finally(() => setLoading(false));
-    }
+      try {
+        const r = await fetch('/api/settings', { credentials: 'same-origin' });
+        const data = await r.json();
+        if (data?.seo) setSeo({ ...DEFAULT_SEO, ...data.seo });
+      } catch {
+        // ignore
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSettings();
   }, [isOpen]);
 
   const updateField = (field, value) => {
@@ -294,12 +301,13 @@ export default function SeoModal({ isOpen, onClose, onSave }) {
       });
       const data = await res.json();
       if (data?.success) {
-        onSave && onSave(data.settings?.seo);
+        if (typeof onSave === 'function') onSave(data.settings?.seo);
         alert("SEO settings saved successfully! ✅");
       } else {
         alert("Error: " + (data?.error || "Failed to save"));
       }
     } catch (err) {
+      console.error(err);
       alert("Error saving SEO settings");
     } finally {
       setSaving(false);

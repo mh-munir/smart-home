@@ -136,7 +136,7 @@ export default function CookiePolicy() {
             <section>
               <h2 className="text-2xl font-bold mt-8 mb-4">7. Do Not Track</h2>
               <p>
-                Some browsers include a "Do Not Track" feature. Our website respects your privacy preferences. However, not all third-party services respond to Do Not Track signals.
+                Some browsers include a &quot;Do Not Track&quot; feature. Our website respects your privacy preferences. However, not all third-party services respond to Do Not Track signals.
               </p>
             </section>
 

@@ -164,7 +164,7 @@ export default function AdminSettingsPage() {
       <SeoModal
         isOpen={seoOpen}
         onClose={() => setSeoOpen(false)}
-        onSave={(updatedSeo) => {
+        onSave={() => {
           // SEO settings saved
         }}
       />

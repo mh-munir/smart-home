@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 
 export default function AdSenseDebugPage() {
-  const [debugInfo, setDebugInfo] = useState<any>({});
   const [testResults, setTestResults] = useState<any>({});
 
   useEffect(() => {
@@ -53,10 +52,6 @@ export default function AdSenseDebugPage() {
       results.cspContent = cspMeta?.getAttribute('content') || 'Not found';
 
       setTestResults(results);
-      setDebugInfo({
-        timestamp: new Date().toISOString(),
-        pageUrl: window.location.href,
-      });
     };
 
     runDiagnostics();

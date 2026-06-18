@@ -102,7 +102,7 @@ export default function AffiliateDisclosure() {
               We clearly identify affiliate links in several ways:
             </p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>"*Affiliate Link" notation near the link</li>
+              <li>&quot;*Affiliate Link&quot; notation near the link</li>
               <li>Disclosure at the beginning of articles with affiliate links</li>
               <li>Distinctive styling or highlighting of affiliate links</li>
               <li>Clear statements about affiliate relationships</li>
@@ -145,7 +145,7 @@ export default function AffiliateDisclosure() {
             <ul className="list-disc pl-6 space-y-2">
               <li>We select products based on merit, not affiliate potential</li>
               <li>Negative reviews are published when warranted</li>
-              <li>We don't feature inferior products for higher commissions</li>
+              <li>We don&apos;t feature inferior products for higher commissions</li>
               <li>Our honest opinions are never compromised by financial relationships</li>
             </ul>
           </section>

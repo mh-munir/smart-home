@@ -64,8 +64,8 @@ export default function Navbar() {
 
         const data = await res.json();
         if (data) setSettings(data);
-      } catch (err) {
-        console.log("Settings load failed");
+      } catch (error) {
+        console.error("Settings load failed", error);
       }
     };
 

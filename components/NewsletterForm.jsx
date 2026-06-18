@@ -32,7 +32,8 @@ export default function NewsletterForm({ source = "homepage" }) {
         setStatus("error");
         setMessage(data.error || "Something went wrong. Please try again.");
       }
-    } catch (err) {
+    } catch (error) {
+      console.error(error);
       setStatus("error");
       setMessage("Network error. Please try again.");
     }

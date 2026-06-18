@@ -7,7 +7,6 @@ import {
   ADMIN_SESSION_COOKIE,
   SESSION_MAX_AGE_SECONDS,
   createSessionToken,
-  getAllowedAdminEmails,
   verifyAdminCredentials,
 } from "@/lib/admin-session";
 
