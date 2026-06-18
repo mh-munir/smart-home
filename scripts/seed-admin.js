@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import AdminUser from "../models/AdminUser.js";
 import Product from "../models/Product.js";
-import Blog from "../models/Blog.js";
 import dotenv from "dotenv";
-import { hashPassword, generateSecurePassword } from "../lib/password-utils.js";
 
 // Load environment variables from .env.local
 dotenv.config({ path: ".env.local" });

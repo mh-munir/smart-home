@@ -82,7 +82,7 @@ export function GoogleAnalyticsComponent({
           src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
           height="0"
           width="0"
-          style={{ display: 'none', visibility: 'hidden' }}
+          className="hidden invisible"
         />
       </noscript>
     </>
@@ -108,19 +108,22 @@ export function useTracking() {
 /**
  * Product tracking hook
  */
-export function useProductTracking(product: any) {
+export function useProductTracking(product: Record<string, unknown> | null) {
   useEffect(() => {
     if (!product || typeof window === 'undefined' || !window.gtag) return;
 
+    const price = (product as any).price;
+    const currency = (product as any).currency || 'USD';
+
     window.gtag('event', 'view_item', {
-      value: product.price,
-      currency: product.currency || 'USD',
+      value: price,
+      currency,
       items: [
         {
-          item_id: product._id,
-          item_name: product.name,
-          price: product.price,
-          item_category: product.category,
+          item_id: (product as any)._id,
+          item_name: (product as any).name,
+          price,
+          item_category: (product as any).category,
         },
       ],
     });
@@ -129,7 +132,7 @@ export function useProductTracking(product: any) {
 
 declare global {
   interface Window {
-    dataLayer?: any[];
-    gtag?: (...args: any[]) => void;
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
   }
 }

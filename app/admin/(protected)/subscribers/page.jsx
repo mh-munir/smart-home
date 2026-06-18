@@ -29,7 +29,10 @@ export default function SubscribersPage() {
   };
 
   useEffect(() => {
-    fetchSubscribers();
+    // Fetch subscribers asynchronously to avoid calling setState synchronously in the effect body
+    (async () => {
+      await fetchSubscribers();
+    })();
   }, []);
 
   const handleSearch = (e) => {

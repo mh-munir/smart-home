@@ -30,7 +30,7 @@ async function collectFiles(dir) {
         out.push(full);
       }
     }
-  } catch (err) {
+  } catch {
     // ignore
   }
   return out;

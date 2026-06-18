@@ -51,14 +51,7 @@ const productSlugs = [
   "smart-projector",
 ];
 
-// Known dummy blog slugs (from seed scripts)
-const blogSlugs = [
-  "setup-first-smart-home",
-  "best-smart-door-locks",
-  "smart-lighting-comparison",
-  "save-money-smart-thermostat",
-  "smart-security-guide",
-];
+// (No known blog slugs required) intentionally omitted
 
 async function main() {
   if (!MONGODB_URI) {

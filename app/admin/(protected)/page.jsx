@@ -91,7 +91,7 @@ export default async function AdminDashboard() {
         <div className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
           <h3 className="text-gray-600 font-semibold mb-2">📧 Subscribers</h3>
           <p className="text-4xl font-bold text-teal-500">{fmt(totalSubscribers)}</p>
-          <a href="/admin/subscribers" className="text-sm text-teal-600 hover:underline mt-2 inline-block">View all →</a>
+          <Link href="/admin/subscribers" className="text-sm text-teal-600 hover:underline mt-2 inline-block">View all →</Link>
         </div>
       </div>
 
@@ -163,9 +163,9 @@ export default async function AdminDashboard() {
                   <span className="text-xs bg-teal-100 text-teal-700 px-2 py-1 rounded-full">New</span>
                 </div>
               ))}
-              <a href="/admin/subscribers" className="block text-center text-teal-600 hover:underline text-sm font-medium mt-3 pt-2 border-t border-gray-100">
+              <Link href="/admin/subscribers" className="block text-center text-teal-600 hover:underline text-sm font-medium mt-3 pt-2 border-t border-gray-100">
                 View All Subscribers →
-              </a>
+              </Link>
             </div>
           ) : (
             <p className="text-gray-500 text-sm">No subscribers yet.</p>

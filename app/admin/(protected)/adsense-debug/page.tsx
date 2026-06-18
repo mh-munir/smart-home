@@ -63,12 +63,12 @@ export default function AdSenseDebugPage() {
   }, []);
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'monospace', fontSize: '12px' }}>
-      <h1>🔍 AdSense Debug Diagnostics</h1>
+    <div className="p-5 font-mono text-sm">
+      <h1 className="text-xl font-semibold mb-4">🔍 AdSense Debug Diagnostics</h1>
 
-      <section>
-        <h2>📋 Environment Variables</h2>
-        <pre style={{ background: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
+      <section className="mb-4">
+        <h2 className="text-lg font-medium mb-2">📋 Environment Variables</h2>
+        <pre className="bg-gray-100 p-2.5 rounded">
           {JSON.stringify(
             {
               publisherId: testResults.publisherId,
@@ -80,9 +80,9 @@ export default function AdSenseDebugPage() {
         </pre>
       </section>
 
-      <section>
-        <h2>🌐 Browser & Network</h2>
-        <pre style={{ background: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
+      <section className="mb-4">
+        <h2 className="text-lg font-medium mb-2">🌐 Browser & Network</h2>
+        <pre className="bg-gray-100 p-2.5 rounded">
           {JSON.stringify(
             {
               hostname: testResults.hostname,
@@ -97,22 +97,18 @@ export default function AdSenseDebugPage() {
         </pre>
       </section>
 
-      <section>
-        <h2>🚫 Ad Blocker Detection</h2>
+      <section className="mb-4">
+        <h2 className="text-lg font-medium mb-2">🚫 Ad Blocker Detection</h2>
         <div
-          style={{
-            padding: '10px',
-            background: testResults.adBlockerDetected ? '#ffcccc' : '#ccffcc',
-            borderRadius: '4px',
-          }}
+          className={`p-2.5 rounded ${testResults.adBlockerDetected ? 'bg-red-100' : 'bg-green-100'}`}
         >
           {testResults.adBlockerDetected ? '❌ Ad blocker DETECTED' : '✅ No ad blocker detected'}
         </div>
       </section>
 
-      <section>
-        <h2>🔒 Content Security Policy</h2>
-        <pre style={{ background: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
+      <section className="mb-4">
+        <h2 className="text-lg font-medium mb-2">🔒 Content Security Policy</h2>
+        <pre className="bg-gray-100 p-2.5 rounded">
           {JSON.stringify(
             {
               cspFound: testResults.cspFound,
@@ -124,16 +120,16 @@ export default function AdSenseDebugPage() {
         </pre>
       </section>
 
-      <section>
-        <h2>📊 Full Debug Info</h2>
-        <pre style={{ background: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
+      <section className="mb-4">
+        <h2 className="text-lg font-medium mb-2">📊 Full Debug Info</h2>
+        <pre className="bg-gray-100 p-2.5 rounded">
           {JSON.stringify(testResults, null, 2)}
         </pre>
       </section>
 
-      <section>
-        <h2>💡 Troubleshooting Steps</h2>
-        <ol>
+      <section className="mb-4">
+        <h2 className="text-lg font-medium mb-2">💡 Troubleshooting Steps</h2>
+        <ol className="list-decimal list-inside space-y-1">
           <li>Check if publisherId is set correctly (should start with 'pub-')</li>
           <li>Disable ad blockers and refresh</li>
           <li>Check Network tab in DevTools for script loading status</li>
@@ -145,8 +141,10 @@ export default function AdSenseDebugPage() {
       </section>
 
       <section>
-        <h2>📝 Copy This Debug Info</h2>
+        <h2 className="text-lg font-medium mb-2">📝 Copy This Debug Info</h2>
+        <label htmlFor="debugCopy" className="sr-only">Debug Info</label>
         <textarea
+          id="debugCopy"
           readOnly
           value={JSON.stringify(
             {
@@ -156,13 +154,7 @@ export default function AdSenseDebugPage() {
             null,
             2
           )}
-          style={{
-            width: '100%',
-            height: '200px',
-            padding: '10px',
-            fontFamily: 'monospace',
-            fontSize: '12px',
-          }}
+          className="w-full h-48 p-2.5 font-mono text-sm"
         />
       </section>
     </div>

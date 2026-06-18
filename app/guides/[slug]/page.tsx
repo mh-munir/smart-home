@@ -1,6 +1,6 @@
 import { getGuideBySlug } from '@/lib/guides';
 
-export default async function GuidePage({ params }) {
+export default async function GuidePage({ params }: { params: { slug: string } }) {
   const { slug } = params;
   const guide = getGuideBySlug(slug);
 

@@ -24,6 +24,61 @@ Object.freeze(navItems);
 export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
   const pathname = usePathname();
 
+  const getIcon = (label) => {
+    switch (label) {
+      case "Dashboard":
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 13h8V3H3v10zM13 21h8V11h-8v10zM13 3v8h8V3h-8zM3 21h8v-8H3v8z" />
+          </svg>
+        );
+      case "Products":
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z" />
+          </svg>
+        );
+      case "Add Product":
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+        );
+      case "Blogs":
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" />
+          </svg>
+        );
+      case "Guides":
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 20l9-5-9-5-9 5 9 5z" />
+          </svg>
+        );
+      case "Settings":
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7z" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l0 0a2 2 0 1 1-2.83 2.83l0 0a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l0 0A2 2 0 1 1 2.27 16.82l0 0A1.65 1.65 0 0 0 2.6 15a1.65 1.65 0 0 0-.33-1.82l0 0A2 2 0 1 1 4.6 9.33l0 0A1.65 1.65 0 0 0 5.59 8.3 1.65 1.65 0 0 0 6.5 6.79V6a2 2 0 1 1 4 0v.79a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l0 0A2 2 0 1 1 19.4 8.18l0 0A1.65 1.65 0 0 0 19.4 15z" />
+          </svg>
+        );
+      case "Analytics":
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M3 3v18h18" />
+            <path d="M7 13v6M12 7v12M17 11v8" />
+          </svg>
+        );
+      default:
+        return (
+          <svg className="w-5 h-5 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        );
+    }
+  };
+
   return (
     <>
       {/* Backdrop for mobile when sidebar is open */}
@@ -57,16 +112,17 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
           <nav className="space-y-2 flex-1" suppressHydrationWarning>
             {navItems.map((item) => {
               const active = pathname === item.href || (item.href !== "/admin" && pathname?.startsWith(item.href));
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`block rounded px-4 py-2 transition-colors ${active ? 'bg-teal-600 text-white' : 'text-gray-200 hover:bg-gray-800'}`}
-                  aria-current={active ? 'page' : undefined}
-                >
-                  {item.label}
-                </Link>
-              );
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={`flex items-center gap-3 rounded px-4 py-2 transition-colors ${active ? '`bg-gradient-to-r` from-teal-600 to-teal-500 text-white shadow' : 'text-gray-200 hover:bg-gray-800'}`}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      <span className="`flex-shrink-0`">{getIcon(item.label)}</span>
+                      <span className="truncate">{item.label}</span>
+                    </Link>
+                  );
             })}
           </nav>
 

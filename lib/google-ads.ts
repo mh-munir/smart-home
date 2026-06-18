@@ -137,7 +137,7 @@ export function generateGA4Script(): string {
  */
 export function trackEvent(
   eventName: string,
-  eventData?: Record<string, any>
+  eventData?: Record<string, unknown>
 ): void {
   if (typeof window !== 'undefined' && window.dataLayer) {
     window.dataLayer.push({
@@ -150,10 +150,10 @@ export function trackEvent(
 /**
  * Set user properties
  */
-export function setUserProperty(key: string, value: any): void {
+export function setUserProperty(key: string, value: unknown): void {
   trackEvent('set_user_property', {
     [key]: value,
-  });
+  } as Record<string, unknown>);
 }
 
 /**
@@ -270,7 +270,7 @@ export function trackContactForm(contactType: string): void {
 
 declare global {
   interface Window {
-    dataLayer?: any[];
-    gtag?: (...args: any[]) => void;
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
   }
 }
