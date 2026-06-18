@@ -18,6 +18,11 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    // Support multiple images for product gallery
+    images: {
+      type: [String],
+      default: [],
+    },
     price: {
       type: String,
       default: null,

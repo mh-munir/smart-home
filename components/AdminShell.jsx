@@ -14,7 +14,7 @@ export default function AdminShell({ children }) {
   }
 
   return (
-    <div className="flex">
+    <div className="flex" suppressHydrationWarning>
       <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
       <div className="flex-1 flex flex-col">

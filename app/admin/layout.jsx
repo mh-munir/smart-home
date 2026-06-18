@@ -1,5 +1,5 @@
-import AdminShell from "@/components/AdminShell";
+import AdminShellClient from "@/components/AdminShellClient";
 
-export default async function AdminLayout({ children }) {
-  return <AdminShell>{children}</AdminShell>;
+export default function AdminLayout({ children }) {
+  return <AdminShellClient>{children}</AdminShellClient>;
 }

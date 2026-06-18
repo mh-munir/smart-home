@@ -106,6 +106,12 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
       {/* Action Buttons */}
       {showBuyButton && (
         <div className="px-6 pb-6 pt-4 space-y-2">
+          <Link
+            href={`/products/${product.slug}`}
+            className="block rounded-lg border border-gray-300 text-gray-800 px-3 py-2 text-center font-semibold text-sm hover:bg-gray-100 transition"
+          >
+            View Details
+          </Link>
           {mainLink ? (
             <>
               <a

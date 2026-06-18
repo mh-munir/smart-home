@@ -16,6 +16,11 @@ const navItems = [
   { href: "/admin/analytics", label: "Analytics" },
 ];
 
+// Freeze nav items to prevent accidental runtime mutation that can
+// produce server/client rendering differences during HMR or runtime updates.
+navItems.forEach((it) => Object.freeze(it));
+Object.freeze(navItems);
+
 export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
   const pathname = usePathname();
 
@@ -49,7 +54,7 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
             </button>
           </div>
 
-          <nav className="space-y-2 flex-1">
+          <nav className="space-y-2 flex-1" suppressHydrationWarning>
             {navItems.map((item) => {
               const active = pathname === item.href || (item.href !== "/admin" && pathname?.startsWith(item.href));
               return (
