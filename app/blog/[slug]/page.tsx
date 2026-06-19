@@ -190,7 +190,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           <figure className="mb-8">
             <Image
               src={articleImages[0]}
-              alt={article.title}
+              alt={article.title || ""}
               width={1200}
               height={720}
               unoptimized
