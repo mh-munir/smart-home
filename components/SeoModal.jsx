@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 
 const DEFAULT_SEO = {
   metaTitle: "",
@@ -204,9 +205,14 @@ function FacebookPreview({ title, description, image, url }) {
       <p className="text-xs text-gray-500 px-4 pt-3 pb-1 font-medium">📘 Facebook Preview</p>
       <div className="bg-gray-200 h-40 flex items-center justify-center">
         {image ? (
-          // using <img> here for preview of arbitrary external URLs — disable rule
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={image} alt="OG" className="w-full h-full object-cover" />
+          <Image
+            src={image}
+            alt="OG"
+            unoptimized
+            width={1200}
+            height={630}
+            className="w-full h-full object-cover"
+          />
         ) : (
           <span className="text-gray-400 text-sm">No Image</span>
         )}
@@ -232,8 +238,14 @@ function TwitterPreview({ title, description, image, card }) {
         <div className={`flex ${card === "summary" ? "" : ""} gap-3`}>
            <div className={`bg-gray-200 rounded-lg overflow-hidden ${card === "summary" ? "w-16 h-16 shrink-0" : "w-full h-48"}`}>
             {image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={image} alt="Twitter" className="w-full h-full object-cover" />
+              <Image
+                src={image}
+                alt="Twitter"
+                unoptimized
+                width={card === "summary" ? 64 : 1200}
+                height={card === "summary" ? 64 : 480}
+                className="w-full h-full object-cover"
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
                 No Image
