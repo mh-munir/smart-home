@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function ProductCard({ product, showBuyButton = true, priority = false }) {
   const [showAffiliateMenu, setShowAffiliateMenu] = useState(false);
+  const router = useRouter();
 
   const formattedDate = useMemo(() => {
     if (!product?.createdAt) return null;
@@ -98,8 +100,9 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
           <div className="flex items-center justify-between text-sm mt-2">
             <span className="text-gray-500">Smart Home</span>
             <div className="flex items-center gap-2">
-              <Link
-                href={`/products/${product.slug}`}
+              <button
+                type="button"
+                onClick={() => router.push(`/products/${product.slug}`)}
                 className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 px-3 py-1 rounded-md transition"
                 aria-label={`More details about ${product.title}`}
               >
@@ -107,7 +110,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
                 More Details
-              </Link>
+              </button>
               {formattedDate && <span className="text-gray-500">{formattedDate}</span>}
             </div>
           </div>
