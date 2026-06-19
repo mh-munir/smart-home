@@ -36,13 +36,9 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
   const otherLinks = affiliateLinks.slice(1);
 
   return (
-    <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition h-full flex flex-col">
+    <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-sm transition h-full flex flex-col">
       <div className="flex-1 flex flex-col">
-        <Link
-          href={`/products/${product.slug}`}
-          className="flex-1 flex flex-col"
-          aria-label={`View ${product.title}`}
-        >
+        
           {/* Image Header */}
           <div className="w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
             {product.image ? (
@@ -82,10 +78,14 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
               {product.title}
             </h3>
 
-            {/* Price and Description */}
-            {product.price && (
-              <p className="text-lg font-bold text-teal-600 mb-3">{product.price}</p>
-            )}
+            <div className="flex justify-between mb-3 items-start">
+              {/* Price and Description */}
+              {product.price && (
+                <p className="text-lg font-bold text-teal-600 mb-3">{product.price}</p>
+              )}
+
+              {formattedDate && <span className="text-gray-500">{formattedDate}</span>}
+            </div>
 
             {product.description && (
               <p className="text-gray-600 mb-4 line-clamp-2 flex-1 text-sm">
@@ -93,27 +93,21 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
               </p>
             )}
           </div>
-        </Link>
+        
 
         {/* Footer - Created Date or Stock Info (outside Link so we can add separate actions) */}
         <div className="px-6 pb-0 pt-4">
-          <div className="flex items-center justify-between text-sm mt-2">
-            <span className="text-gray-500">Smart Home</span>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => router.push(`/products/${product.slug}`)}
-                className="inline-flex items-center gap-2 text-sm font-semibold bg-teal-600 hover:bg-teal-700 text-white px-3 py-1 rounded-md transition shadow-sm"
-                aria-label={`More details about ${product.title}`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-                More Details
-              </button>
-              {formattedDate && <span className="text-gray-500">{formattedDate}</span>}
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={() => router.push(`/products/${product.slug}`)}
+            className="inline-flex items-center gap-2 text-sm font-semibold bg-teal-600 hover:bg-teal-700 text-white px-3 py-1 rounded-md transition shadow-sm"
+            aria-label={`More details about ${product.title}`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+            More Details
+          </button>
         </div>
       </div>
 
