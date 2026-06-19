@@ -103,7 +103,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
               <button
                 type="button"
                 onClick={() => router.push(`/products/${product.slug}`)}
-                className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 px-3 py-1 rounded-md transition"
+                className="inline-flex items-center gap-2 text-sm font-semibold bg-teal-600 hover:bg-teal-700 text-white px-3 py-1 rounded-md transition shadow-sm"
                 aria-label={`More details about ${product.title}`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -129,7 +129,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
             </Link>
             <Link
               href={`/products/${product.slug}`}
-              className="flex-1 rounded-lg border border-teal-600 text-teal-600 px-3 py-2 text-center font-semibold text-sm hover:bg-teal-50 transition flex items-center justify-center gap-2"
+              className="flex-1 rounded-lg bg-teal-600 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-teal-700 transition flex items-center justify-center gap-2 shadow-sm"
               aria-label={`More details about ${product.title}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
