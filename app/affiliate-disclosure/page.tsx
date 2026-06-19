@@ -160,7 +160,7 @@ export default function AffiliateDisclosure() {
           <section>
             <h2 className="text-2xl font-bold mt-8 mb-4">10. Sponsored Content</h2>
             <p>
-              If we publish sponsored content or partner with brands, we clearly disclose the relationship. Sponsored content is always clearly labeled as "Sponsored," "Advertisement," or "Promotional Content."
+              If we publish sponsored content or partner with brands, we clearly disclose the relationship. Sponsored content is always clearly labeled as &quot;Sponsored,&quot; &quot;Advertisement,&quot; or &quot;Promotional Content.&quot;
             </p>
           </section>
 
@@ -193,7 +193,7 @@ export default function AffiliateDisclosure() {
           <section className="bg-blue-50 p-6 rounded-lg mt-8">
             <h2 className="text-xl font-bold mb-4">Thank You</h2>
             <p>
-              We appreciate your support and trust. By using our affiliate links, you're helping us continue to provide free, high-quality content about smart home products. Thank you for being part of our community!
+              We appreciate your support and trust. By using our affiliate links, you&apos;re helping us continue to provide free, high-quality content about smart home products. Thank you for being part of our community!
             </p>
           </section>
         </div>
