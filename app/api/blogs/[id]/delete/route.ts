@@ -11,7 +11,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   try {
     await connectDB();
     await Blog.deleteOne({ _id: id });
-    return NextResponse.redirect('/admin/blogs');
+    // NextResponse.redirect requires absolute URLs in this environment
+    return NextResponse.redirect(new URL('/admin/blogs', req.url));
   } catch (err) {
     console.error('Error deleting blog', err);
     return NextResponse.json({ error: 'Failed to delete' }, { status: 500 });

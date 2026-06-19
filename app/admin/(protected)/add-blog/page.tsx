@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 interface SubSection {
   subHeading: string;
@@ -191,8 +192,15 @@ const BlogAddForm = () => {
               onChange={handleMainImageChange}
             />
             {blogData.mainImagePreview && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={blogData.mainImagePreview} alt="Preview" className="mt-4 max-h-48 rounded-lg" />
+              <Image
+                src={blogData.mainImagePreview}
+                alt="Preview"
+                unoptimized
+                width={800}
+                height={480}
+                className="mt-4 max-h-48 rounded-lg"
+                loading="lazy"
+              />
             )}
           </div>
 
@@ -235,8 +243,15 @@ const BlogAddForm = () => {
                 onChange={(e) => handleSubSectionChange(index, 'image', e.target.files ? e.target.files[0] : null)}
               />
               {section.imagePreview && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={section.imagePreview} alt={`Step ${index + 2} Preview`} className="mt-4 max-h-48 rounded-lg border object-cover shadow-sm" />
+                <Image
+                  src={section.imagePreview}
+                  alt={`Step ${index + 2} Preview`}
+                  unoptimized
+                  width={800}
+                  height={480}
+                  className="mt-4 max-h-48 rounded-lg border object-cover shadow-sm"
+                  loading="lazy"
+                />
               )}
             </div>
 

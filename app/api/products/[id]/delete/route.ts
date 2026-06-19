@@ -11,7 +11,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   try {
     await connectDB();
     await Product.deleteOne({ _id: id });
-    return NextResponse.redirect('/admin/products');
+    // NextResponse.redirect requires absolute URLs in this environment
+    return NextResponse.redirect(new URL('/admin/products', req.url));
   } catch (err) {
     console.error('Error deleting product', err);
     return NextResponse.json({ error: 'Failed to delete' }, { status: 500 });

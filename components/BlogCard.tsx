@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React from "react";
+import Image from "next/image";
 
 export interface BlogArticle {
   id?: string;
@@ -23,8 +24,14 @@ export default function BlogCard({ article }: { article: BlogArticle }) {
     >
       <div className="flex flex-col h-full">
         <div className="w-full h-48 bg-gray-100 overflow-hidden">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={image} alt={article.title} className="w-full h-full object-cover" />
+          <Image
+            src={image}
+            alt={article.title || ""}
+            width={1200}
+            height={720}
+            unoptimized
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <div className="p-6 flex-1 flex flex-col">

@@ -106,7 +106,7 @@ export default function Author() {
                  Every article, guide, and review is backed by thorough research, real-world testing, and genuine expertise. We do not cut corners, and we do not compromise our integrity.
               </p>
               <p className="text-gray-700">
-                Whether you're a smart home beginner or an advanced enthusiast, you can trust that our recommendations are based on merit, not affiliate potential.
+                Whether you&apos;re a smart home beginner or an advanced enthusiast, you can trust that our recommendations are based on merit, not affiliate potential.
               </p>
             </div>
           </section>

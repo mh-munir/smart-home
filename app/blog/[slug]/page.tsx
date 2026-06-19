@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { getBlogArticle, getLatestArticles } from "@/lib/blog";
 import { connectDB } from "@/lib/db";
@@ -187,13 +188,15 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         {/* Hero Image (first image) */}
         {articleImages.length > 0 && (
           <figure className="mb-8">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={articleImages[0]}
-                alt={article.title}
-                className="w-full h-auto rounded-sm object-cover `max-h-[520px]`"
-              />
-            </figure>
+            <Image
+              src={articleImages[0]}
+              alt={article.title}
+              width={1200}
+              height={720}
+              unoptimized
+              className="w-full h-auto rounded-sm object-cover max-h-[520px]"
+            />
+          </figure>
         )}
 
         {/* Article Content */}
@@ -313,9 +316,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                   blocks.push(
                     <figure key={`img-${i}`} className="my-8">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
+                        <Image
                           src={images[imageIndex]}
                           alt={`${article.title} - image ${imageIndex + 2}`}
+                          width={1200}
+                          height={720}
+                          unoptimized
                           className="w-full h-auto rounded-sm object-cover"
                           loading="lazy"
                         />
@@ -330,10 +336,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             while (imageIndex < images.length) {
               blocks.push(
                 <figure key={`extra-img-${imageIndex}`} className="my-8">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={images[imageIndex]}
                     alt={`${article.title} - image ${imageIndex + 2}`}
+                    width={1200}
+                    height={720}
+                    unoptimized
                     className="w-full h-auto rounded-sm object-cover"
                     loading="lazy"
                   />

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SeoModal from "@/components/SeoModal";
+import Image from "next/image";
 
 export default function AdminSettingsPage() {
   const [seoOpen, setSeoOpen] = useState(false);
@@ -134,8 +135,14 @@ export default function AdminSettingsPage() {
           {logoPreview ? (
             <div className="mt-4">
               <p className="text-sm text-gray-600 mb-2">Logo preview</p>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logoPreview} alt="logo-preview" className="h-16 object-contain" />
+              <Image
+                src={logoPreview}
+                alt="logo-preview"
+                unoptimized
+                width={200}
+                height={50}
+                className="h-16 object-contain"
+              />
             </div>
           ) : null}
         </div>
@@ -146,8 +153,14 @@ export default function AdminSettingsPage() {
           {favPreview ? (
             <div className="mt-4">
               <p className="text-sm text-gray-600 mb-2">Favicon preview</p>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={favPreview} alt="favicon-preview" className="h-8 w-8 object-contain" />
+              <Image
+                src={favPreview}
+                alt="favicon-preview"
+                unoptimized
+                width={32}
+                height={32}
+                className="h-8 w-8 object-contain"
+              />
             </div>
           ) : null}
         </div>
