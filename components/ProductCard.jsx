@@ -100,8 +100,12 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
             <div className="flex items-center gap-2">
               <Link
                 href={`/products/${product.slug}`}
-                className="text-teal-600 hover:underline text-sm font-semibold"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 bg-teal-50 hover:bg-teal-100 px-3 py-1 rounded-md transition"
+                aria-label={`More details about ${product.title}`}
               >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
                 More Details
               </Link>
               {formattedDate && <span className="text-gray-500">{formattedDate}</span>}
@@ -122,8 +126,12 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
             </Link>
             <Link
               href={`/products/${product.slug}`}
-              className="flex-1 rounded-lg border border-gray-300 text-gray-800 px-3 py-2 text-center font-semibold text-sm hover:bg-gray-100 transition"
+              className="flex-1 rounded-lg border border-teal-600 text-teal-600 px-3 py-2 text-center font-semibold text-sm hover:bg-teal-50 transition flex items-center justify-center gap-2"
+              aria-label={`More details about ${product.title}`}
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
               More Details
             </Link>
           </div>
