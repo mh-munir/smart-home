@@ -115,14 +115,18 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
       {showBuyButton && (
         <div className="px-6 pb-6 pt-4 space-y-2">
           <div className="flex gap-2">
-            <Link
-              href={`/products/${product.slug}`}
+            <button
+              type="button"
+              onClick={() => router.push(`/products/${product.slug}`)}
               className="flex-1 rounded-lg border border-gray-300 text-gray-800 px-3 py-2 text-center font-semibold text-sm hover:bg-gray-100 transition"
+              aria-label={`View details about ${product.title}`}
             >
               View Details
-            </Link>
-            <Link
-              href={`/products/${product.slug}`}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push(`/products/${product.slug}`)}
               className="flex-1 rounded-lg bg-teal-600 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-teal-700 transition flex items-center justify-center gap-2 shadow-sm"
               aria-label={`More details about ${product.title}`}
             >
@@ -130,7 +134,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
               More Details
-            </Link>
+            </button>
           </div>
           {mainLink ? (
             <>
