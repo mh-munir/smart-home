@@ -128,6 +128,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Product pages
     if (products && Array.isArray(products)) {
+      // product shapes are dynamic; allow legacy any here
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (products as any[]).forEach((product) => {
         entries.push({
           url: `${SITE_URL}/products/${product.slug || product._id}`,

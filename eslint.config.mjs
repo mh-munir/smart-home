@@ -12,11 +12,11 @@ const eslintConfig = defineConfig([
   // them incrementally for long-term code quality.
   {
     rules: {
-      'react/no-unescaped-entities': 'off',
-      '@next/next/no-html-link-for-pages': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      'import/no-anonymous-default-export': 'off',
-      'react-hooks/set-state-in-effect': 'off',
+      'react/no-unescaped-entities': 'warn',
+      '@next/next/no-html-link-for-pages': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      'import/no-anonymous-default-export': 'warn',
+      'react-hooks/set-state-in-effect': 'warn',
     },
   },
   // Override default ignores of eslint-config-next.

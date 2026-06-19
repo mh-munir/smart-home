@@ -34,7 +34,9 @@ export default function GoogleAdSenseScript() {
     const hasAnyAdSenseScript = document.querySelector(
       'script[src*="pagead/js/adsbygoogle.js"]'
     );
-    if ((window as any).adsbygoogle || hasQueryScript || hasDataClientScript || hasAnyAdSenseScript) {
+
+    const getAdsbyGoogle = () => (window as unknown as { adsbygoogle?: unknown }).adsbygoogle;
+    if (getAdsbyGoogle() || hasQueryScript || hasDataClientScript || hasAnyAdSenseScript) {
       return;
     }
 
@@ -60,7 +62,7 @@ export default function GoogleAdSenseScript() {
 
     // Monitor script loading status
     const interval = setInterval(() => {
-      if ((window as any).adsbygoogle) {
+      if (getAdsbyGoogle()) {
         if (isDev) {
           console.log('✅ AdSense library loaded successfully');
         }

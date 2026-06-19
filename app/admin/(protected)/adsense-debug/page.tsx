@@ -1,20 +1,26 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 
+declare global {
+  interface Window {
+    adsbygoogle?: unknown;
+  }
+}
+
 export default function AdSenseDebugPage() {
-  const [testResults, setTestResults] = useState<any>({});
+  const [testResults, setTestResults] = useState<Record<string, unknown>>({});
 
   useEffect(() => {
     const runDiagnostics = async () => {
-      const results: any = {};
+      const results: Record<string, unknown> = {};
 
       // 1. Check environment variables
       results.publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID || 'NOT SET';
       results.customerId = process.env.NEXT_PUBLIC_ADSENSE_CUSTOMER_ID || 'NOT SET';
 
       // 2. Check if adsbygoogle is available
-      results.adsByGoogleLoaded = (window as any).adsbygoogle !== undefined;
+      results.adsByGoogleLoaded = typeof window !== 'undefined' && typeof window.adsbygoogle !== 'undefined';
 
       // 3. Check browser info
       results.userAgent = navigator.userAgent;
@@ -42,8 +48,8 @@ export default function AdSenseDebugPage() {
         );
         results.networkTest = 'Script is reachable';
         results.networkStatus = response.status;
-      } catch (error: any) {
-        results.networkTest = error.message;
+      } catch (error) {
+        results.networkTest = error instanceof Error ? error.message : String(error);
       }
 
       // 6. CSP check
@@ -125,7 +131,7 @@ export default function AdSenseDebugPage() {
       <section className="mb-4">
         <h2 className="text-lg font-medium mb-2">💡 Troubleshooting Steps</h2>
         <ol className="list-decimal list-inside space-y-1">
-          <li>Check if publisherId is set correctly (should start with 'pub-')</li>
+          <li>Check if publisherId is set correctly (should start with &apos;pub-&apos;)</li>
           <li>Disable ad blockers and refresh</li>
           <li>Check Network tab in DevTools for script loading status</li>
           <li>Verify AdSense account is approved at adsense.google.com</li>

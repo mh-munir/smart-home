@@ -17,7 +17,7 @@ type ProductDoc = {
   images?: string[];
   category?: string;
   affiliateLink?: string;
-  affiliateLinks?: Record<string, any>;
+  affiliateLinks?: Record<string, unknown>;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -61,7 +61,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   try {
     await connectDB();
     product = (await Product.findOne({ slug }).lean()) as ProductDoc | null;
-  } catch (err) {
+  } catch {
     // ignore DB errors and try API fallback
   }
 
@@ -151,7 +151,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         if (shouldInsert) {
           blocks.push(
             <figure key={`img-${i}`} className="my-8">
-              <img src={images[imageIndex]} alt={`${product.title} - image ${imageIndex + 2}`} className="w-full h-auto rounded-sm object-cover" loading="lazy" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={images[imageIndex]} alt={`${product.title} - image ${imageIndex + 2}`} className="w-full h-auto rounded-sm object-cover" loading="lazy" />
             </figure>
           );
           imageIndex++;
@@ -162,6 +163,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     while (imageIndex < images.length) {
       blocks.push(
         <figure key={`extra-img-${imageIndex}`} className="my-8">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={images[imageIndex]} alt={`${product.title} - image ${imageIndex + 2}`} className="w-full h-auto rounded-sm object-cover" loading="lazy" />
         </figure>
       );
@@ -186,6 +188,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
         {productImages.length > 0 && (
           <figure className="mb-8">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={productImages[0]} alt={product.title} className="w-full h-auto rounded-sm object-cover `max-h-[520px]`" />
           </figure>
         )}
@@ -209,6 +212,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 <Link key={item.slug} href={`/products/${item.slug}`} className="border rounded-lg overflow-hidden">
                   {item.image && (
                     <div className="w-full h-48 relative">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={item.image} alt={item.title} className="object-cover w-full h-full" />
                     </div>
                   )}

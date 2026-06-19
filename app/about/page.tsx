@@ -42,7 +42,7 @@ export default function About() {
                 At {SITE_NAME}, our mission is to empower people to make informed decisions about smart home technology. We believe that everyone deserves access to honest, comprehensive information about the latest smart home devices, from budget-friendly options to premium systems.
               </p>
               <p className="text-gray-700">
-                We&apos;re dedicated to simplifying the complex world of home automation and helping our readers find the perfect devices for their lifestyle and budget.
+                We are dedicated to simplifying the complex world of home automation and helping our readers find the perfect devices for their lifestyle and budget.
               </p>
             </div>
           </section>
@@ -72,7 +72,7 @@ export default function About() {
                 {SITE_NAME} was founded with a simple goal: to help people navigate the rapidly growing world of smart home technology. What started as a passion project for smart home enthusiasts has evolved into a trusted resource for hundreds of thousands of readers worldwide.
               </p>
               <p className="text-gray-700 mb-4">
-                Over the years, we've reviewed countless smart home devices, tested integrations, and gathered feedback from our community. This experience has given us unique insights into what makes a great smart home product and what pitfalls to avoid.
+                Over the years, we have reviewed countless smart home devices, tested integrations, and gathered feedback from our community. This experience has given us unique insights into what makes a great smart home product and what pitfalls to avoid.
               </p>
               <p className="text-gray-700">
                 Today, {SITE_NAME} is committed to maintaining the highest standards of integrity, accuracy, and user-focused content.
@@ -133,7 +133,7 @@ export default function About() {
                 Our team consists of experienced technology writers, product reviewers, and smart home enthusiasts. Each team member brings unique expertise and perspectives to our content.
               </p>
               <p className="text-gray-700 mb-4">
-                We&apos;re united by a common passion: making smart home technology accessible and understandable for everyone.
+                 We are united by a common passion: making smart home technology accessible and understandable for everyone.
               </p>
               <p className="text-gray-700">
                 Learn more about our team members on our <Link href="/author" className="text-primary-600 hover:underline">Author Profile</Link> page.

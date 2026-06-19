@@ -8,7 +8,7 @@ export default async function GuidePage({ params }: { params: { slug: string } }
     return (
       <div className="p-12 min-h-screen">
         <h1 className="text-3xl font-bold">Guide not found</h1>
-        <p className="text-gray-600 mt-4">We couldn't find the guide you're looking for.</p>
+        <p className="text-gray-600 mt-4">We couldn&apos;t find the guide you&apos;re looking for.</p>
       </div>
     );
   }

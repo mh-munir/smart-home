@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const affiliates: Record<string, any> = {};
 
       if (product.affiliateLinks && product.affiliateLinks.size > 0) {
@@ -60,7 +61,9 @@ export async function GET(request: NextRequest) {
       .select('_id title clicks conversions affiliateLinks')
       .lean();
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const allStats = products.map((product: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const affiliates: Record<string, any> = {};
 
       if (product.affiliateLinks && product.affiliateLinks.size > 0) {

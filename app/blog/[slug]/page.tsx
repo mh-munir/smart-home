@@ -123,10 +123,10 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     if (!article) notFound();
   }
 
-  const relatedArticles = (await (async () => {
+  // Related articles: attempt DB, otherwise fallback to static
+    const relatedArticles: RelatedArticle[] = (await (async () => {
     try {
-        if (typeof article._id !== "undefined") {
-        // from DB - fetch latest from DB
+      if (typeof article._id !== "undefined") {
         const latest = (await Blog.find({ published: true }).sort({ createdAt: -1 }).limit(4).lean()) as BlogArticleDoc[];
         return latest.map((a) => ({ id: a._id?.toString?.() ?? String(a._id), slug: a.slug, title: a.title, excerpt: a.description || "", readTime: a.readTime || 5 }));
       }
@@ -134,7 +134,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       // fallback
     }
     return getLatestArticles(3);
-  })()).filter((a: RelatedArticle) => a.slug !== article.slug).slice(0, 3);
+  })());
   const articleTags = article.tags ?? [];
   const articleDate =
     article.createdAt?.toISOString?.() || article.date || new Date().toISOString();
@@ -187,12 +187,13 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         {/* Hero Image (first image) */}
         {articleImages.length > 0 && (
           <figure className="mb-8">
-            <img
-              src={articleImages[0]}
-              alt={article.title}
-              className="w-full h-auto rounded-sm object-cover `max-h-[520px]`"
-            />
-          </figure>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={articleImages[0]}
+                alt={article.title}
+                className="w-full h-auto rounded-sm object-cover `max-h-[520px]`"
+              />
+            </figure>
         )}
 
         {/* Article Content */}
@@ -311,13 +312,14 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 if (shouldInsert) {
                   blocks.push(
                     <figure key={`img-${i}`} className="my-8">
-                      <img
-                        src={images[imageIndex]}
-                        alt={`${article.title} - image ${imageIndex + 2}`}
-                        className="w-full h-auto rounded-sm object-cover"
-                        loading="lazy"
-                      />
-                    </figure>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={images[imageIndex]}
+                          alt={`${article.title} - image ${imageIndex + 2}`}
+                          className="w-full h-auto rounded-sm object-cover"
+                          loading="lazy"
+                        />
+                      </figure>
                   );
                   imageIndex++;
                 }
@@ -328,6 +330,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             while (imageIndex < images.length) {
               blocks.push(
                 <figure key={`extra-img-${imageIndex}`} className="my-8">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={images[imageIndex]}
                     alt={`${article.title} - image ${imageIndex + 2}`}
@@ -342,6 +345,22 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             return blocks;
           })()}
         </article>
+
+          {/* Related Articles */}
+          {relatedArticles && relatedArticles.length > 0 && (
+            <div className="mt-10">
+              <h2 className="text-xl font-semibold mb-4">Related Articles</h2>
+              <ul className="space-y-2">
+                {relatedArticles.map((ra) => (
+                  <li key={ra.slug || ra.id}>
+                    <Link href={`/blog/${ra.slug}`} className="text-teal-600 hover:underline">
+                      {ra.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
         {/* Sponsor Notice */}
         <div className="mt-12 pt-8 border-t border-gray-200">

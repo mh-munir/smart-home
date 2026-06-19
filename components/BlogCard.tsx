@@ -23,6 +23,7 @@ export default function BlogCard({ article }: { article: BlogArticle }) {
     >
       <div className="flex flex-col h-full">
         <div className="w-full h-48 bg-gray-100 overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image} alt={article.title} className="w-full h-full object-cover" />
         </div>
 

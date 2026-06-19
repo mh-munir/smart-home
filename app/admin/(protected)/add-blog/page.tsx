@@ -190,7 +190,10 @@ const BlogAddForm = () => {
               className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
               onChange={handleMainImageChange}
             />
-            {blogData.mainImagePreview && <img src={blogData.mainImagePreview} alt="Preview" className="mt-4 max-h-48 rounded-lg" />}
+            {blogData.mainImagePreview && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={blogData.mainImagePreview} alt="Preview" className="mt-4 max-h-48 rounded-lg" />
+            )}
           </div>
 
           <div>
@@ -232,6 +235,7 @@ const BlogAddForm = () => {
                 onChange={(e) => handleSubSectionChange(index, 'image', e.target.files ? e.target.files[0] : null)}
               />
               {section.imagePreview && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={section.imagePreview} alt={`Step ${index + 2} Preview`} className="mt-4 max-h-48 rounded-lg border object-cover shadow-sm" />
               )}
             </div>

@@ -72,7 +72,7 @@ export async function PUT(req, { params }) {
             try {
               const res = await saveBufferToStorage(buffer, key, mime);
               processedImages.push(res.url);
-            } catch (e) {
+            } catch {
               const uploadsDir = path.join(process.cwd(), "public", "uploads", "blogs");
               await fs.mkdir(uploadsDir, { recursive: true });
               const filePath = path.join(uploadsDir, filename);

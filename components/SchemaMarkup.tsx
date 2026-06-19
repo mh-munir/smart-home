@@ -22,7 +22,7 @@ export default function SchemaMarkup({
   dateModified = new Date().toISOString(),
   type = 'WebSite',
 }: SchemaMarkupProps) {
-  const schemas: any[] = [
+  const schemas: Array<Record<string, unknown>> = [
     // Organization Schema
     {
       '@context': 'https://schema.org',

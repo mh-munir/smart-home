@@ -19,7 +19,7 @@ export async function GET() {
     const raw = fs.readFileSync(SETTINGS_PATH, "utf8");
     const settings = JSON.parse(raw);
     return NextResponse.json(settings);
-  } catch (err) {
+  } catch {
     const fallback = { subtitle: "Make your home smarter", logo: "/logo.png", favicon: "/favicon.ico" };
     return NextResponse.json(fallback);
   }
@@ -35,7 +35,7 @@ export async function POST(request) {
     if (!session) {
       return NextResponse.json({ success: false, error: "not_authorized" }, { status: 401 });
     }
-  } catch (e) {
+  } catch {
     return NextResponse.json({ success: false, error: "not_authorized" }, { status: 401 });
   }
 
@@ -47,7 +47,7 @@ export async function POST(request) {
     let existing = {};
     try {
       existing = JSON.parse(fs.readFileSync(SETTINGS_PATH, "utf8"));
-    } catch (e) {
+    } catch {
       existing = {};
     }
 
@@ -59,7 +59,7 @@ export async function POST(request) {
     // Ensure public dir exists
     try {
       fs.mkdirSync(PUBLIC_DIR, { recursive: true });
-    } catch (e) {}
+    } catch {}
 
     if (logoBase64) {
       const parsed = parseDataUrl(logoBase64);
@@ -79,7 +79,7 @@ export async function POST(request) {
       try {
         const res = await saveBufferToStorage(buffer, logoFilename, mime);
         newSettings.logo = res.url;
-      } catch (e) {
+      } catch {
         // Fallback to local write
         fs.writeFileSync(path.join(PUBLIC_DIR, logoFilename), buffer);
         newSettings.logo = `/${logoFilename}`;
@@ -104,7 +104,7 @@ export async function POST(request) {
       try {
         const res = await saveBufferToStorage(buffer, favFilename, mime);
         newSettings.favicon = res.url;
-      } catch (e) {
+      } catch {
         fs.writeFileSync(path.join(PUBLIC_DIR, favFilename), buffer);
         newSettings.favicon = `/${favFilename}`;
       }

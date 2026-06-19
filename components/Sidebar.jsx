@@ -91,6 +91,8 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
       </div>
 
       <aside
+        role="navigation"
+        aria-label="Admin sidebar"
         className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-gray-900 text-white transition-transform duration-200 md:static md:translate-x-0 ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`}
         aria-hidden={!mobileOpen}
         suppressHydrationWarning
@@ -112,17 +114,18 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
           <nav className="space-y-2 flex-1" suppressHydrationWarning>
             {navItems.map((item) => {
               const active = pathname === item.href || (item.href !== "/admin" && pathname?.startsWith(item.href));
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`flex items-center gap-3 rounded px-4 py-2 transition-colors ${active ? '`bg-gradient-to-r` from-teal-600 to-teal-500 text-white shadow' : 'text-gray-200 hover:bg-gray-800'}`}
-                      aria-current={active ? 'page' : undefined}
-                    >
-                      <span className="`flex-shrink-0`">{getIcon(item.label)}</span>
-                      <span className="truncate">{item.label}</span>
-                    </Link>
-                  );
+              const itemClass = active ? 'flex items-center gap-3 rounded px-4 py-2 transition-colors bg-gradient-to-r from-teal-600 to-teal-500 text-white shadow' : 'flex items-center gap-3 rounded px-4 py-2 transition-colors text-gray-200 hover:bg-gray-800';
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={itemClass}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <span className="`flex-shrink-0`">{getIcon(item.label)}</span>
+                  <span className="truncate">{item.label}</span>
+                </Link>
+              );
             })}
           </nav>
 

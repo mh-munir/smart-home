@@ -10,9 +10,55 @@ import fs from "fs";
 import path from "path";
 import { ConditionalNavbar, ConditionalFooter } from "@/components/ConditionalNavFooter";
 
+type ExtraMetaTag = { name?: string; content?: string; property?: string; httpEquiv?: string };
+
+interface SEOStructuredData {
+  organizationName?: string;
+  organizationUrl?: string;
+  organizationLogo?: string;
+  sameAs?: string[];
+}
+
+interface SeoData {
+  canonicalUrl?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  keywords?: string | string[];
+  author?: string;
+  robots?: string;
+  ogType?: string;
+  ogUrl?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  twitterCard?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  twitterSite?: string;
+  twitterCreator?: string;
+  googleSiteVerification?: string | number | (string | number)[];
+  yandexVerification?: string | number | (string | number)[];
+  bingVerification?: string | number | (string | number)[];
+  applicationName?: string;
+  msTileColor?: string;
+  appleMobileWebAppCapable?: string;
+  appleMobileWebAppStatusBarStyle?: string;
+  appleMobileWebAppTitle?: string;
+  mobileWebAppCapable?: string;
+  geoRegion?: string;
+  geoPlacename?: string;
+  geoPosition?: string;
+  icbm?: string;
+  articleAuthor?: string;
+  articlePublisher?: string;
+  structuredData?: SEOStructuredData;
+  extraMetaTags?: ExtraMetaTag[];
+}
+
 let faviconPath = "/favicon.ico";
 let siteTitle = "";
-let seoData: Record<string, any> = {};
+let seoData: SeoData = {};
 try {
   const settingsPath = path.join(process.cwd(), "data", "site-settings.json");
   if (fs.existsSync(settingsPath)) {
@@ -40,50 +86,105 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Derive safe, correctly-typed metadata values from `seoData`
+const _baseUrl = typeof seoData.canonicalUrl === "string" && seoData.canonicalUrl.trim() ? seoData.canonicalUrl : SITE_URL;
+const _metaTitle = typeof seoData.metaTitle === "string" && seoData.metaTitle.trim() ? seoData.metaTitle : siteTitle || "Home Smart Products - Best Smart Home Devices & Reviews 2026 | SmartHome Affiliate";
+const _metaDescription = typeof seoData.metaDescription === "string" && seoData.metaDescription.trim()
+  ? seoData.metaDescription
+  : "Discover the best home smart products and devices. Expert reviews, buying guides, and affiliate recommendations for smart locks, cameras, lighting, thermostats, and more. Find your perfect home automation solution today.";
+const _keywords = typeof seoData.keywords === "string" ? seoData.keywords : Array.isArray(seoData.keywords) ? seoData.keywords.join(", ") : "home smart products, smart home devices, smart lock, smart camera, smart lighting, smart thermostat, smart speakers, home automation, best smart home products, affiliate review";
+const _authors = typeof seoData.author === "string" ? [{ name: seoData.author }] : undefined;
+
+const _ogAllowed = new Set([
+  "website",
+  "article",
+  "book",
+  "profile",
+  "music.song",
+  "music.album",
+  "music.playlist",
+  "music.radio_station",
+  "video.movie",
+  "video.episode",
+  "video.tv_show",
+  "video.other",
+]);
+type OGType =
+  | "website"
+  | "article"
+  | "book"
+  | "profile"
+  | "music.song"
+  | "music.album"
+  | "music.playlist"
+  | "music.radio_station"
+  | "video.movie"
+  | "video.episode"
+  | "video.tv_show"
+  | "video.other";
+const _ogType: OGType = typeof seoData.ogType === "string" && _ogAllowed.has(seoData.ogType) ? (seoData.ogType as OGType) : "website";
+const _ogUrl = typeof seoData.ogUrl === "string" && seoData.ogUrl.trim() ? seoData.ogUrl : SITE_URL;
+const _ogTitle = typeof seoData.ogTitle === "string" && seoData.ogTitle.trim() ? seoData.ogTitle : _metaTitle;
+const _ogDescription = typeof seoData.ogDescription === "string" && seoData.ogDescription.trim() ? seoData.ogDescription : _metaDescription;
+const _ogImage = typeof seoData.ogImage === "string" && seoData.ogImage.trim() ? seoData.ogImage : DEFAULT_OG_IMAGE;
+
+const _twitterAllowed = new Set(["summary_large_image", "summary", "player", "app"]);
+type TwitterCard = "summary_large_image" | "summary" | "player" | "app";
+const _twitterCard: TwitterCard = typeof seoData.twitterCard === "string" && _twitterAllowed.has(seoData.twitterCard) ? (seoData.twitterCard as TwitterCard) : "summary_large_image";
+const _twitterImages = [(typeof seoData.twitterImage === "string" && seoData.twitterImage.trim() ? seoData.twitterImage : _ogImage)];
+const _twitterTitle = typeof seoData.twitterTitle === "string" && seoData.twitterTitle.trim() ? seoData.twitterTitle : _ogTitle;
+const _twitterSite = typeof seoData.twitterSite === "string" ? seoData.twitterSite : undefined;
+const _twitterCreator = typeof seoData.twitterCreator === "string" ? seoData.twitterCreator : undefined;
+
+const _verificationGoogle = (typeof seoData.googleSiteVerification === "string" || typeof seoData.googleSiteVerification === "number" || Array.isArray(seoData.googleSiteVerification)) ? seoData.googleSiteVerification : undefined;
+const _verificationYandex = (typeof seoData.yandexVerification === "string" || typeof seoData.yandexVerification === "number" || Array.isArray(seoData.yandexVerification)) ? seoData.yandexVerification : undefined;
+const _verificationBing = (typeof seoData.bingVerification === "string" || typeof seoData.bingVerification === "number" || Array.isArray(seoData.bingVerification)) ? seoData.bingVerification : undefined;
+
+const _structured = seoData.structuredData && typeof seoData.structuredData === "object" ? (seoData.structuredData as SEOStructuredData) : undefined;
+const _extraMeta = Array.isArray(seoData.extraMetaTags) ? seoData.extraMetaTags.filter(Boolean) as ExtraMetaTag[] : undefined;
+
 export const metadata: Metadata = {
-  metadataBase: new URL(seoData.canonicalUrl || SITE_URL),
-  title: seoData.metaTitle || siteTitle || "Home Smart Products - Best Smart Home Devices & Reviews 2026 | SmartHome Affiliate",
-  description:
-    seoData.metaDescription || "Discover the best home smart products and devices. Expert reviews, buying guides, and affiliate recommendations for smart locks, cameras, lighting, thermostats, and more. Find your perfect home automation solution today.",
-  keywords:
-    seoData.keywords || "home smart products, smart home devices, smart lock, smart camera, smart lighting, smart thermostat, smart speakers, home automation, best smart home products, affiliate review",
-  authors: seoData.author ? [{ name: seoData.author }] : undefined,
+  metadataBase: new URL(String(_baseUrl)),
+  title: _metaTitle,
+  description: _metaDescription,
+  keywords: _keywords,
+  authors: _authors,
   robots: seoData.robots || "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
   alternates: {
-    canonical: seoData.canonicalUrl || SITE_URL,
+    canonical: _ogUrl,
     languages: alternateLanguages,
   },
   openGraph: {
-    type: (seoData.ogType as any) || "website",
+    type: _ogType,
     locale: "en_US",
-    url: seoData.ogUrl || SITE_URL,
+    url: _ogUrl,
     siteName: SITE_NAME,
-    title: seoData.ogTitle || seoData.metaTitle || "Home Smart Products - Best Smart Home Devices & Reviews 2026",
-    description:
-      seoData.ogDescription || seoData.metaDescription || "Expert reviews and buying guides for home smart products. Find the best smart home devices for your needs.",
+    title: _ogTitle,
+    description: _ogDescription,
     images: [
       {
-        url: seoData.ogImage || DEFAULT_OG_IMAGE,
+        url: _ogImage,
         width: 1200,
         height: 630,
-        alt: seoData.ogTitle || "Home Smart Products - Best Smart Home Devices",
+        alt: _ogTitle || "Home Smart Products - Best Smart Home Devices",
       },
     ],
   },
   twitter: {
-    card: (seoData.twitterCard as any) || "summary_large_image",
-    title: seoData.twitterTitle || seoData.ogTitle || "Home Smart Products - Best Smart Home Devices & Reviews",
-    description:
-      seoData.twitterDescription || seoData.ogDescription || "Discover the best home smart products with expert reviews and recommendations.",
-    images: [seoData.twitterImage || seoData.ogImage || DEFAULT_OG_IMAGE],
-    site: seoData.twitterSite || undefined,
-    creator: seoData.twitterCreator || undefined,
+    card: _twitterCard,
+    title: _twitterTitle,
+    description: seoData.twitterDescription || _ogDescription,
+    images: _twitterImages,
+    site: _twitterSite || undefined,
+    creator: _twitterCreator || undefined,
   },
   verification: {
-    google: seoData.googleSiteVerification || undefined,
-    yandex: seoData.yandexVerification || undefined,
-    other: seoData.bingVerification ? { "msvalidate.01": seoData.bingVerification } : undefined,
+    google: _verificationGoogle,
+    yandex: _verificationYandex,
+    other: _verificationBing ? { "msvalidate.01": _verificationBing } : undefined,
   },
+  // include extraMetaTags for head mapping
+  // (we still map them into <head/> below)
 };
 
 export const viewport: Viewport = {
@@ -121,22 +222,22 @@ export default function RootLayout({
         {seoData.icbm && <meta name="ICBM" content={seoData.icbm} />}
         {seoData.articleAuthor && <meta property="article:author" content={seoData.articleAuthor} />}
         {seoData.articlePublisher && <meta property="article:publisher" content={seoData.articlePublisher} />}
-        {seoData.structuredData?.organizationName && (
+        {_structured?.organizationName && (
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify({
                 "@context": "https://schema.org",
                 "@type": "Organization",
-                name: seoData.structuredData.organizationName,
-                url: seoData.structuredData.organizationUrl || SITE_URL,
-                logo: seoData.structuredData.organizationLogo || undefined,
-                sameAs: seoData.structuredData.sameAs || [],
+                name: _structured.organizationName,
+                url: _structured.organizationUrl || SITE_URL,
+                logo: _structured.organizationLogo || undefined,
+                sameAs: _structured.sameAs || [],
               }),
             }}
           />
         )}
-        {seoData.extraMetaTags?.map((tag: any, i: number) => {
+        {_extraMeta?.map((tag: ExtraMetaTag, i: number) => {
           if (tag.name && tag.content) return <meta key={`extra-${i}`} name={tag.name} content={tag.content} />;
           if (tag.property && tag.content) return <meta key={`extra-${i}`} property={tag.property} content={tag.content} />;
           if (tag.httpEquiv && tag.content) return <meta key={`extra-${i}`} httpEquiv={tag.httpEquiv} content={tag.content} />;

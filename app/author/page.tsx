@@ -103,7 +103,7 @@ export default function Author() {
                 Our team is united by a simple philosophy: provide honest, in-depth reviews that help people make informed decisions about smart home products.
               </p>
               <p className="text-gray-700 mb-4">
-                Every article, guide, and review is backed by thorough research, real-world testing, and genuine expertise. We don&apos;t cut corners, and we don&apos;t compromise our integrity.
+                 Every article, guide, and review is backed by thorough research, real-world testing, and genuine expertise. We do not cut corners, and we do not compromise our integrity.
               </p>
               <p className="text-gray-700">
                 Whether you're a smart home beginner or an advanced enthusiast, you can trust that our recommendations are based on merit, not affiliate potential.

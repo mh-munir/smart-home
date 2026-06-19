@@ -134,6 +134,7 @@ export default function AdminSettingsPage() {
           {logoPreview ? (
             <div className="mt-4">
               <p className="text-sm text-gray-600 mb-2">Logo preview</p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={logoPreview} alt="logo-preview" className="h-16 object-contain" />
             </div>
           ) : null}
@@ -145,6 +146,7 @@ export default function AdminSettingsPage() {
           {favPreview ? (
             <div className="mt-4">
               <p className="text-sm text-gray-600 mb-2">Favicon preview</p>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={favPreview} alt="favicon-preview" className="h-8 w-8 object-contain" />
             </div>
           ) : null}
