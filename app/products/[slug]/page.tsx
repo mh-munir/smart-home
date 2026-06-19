@@ -209,7 +209,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               width={1200}
               height={720}
               unoptimized
-              className="w-full h-auto rounded-sm object-cover max-h-[520px]"
+              className="w-full h-auto rounded-sm object-cover"
             />
           </figure>
         )}

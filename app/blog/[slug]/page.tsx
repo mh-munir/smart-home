@@ -315,7 +315,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 if (shouldInsert) {
                   blocks.push(
                     <figure key={`img-${i}`} className="my-8">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        { }
                         <Image
                           src={images[imageIndex]}
                           alt={`${article.title} - image ${imageIndex + 2}`}
