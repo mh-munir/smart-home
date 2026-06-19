@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -13,12 +12,11 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
     if (!product?.createdAt) return null;
     return new Intl.DateTimeFormat('en-US', { timeZone: 'UTC' }).format(new Date(product.createdAt));
   }, [product.createdAt]);
-
-  // Get active affiliate links
-  const getAffiliateLinks = () => {
+  // Memoized active affiliate links
+  const affiliateLinks = useMemo(() => {
     const links = [];
-    if (product.affiliateLinks && typeof product.affiliateLinks === 'object') {
-      Object.entries(product.affiliateLinks).forEach(([key, value]) => {
+    if (product?.affiliateLinks && typeof product?.affiliateLinks === 'object') {
+      Object.entries(product?.affiliateLinks || {}).forEach(([key, value]) => {
         if (value && value.url && value.enabled) {
           links.push({
             id: key,
@@ -29,15 +27,14 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
       });
     }
     return links;
-  };
+  }, [product.affiliateLinks]);
 
-  const affiliateLinks = getAffiliateLinks();
   const mainLink = affiliateLinks.length > 0 ? affiliateLinks[0] : null;
   const otherLinks = affiliateLinks.slice(1);
 
   return (
     <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-sm transition h-full flex flex-col">
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col pb-4">
         
           {/* Image Header */}
           <div className="w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
@@ -100,7 +97,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
           <button
             type="button"
             onClick={() => router.push(`/products/${product.slug}`)}
-            className="inline-flex items-center gap-2 text-sm font-semibold bg-teal-600 hover:bg-teal-700 text-white px-3 py-1 rounded-md transition shadow-sm"
+            className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-teal-600 hover:bg-teal-700 text-white px-3 py-3 rounded-md transition shadow-sm"
             aria-label={`More details about ${product.title}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

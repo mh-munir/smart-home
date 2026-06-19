@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
+import Link from "next/link";
 
 export default async function ProductsPage() {
   await connectDB();
@@ -18,6 +19,7 @@ export default async function ProductsPage() {
               <th className="px-6 py-3 text-left">Title</th>
               <th className="px-6 py-3 text-left">Price</th>
               <th className="px-6 py-3 text-left">Rating</th>
+              <th className="px-6 py-3 text-left">Best Deal</th>
               <th className="px-6 py-3 text-left">Actions</th>
             </tr>
           </thead>
@@ -28,8 +30,11 @@ export default async function ProductsPage() {
                   <td className="px-6 py-4">{product.title}</td>
                   <td className="px-6 py-4">{product.price}</td>
                   <td className="px-6 py-4">⭐ {product.rating}</td>
-                  <td className="px-6 py-4">
-                    <form method="post" action={`/api/products/${product._id}/delete`}>
+                  <td className="px-6 py-4">{product.bestDeal ? <span className="text-sm bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Yes</span> : '—'}</td>
+                  <td className="px-6 py-4 flex items-center gap-2">
+                    <Link href={`/admin/products/${product._id}/edit`} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Edit</Link>
+
+                    <form method="post" action={`/api/products/${product._id}/delete`}> 
                       <button
                         type="submit"
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"

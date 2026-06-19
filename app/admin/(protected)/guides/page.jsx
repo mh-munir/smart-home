@@ -1,8 +1,12 @@
 import Link from 'next/link';
-import { getAllGuides } from '@/lib/guides';
+import { connectDB } from '@/lib/db';
+import Guide from '@/models/Guide';
 
-export default function AdminGuidesPage() {
-  const guides = getAllGuides();
+export const dynamic = 'force-dynamic';
+
+export default async function AdminGuidesPage() {
+  await connectDB();
+  const guides = await Guide.find({}).sort({ createdAt: -1 }).lean().exec();
 
   return (
     <div className="p-8 min-h-screen">
@@ -22,11 +26,12 @@ export default function AdminGuidesPage() {
           </thead>
           <tbody>
             {guides.map((g) => (
-              <tr key={g.slug} className="border-b last:border-b-0">
+              <tr key={g._id} className="border-b last:border-b-0">
                 <td className="px-6 py-4">{g.title}</td>
                 <td className="px-6 py-4">{g.category}</td>
                 <td className="px-6 py-4">
                   <Link href={`/guides/${g.slug}`} className="text-teal-600 hover:underline mr-3">View</Link>
+                  <Link href={`/admin/guides/${g._id}/edit`} className="text-blue-600 hover:underline">Edit</Link>
                 </td>
               </tr>
             ))}

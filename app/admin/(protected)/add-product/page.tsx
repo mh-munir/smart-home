@@ -21,6 +21,7 @@ interface ProductData {
   mainImagePreview: string;
   mainDescription: string;
   subSections: SubSection[];
+  bestDeal?: boolean;
 }
 
 const AddProductPage = () => {
@@ -40,6 +41,7 @@ const AddProductPage = () => {
       imagePreview: '',
       content: '',
     })),
+    bestDeal: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const previewsRef = useRef<string[]>([]);
@@ -137,6 +139,7 @@ const AddProductPage = () => {
         category: productData.category,
         affiliateLink: productData.affiliateLink,
         description,
+        bestDeal: productData.bestDeal,
         images,
       };
 
@@ -268,6 +271,17 @@ const AddProductPage = () => {
               value={productData.affiliateLink}
               onChange={(e) => setProductData(prev => ({ ...prev, affiliateLink: e.target.value }))}
             />
+          </div>
+
+          <div className="flex items-center gap-3 mt-2">
+            <input
+              id="bestDeal"
+              type="checkbox"
+              checked={productData.bestDeal}
+              onChange={(e) => setProductData(prev => ({ ...prev, bestDeal: e.target.checked }))}
+              className="h-4 w-4"
+            />
+            <label htmlFor="bestDeal" className="text-sm font-medium text-gray-700">Mark as Best Deal</label>
           </div>
         </section>
 

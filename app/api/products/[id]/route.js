@@ -2,6 +2,9 @@ import { connectDB } from "@/lib/db";
 import { requireAdminSession } from "@/lib/admin-auth";
 import { revalidatePath } from "next/cache";
 import Product from "@/models/Product";
+import fs from "fs/promises";
+import path from "path";
+import { saveBufferToStorage } from "@/lib/storage";
 
 function serializeProduct(product) {
   let affiliateLinks = {};
@@ -15,6 +18,7 @@ function serializeProduct(product) {
     title: product.title,
     slug: product.slug,
     image: product.image || null,
+    images: product.images || [],
     price: product.price || null,
     rating: product.rating || 4.5,
     affiliateLink: product.affiliateLink || null,
@@ -52,6 +56,43 @@ export async function PUT(req, { params }) {
     await connectDB();
     const { id } = await params;
     const data = await req.json();
+
+    // Process images if provided (support data URLs and existing URLs)
+    const processedImages = [];
+    if (Array.isArray(data.images)) {
+      for (let i = 0; i < data.images.length && processedImages.length < 10; i++) {
+        const img = data.images[i];
+        if (typeof img === "string" && img.startsWith("data:")) {
+          const match = img.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/);
+          if (match) {
+            const mime = match[1];
+            const base64Data = match[2];
+            const ext = mime.split("/")[1].split("+")[0] || "jpg";
+            const filename = `product-${id}-${Date.now()}-${i}.${ext}`;
+            const key = `uploads/products/${filename}`;
+            const buffer = Buffer.from(base64Data, "base64");
+            try {
+              const res = await saveBufferToStorage(buffer, key, mime);
+              processedImages.push(res.url);
+            } catch {
+              const uploadsDir = path.join(process.cwd(), "public", "uploads", "products");
+              await fs.mkdir(uploadsDir, { recursive: true });
+              const filePath = path.join(uploadsDir, filename);
+              await fs.writeFile(filePath, buffer);
+              processedImages.push(`/uploads/products/${filename}`);
+            }
+          }
+        } else if (typeof img === "string" && img.trim()) {
+          processedImages.push(img);
+        }
+      }
+    }
+
+    if (processedImages.length > 0) {
+      data.images = processedImages;
+      // set main image to first image if provided
+      data.image = processedImages[0];
+    }
 
     const product = await Product.findByIdAndUpdate(id, data, { new: true });
     revalidatePath("/");

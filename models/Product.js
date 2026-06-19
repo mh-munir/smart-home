@@ -85,6 +85,12 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    // Mark if the product is part of "Best Deals" promotions
+    bestDeal: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
     // High-traffic optimization fields
     views: {
       type: Number,

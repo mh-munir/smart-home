@@ -49,8 +49,10 @@ export default async function BlogsPage() {
                       {blog.published ? "Published" : "Draft"}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <form method="post" action={`/api/blogs/${blog._id}/delete`}>
+                  <td className="px-6 py-4 flex items-center gap-2">
+                    <Link href={`/admin/blogs/${blog._id}/edit`} className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Edit</Link>
+
+                    <form method="post" action={`/api/blogs/${blog._id}/delete`}> 
                       <button
                         type="submit"
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
