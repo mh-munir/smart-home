@@ -7,8 +7,8 @@ export default async function BestDealsPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <div className="bg-linear-to-r from-red-50 to-orange-50 border-b border-gray-200 py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+      <div className="bg-linear-to-r from-red-50 to-orange-50 border-b border-gray-200 py-16">
+        <div className="max-w-7xl mx-auto px-4 lg:px-4">
           <div className="flex items-start gap-4 mb-4">
             <span className="text-4xl">🎉</span>
             <div>
@@ -20,8 +20,8 @@ export default async function BestDealsPage() {
         </div>
       </div>
 
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 lg:px-4">
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-serif font-bold text-gray-900">Top Deals</h2>
             <span className="text-gray-600 text-sm font-semibold">{deals.length} deals found</span>

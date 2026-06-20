@@ -74,10 +74,11 @@ export default async function BlogPage() {
 
   return (
 
-      <div className="min-h-screen bg-white">
+      <section>
+        <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">
               Smart Home Blog
             </h1>
@@ -88,7 +89,7 @@ export default async function BlogPage() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
           {/* Categories */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-4 text-gray-900">Categories</h2>
@@ -115,8 +116,8 @@ export default async function BlogPage() {
           <BlogList articles={latestArticles} pageSize={12} />
 
           {/* Newsletter Section */}
-          <section className="mt-16 bg-linear-to-r from-teal-600 to-teal-600 text-white rounded-lg p-8 md:p-12">
-            <div className="max-w-2xl mx-auto text-center">
+          <section className="w-full mt-16 bg-linear-to-r from-teal-600 to-teal-600 text-white rounded-lg p-8 md:p-12">
+            <div className="max-w-7xl mx-auto px-4 lg:px-4 text-center">
               <h2 className="text-3xl font-bold mb-4">Subscribe to Our Newsletter</h2>
               <p className="text-teal-100 mb-6">
                 Get the latest smart home tips, reviews, and guides delivered to your inbox weekly.
@@ -125,7 +126,7 @@ export default async function BlogPage() {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none"
+                  className="flex-1 px-4 py-3 rounded-lg text-white border border-white focus:outline-none"
                   required
                 />
                 <button
@@ -139,5 +140,6 @@ export default async function BlogPage() {
           </section>
         </div>
       </div>
+      </section>
   );
 }

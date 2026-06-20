@@ -25,7 +25,13 @@ export async function GET() {
     const fromProducts = await Product.distinct('category');
     const namesFromProducts = (Array.isArray(fromProducts) ? fromProducts : []).filter(Boolean).map((c) => String(c));
 
-    const merged = Array.from(new Set([...namesFromCollection, ...namesFromProducts]));
+    // If explicit Category collection contains entries, return only those
+    if (Array.isArray(namesFromCollection) && namesFromCollection.length > 0) {
+      return Response.json(namesFromCollection);
+    }
+
+    // Otherwise fall back to product-derived categories, or default list
+    const merged = Array.from(new Set([...namesFromProducts]));
     if (merged.length === 0) return Response.json(DEFAULT_CATS);
     return Response.json(merged);
   } catch (err) {
@@ -54,5 +60,37 @@ export async function POST(req) {
     return Response.json({ ok: true, name: created.name, _id: created._id.toString() });
   } catch (err) {
     return Response.json({ error: err?.message || 'Failed to create category' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req) {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
+
+  try {
+    await connectDB();
+    const data = await req.json().catch(() => ({}));
+    const id = data?.id;
+    const name = String(data?.name || "").trim();
+
+    if (!id && !name) {
+      return Response.json({ error: 'Provide category id or name to delete' }, { status: 400 });
+    }
+
+    let removed = null;
+    if (id) {
+      removed = await Category.findByIdAndDelete(id);
+    } else {
+      const safe = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      removed = await Category.findOneAndDelete({ name: { $regex: `^${safe}$`, $options: 'i' } });
+    }
+
+    if (!removed) {
+      return Response.json({ error: 'Category not found' }, { status: 404 });
+    }
+
+    return Response.json({ ok: true, name: removed.name, _id: removed._id.toString() });
+  } catch (err) {
+    return Response.json({ error: err?.message || 'Failed to delete category' }, { status: 500 });
   }
 }

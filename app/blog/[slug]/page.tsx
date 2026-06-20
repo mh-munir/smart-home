@@ -156,48 +156,48 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     <div className="min-h-screen bg-white">
       {/* Main Article Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 pt-8 pb-12 sm:pt-12 sm:pb-16">
-        {/* Article Title */}
-        <h1 className="text-[2.5rem] sm:text-[3rem] leading-tight font-bold text-gray-900 mb-4 tracking-tight">
-          {article.title}
-        </h1>
+        {/* Hero Header */}
+        <div className="mb-8 rounded-2xl overflow-hidden shadow-sm">
+          <div className="`bg-gradient-to-r` from-teal-600 to-indigo-600 p-8 text-white">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                {article.category && (
+                  <span className="inline-block bg-white/10 text-white px-3 py-1 rounded-full text-xs font-semibold">{article.category}</span>
+                )}
+                <h1 className="mt-4 text-[2.25rem] sm:text-[3rem] leading-tight font-extrabold">{article.title}</h1>
+                {(article.description || article.excerpt) && (
+                  <p className="mt-3 text-sm opacity-90 max-w-2xl">{article.description || article.excerpt}</p>
+                )}
 
-        {/* Subtitle / Excerpt */}
-        {(article.description || article.excerpt) && (
-          <p className="text-lg sm:text-xl text-gray-700 mb-6 leading-relaxed">
-            {article.description || article.excerpt}
-          </p>
-        )}
+                <div className="mt-4 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center text-sm font-bold shrink-0">{authorInitials}</div>
+                  <div>
+                    <p className="text-sm font-semibold">{articleAuthor}</p>
+                    <p className="text-xs opacity-90">Updated {new Date(articleDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })} • {articleReadTime} min read</p>
+                  </div>
+                </div>
+              </div>
 
-        {/* Author Info */}
-        <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-200">
-          <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm font-bold shrink-0">
-            {authorInitials}
+              <div className="flex items-center gap-3">
+                <button className="bg-white text-teal-700 px-3 py-2 rounded-full text-sm font-semibold">Share</button>
+                <a href="#" className="bg-white/20 text-white px-3 py-2 rounded-full text-sm">Subscribe</a>
+              </div>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900">By {articleAuthor}</p>
-            <p className="text-xs text-gray-500">
-              Updated {new Date(articleDate).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })} • {articleReadTime} min read
-            </p>
-          </div>
+
+          {articleImages.length > 0 && (
+            <figure className="w-full h-64 sm:h-96 overflow-hidden">
+              <Image
+                src={articleImages[0]}
+                alt={article.title || ""}
+                width={1200}
+                height={720}
+                unoptimized
+                className="w-full h-full object-cover"
+              />
+            </figure>
+          )}
         </div>
-
-        {/* Hero Image (first image) */}
-        {articleImages.length > 0 && (
-          <figure className="mb-8">
-            <Image
-              src={articleImages[0]}
-              alt={article.title || ""}
-              width={1200}
-              height={720}
-              unoptimized
-              className="w-full h-auto rounded-sm object-cover max-h-130"
-            />
-          </figure>
-        )}
 
         {/* Article Content */}
         <article className="prose prose-lg max-w-none">

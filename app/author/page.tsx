@@ -53,7 +53,7 @@ export default function Author() {
     <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">Meet Our Team</h1>
             <p className="text-xl text-teal-100 max-w-2xl">
               Expert writers and smart home enthusiasts dedicated to helping you find the perfect devices
@@ -62,7 +62,7 @@ export default function Author() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
           {/* Team Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
             {authors.map((author, index) => (

@@ -17,8 +17,8 @@ export default function GuidesPage() {
   return (
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <div className="bg-gray-50 border-b border-gray-200 py-16 px-4">
-          <div className="max-w-6xl mx-auto">
+        <div className="bg-gray-50 border-b border-gray-200 py-16">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4">
             <h1 className="text-5xl font-serif font-bold text-gray-900 mb-4">
               Smart Home Guides
             </h1>
@@ -29,8 +29,8 @@ export default function GuidesPage() {
         </div>
 
         {/* Category Filter */}
-        <div className="border-b border-gray-200 py-6 px-4 bg-white">
-          <div className="max-w-6xl mx-auto">
+        <div className="border-b border-gray-200 py-6 bg-white">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4">
             <div className="flex overflow-x-auto gap-4">
               {categories.map((cat) => (
                 <button
@@ -45,8 +45,8 @@ export default function GuidesPage() {
         </div>
 
         {/* Featured Guide */}
-        <section className="py-12 px-4 bg-gray-50 border-b border-gray-200">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-12 bg-gray-50 border-b border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4">
             <div className="flex items-center gap-2 mb-6">
               <div className="w-1 h-6 bg-yellow-300"></div>
               <h2 className="text-2xl font-serif font-bold text-gray-900">Featured Guide</h2>
@@ -80,8 +80,8 @@ export default function GuidesPage() {
         </section>
 
         {/* All Guides Grid */}
-        <section className="py-16 px-4">
-          <div className="max-w-6xl mx-auto">
+        <section className="py-16">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4">
             <h2 className="text-3xl font-serif font-bold text-gray-900 mb-12">All Guides</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -118,8 +118,8 @@ export default function GuidesPage() {
         </section>
 
         {/* Newsletter Section */}
-        <section className="py-16 px-4 bg-gray-50 border-t border-gray-200">
-          <div className="max-w-2xl mx-auto text-center">
+        <section className="py-16 bg-gray-50 border-t border-gray-200">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4 text-center">
             <h2 className="text-3xl font-serif font-bold text-gray-900 mb-4">
               Subscribe for Weekly Guides
             </h2>

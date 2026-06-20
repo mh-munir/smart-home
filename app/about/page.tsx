@@ -24,7 +24,7 @@ export default function About() {
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6">About {SITE_NAME}</h1>
             <p className="text-xl text-teal-100 max-w-2xl">
               Your trusted source for expert smart home reviews, guides, and recommendations
@@ -33,7 +33,7 @@ export default function About() {
         </div>
 
         {/* Main Content */}
-        <div className="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
           {/* Mission Section */}
           <section className="mb-16">
             <h2 className="text-3xl font-bold mb-6 text-gray-900">Our Mission</h2>

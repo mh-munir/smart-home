@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "node scripts/seed.js",
+    "delete:category": "node scripts/delete-category.mjs",
     "seed:admin": "node scripts/seed-admin.js",
     "reset:products": "node scripts/reset-products.js",
     "update:products:amazon": "node scripts/update-products-amazon.js",

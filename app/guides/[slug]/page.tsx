@@ -14,17 +14,24 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
   }
 
   return (
-    <main className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-4xl font-serif font-bold mb-4">{guide.title}</h1>
-      <div className="text-sm text-gray-600 mb-6">
-        <span className="mr-3">{guide.category}</span>
-        <span className="mr-3">•</span>
-        <span>{guide.readTime}</span>
+    <main className="bg-white">
+      <div className="`bg-gradient-to-r` from-rose-500 to-purple-600 text-white py-12">
+        <div className="max-w-4xl mx-auto px-4">
+          {guide.category && (
+            <div className="mb-3">
+              <span className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold">{guide.category}</span>
+            </div>
+          )}
+          <h1 className="text-4xl sm:text-5xl font-serif font-extrabold mb-2">{guide.title}</h1>
+          <div className="text-sm opacity-90">{guide.readTime} min read</div>
+        </div>
       </div>
 
-      <article className="prose max-w-none">
-        <div dangerouslySetInnerHTML={{ __html: guide.content }} />
-      </article>
+      <div className="max-w-4xl mx-auto p-8">
+        <article className="prose max-w-none">
+          <div dangerouslySetInnerHTML={{ __html: guide.content }} />
+        </article>
+      </div>
     </main>
   );
 }

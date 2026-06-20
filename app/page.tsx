@@ -1,5 +1,6 @@
 import HeroSlider from "@/components/HeroSlider";
 import ProductCard from "@/components/ProductCard";
+import Image from "next/image";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import NewsletterForm from "@/components/NewsletterForm";
 import { getHeroSlides } from "@/lib/hero-slides";
@@ -47,7 +48,6 @@ export default async function Home() {
     getHeroSlides(),
   ]);
 
-  const categories = ['Smart Locks', 'Smart Cameras', 'Smart Lighting', 'Smart Speakers', 'Smart Thermostats', 'Smart Plugs'];
   const featuredProducts = products?.slice(0, 4) || [];
   const allProducts = products || [];
 
@@ -63,112 +63,104 @@ export default async function Home() {
         {/* Hero Section */}
         <HeroSlider slides={heroSlides} />
 
-        {/* Category Navigation */}
-        <nav className="border-b border-gray-200 bg-white">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="flex overflow-x-auto gap-8 text-sm font-semibold">
-              {categories.map((cat) => (
-                <a
-                  key={cat}
-                  href={`#${cat}`}
-                  className="whitespace-nowrap text-gray-700 hover:text-teal-600 transition-colors py-4 border-b-2 border-transparent hover:border-teal-600 uppercase tracking-wide text-xs"
-                >
-                  {cat}
-                </a>
-              ))}
+        {/* Featured header design (renders 3-per-row ProductCard grid) */}
+        <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
+          <div className="w-full">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-4 items-start">
+              <div className="lg:col-span-3">
+                <div className="rounded-xl border border-gray-100 p-6 shadow-sm bg-white mb-6">
+                  <p className="text-xs font-medium text-teal-600 uppercase tracking-wider">Curated Picks</p>
+                  <h2 className="mt-2 text-4xl font-serif font-bold text-gray-900">Featured Products</h2>
+                  <p className="mt-3 text-gray-600">Smart-home upgrades selected for practical features, clean setup, and everyday value.</p>
+                </div>
+
+                {featuredProducts.length === 0 ? (
+                  <div className="rounded-xl border border-gray-100 p-8 shadow-sm bg-white">
+                    <p className="text-gray-600">No featured products at the moment.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {featuredProducts.map((product) => (
+                      <ProductCard key={product._id} product={product} showBuyButton={true} />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <aside className="lg:col-span-1">
+                <div className="sticky top-24 space-y-6">
+                  <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="text-2xl font-serif font-bold text-gray-900">The Latest</h3>
+                        <div className="mt-2 h-1 w-32 bg-yellow-300 rounded" />
+                      </div>
+                      <a href="/products" className="text-xs text-teal-600 font-semibold hidden sm:inline">See all</a>
+                    </div>
+
+                    <ul className="space-y-5">
+                      {allProducts.slice(0, 3).map((product, idx) => (
+                        <li key={product._id} className="flex items-start gap-4">
+                          {product.image ? (
+                            <Image src={product.image} alt={product.title} width={96} height={64} className="rounded-md object-cover w-24 h-16" />
+                          ) : (
+                            <div className="w-24 h-16 bg-gray-100 rounded-md flex items-center justify-center text-sm">🛒</div>
+                          )}
+
+                          <div className="flex-1">
+                            <a href={`/products/${product.slug}`} className="text-sm font-semibold text-gray-900 hover:text-teal-600 line-clamp-2">{product.title}</a>
+                            <div className="text-xs text-gray-500 mt-1">{product.category || 'Smart Home'}{product.price ? ` • ${product.price}` : ''}</div>
+                            <div className="text-xs text-gray-400 mt-1">{Math.max(1, (idx + 1) * 2)} hours ago</div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="bg-white border border-gray-100 p-6 rounded-lg shadow-sm">
+                    <h4 className="text-lg font-serif font-bold text-gray-900">Our Favorites</h4>
+                    <div className="mt-2 h-1 w-40 bg-teal-300 rounded" />
+                    <div className="mt-4 grid gap-4">
+                      {allProducts.slice(3, 6).map((p) => (
+                        <a key={p._id} href={`/products/${p.slug}`} className="flex items-center gap-4 bg-gray-50 p-2 rounded hover:bg-gray-100">
+                          {p.image ? (
+                            <Image src={p.image} alt={p.title} width={80} height={56} className="rounded-sm object-cover w-20 h-14" />
+                          ) : (
+                            <div className="w-16 h-10 bg-gray-100 rounded-sm" />
+                          )}
+                          <div className="text-sm text-gray-800 line-clamp-2">{p.title}</div>
+                          <div className="ml-auto text-sm text-teal-600 font-semibold">{p.price}</div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Subscribe CTA removed per user request */}
+                </div>
+              </aside>
             </div>
           </div>
-        </nav>
+        </section>
+
+        {/* Featured products rendered above; HomeContent removed to avoid duplication */}
 
         {/* Main Content Area */}
-        <div className="max-w-7xl mx-auto px-4 py-12">
+        <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            {/* Featured Products */}
-            <section className="lg:col-span-2">
-              <div className="mb-6 rounded-2xl border border-gray-200 bg-linear-to-br from-white via-white to-teal-50/60 p-5 shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-[0.22em] text-teal-600">
-                  Curated picks
-                </p>
-                <h2 className="mt-2 text-3xl font-serif font-bold text-gray-950">
-                  Featured Products
-                </h2>
-                <p className="mt-3 text-sm leading-6 text-gray-600">
-                  Smart-home upgrades selected for practical features, clean setup, and everyday value.
-                </p>
-              </div>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                {featuredProducts.map((product, idx) => (
-                  <div key={product._id} className="transition-transform duration-300 hover:-translate-y-1">
-                    <ProductCard product={product} showBuyButton={false} priority={idx === 0} />
-                  </div>
-                ))}
-              </div>
-            </section>
 
-            {/* Right Sidebar - Latest + Featured/Recommended */}
-            <aside className="space-y-8 lg:col-span-1">
-              <div>
-                <div className="border-b-4 border-yellow-300 pb-3 mb-6">
-                  <h2 className="text-2xl font-serif font-bold text-gray-900">The Latest</h2>
-                </div>
-                <div className="space-y-6">
-                  {allProducts.slice(0, 3).map((product, idx) => (
-                    <article key={product._id} className="border-b border-gray-200 pb-4">
-                      <div className="text-xs text-teal-600 font-bold uppercase tracking-wide mb-2">
-                        {idx * 2} HOURS AGO
-                      </div>
-                      <h3 className="text-sm font-serif font-bold text-gray-900 mb-1 line-clamp-2 hover:text-teal-600 cursor-pointer transition-colors">
-                        {product.title}
-                      </h3>
-                      <p className="text-xs text-gray-600">
-                        {product.category || 'Smart Home'}
-                      </p>
-                    </article>
-                  ))}
-                </div>
-              </div>
+            {/* Left column (content handled above) */}
+            <div className="lg:col-span-2"></div>
 
-              <div className="bg-gray-50 border border-gray-200 p-6">
-                <h3 className="text-lg font-serif font-bold text-gray-900 mb-4 pb-3 border-b-2 border-teal-600">
-                  Our Favorites
-                </h3>
-                <div className="space-y-4">
-                  {allProducts.slice(0, 2).map((product) => (
-                    <div key={product._id} className="border-b border-gray-200 pb-4 last:border-b-0">
-                      <div className="text-xs text-teal-600 font-bold uppercase tracking-wide mb-1">
-                        {product.category || 'Smart Home'}
-                      </div>
-                      <h4 className="text-sm font-serif font-bold text-gray-900 mb-2 hover:text-teal-600 cursor-pointer transition-colors line-clamp-2">
-                        {product.title}
-                      </h4>
-                      {product.price && (
-                        <p className="text-sm font-bold text-teal-600">{product.price}</p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </aside>
+            {/* Right column intentionally left blank — Latest/Favorites moved above */}
+            <aside className="lg:col-span-1" />
           </div>
-        </div>
+        </section>
 
-        {/* All Products Grid */}
-        {allProducts.length > 3 && (
-          <section className="py-16 px-4 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto">
-              <h2 className="text-3xl font-serif font-bold text-gray-900 mb-12">All Products</h2>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {allProducts.slice(3).map((product) => (
-                  <ProductCard key={product._id} product={product} showBuyButton={false} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {/* (Products grid is handled in HomeContent) */}
 
         {/* Newsletter Section */}
-        <section className="py-16 px-4 bg-gray-50 border-t border-gray-200">
-          <div className="max-w-2xl mx-auto text-center">
+        <section className="py-16 bg-gray-50 border-gray-200 w-full">
+          <div className="max-w-5xl mx-auto px-4 lg:px-8 text-center">
             <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3">
               Get Smart Home Tips
             </h3>
@@ -180,8 +172,8 @@ export default async function Home() {
         </section>
 
         {/* About Section */}
-        <section className="py-16 px-4">
-          <div className="max-w-3xl mx-auto">
+        <section className="max-w-7xl mx-auto px-4 lg:px-4 py-16 bg-white">
+          <div className="w-full">
             <h2 className="text-3xl font-serif font-bold text-gray-900 mb-6">About SmartHome Affiliate</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>

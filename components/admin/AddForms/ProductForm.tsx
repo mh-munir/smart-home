@@ -54,6 +54,9 @@ export default function ProductForm() {
   const [newCategory, setNewCategory] = useState<string>('');
   const [isAddingCategory, setIsAddingCategory] = useState<boolean>(false);
   const [addCatError, setAddCatError] = useState<string | null>(null);
+  const [showManageCategories, setShowManageCategories] = useState<boolean>(false);
+  const [isDeletingCategory, setIsDeletingCategory] = useState<boolean>(false);
+  const [delError, setDelError] = useState<string | null>(null);
 
   const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -301,6 +304,14 @@ export default function ProductForm() {
                 + Add category
               </button>
 
+                <button
+                  type="button"
+                  className="text-sm text-gray-600"
+                  onClick={() => setShowManageCategories((s) => !s)}
+                >
+                  Manage categories
+                </button>
+
               {showAddCategory && (
                 <div className="flex items-center gap-2 ml-2">
                   <input
@@ -325,6 +336,53 @@ export default function ProductForm() {
                   >
                     Cancel
                   </button>
+                </div>
+              )}
+              {showManageCategories && (
+                <div className="mt-3 w-full bg-gray-50 border border-gray-200 rounded p-3">
+                  <div className="text-sm font-medium mb-2">Manage categories</div>
+                  {delError && <div className="text-sm text-red-600 mb-2">{delError}</div>}
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {categories.map((cat) => (
+                      <div key={cat} className="flex items-center justify-between bg-white p-2 rounded border">
+                        <div className="text-sm text-gray-700">{cat}</div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            disabled={isDeletingCategory}
+                            onClick={async () => {
+                              if (!confirm(`Delete category "${cat}"? This will remove it from the admin list.`)) return;
+                              setDelError(null);
+                              setIsDeletingCategory(true);
+                              try {
+                                const res = await fetch('/api/categories', {
+                                  method: 'DELETE',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({ name: cat }),
+                                });
+                                const data = await res.json();
+                                if (!res.ok) throw new Error(data?.error || 'Failed to delete');
+                                setCategories((prev) => prev.filter((c) => c !== cat));
+                                setProductData((prev) => {
+                                  if (prev.category === cat) {
+                                    return { ...prev, category: (categories.find((c) => c !== cat) || '') };
+                                  }
+                                  return prev;
+                                });
+                              } catch (err: any) {
+                                setDelError(err?.message || String(err));
+                              } finally {
+                                setIsDeletingCategory(false);
+                              }
+                            }}
+                            className="text-sm text-red-600"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

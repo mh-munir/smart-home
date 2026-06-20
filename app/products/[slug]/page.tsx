@@ -14,6 +14,7 @@ type ProductDoc = {
   title?: string;
   description?: string;
   price?: string;
+  rating?: number;
   image?: string;
   images?: string[];
   category?: string;
@@ -189,70 +190,96 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 pt-8 pb-12 sm:pt-12 sm:pb-16">
-        <h1 className="text-[2.5rem] sm:text-[3rem] leading-tight font-bold text-gray-900 mb-4 tracking-tight">{product.title}</h1>
+    <div className="max-w-7xl mx-auto px-4 lg:px-4 min-h-screen bg-white">
+      <div className="pt-8 pb-12 sm:pt-12 sm:pb-16">
+        <div className="grid lg:grid-cols-3 gap-8 items-start">
+          <main className="lg:col-span-2">
+            <h1 className="text-[2.5rem] sm:text-[3rem] leading-tight font-extrabold text-gray-900 mb-4 tracking-tight">{product.title}</h1>
 
-        <div className="flex items-center gap-3 mb-8 pb-8 border-b border-gray-200">
-          <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm font-bold shrink-0">PR</div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900">{product.category || SITE_NAME}</p>
-            <p className="text-xs text-gray-500">Updated {new Date(productDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
-          </div>
-        </div>
-
-        {productImages.length > 0 && (
-          <figure className="mb-8">
-            <Image
-              src={productImages[0]}
-              alt={product.title || ""}
-              width={1200}
-              height={720}
-              unoptimized
-              className="w-full h-auto rounded-sm object-cover"
-            />
-          </figure>
-        )}
-
-        <article className="prose prose-lg max-w-none">
-          {renderContentBlocks(product.description || "")}
-        </article>
-
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <div className="bg-teal-50 p-6 rounded-lg mb-10">
-            <h3 className="text-xl font-bold mb-4">Buy This Product</h3>
-            <a href={product.affiliateLink || "#"} target="_blank" rel="noopener noreferrer" className="inline-block bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg">Buy Now</a>
-          </div>
-        </div>
-
-        {relatedProducts.length > 0 && (
-          <>
-            <h2 className="text-2xl font-bold mb-6">Related Products</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {relatedProducts.map((item) => (
-                <Link key={item.slug} href={`/products/${item.slug}`} className="border rounded-lg overflow-hidden">
-                  {item.image && (
-                    <div className="w-full h-48 relative">
-                      <Image
-                        src={item.image}
-                        alt={item.title || ""}
-                        width={800}
-                        height={480}
-                        unoptimized
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                  )}
-
-                  <div className="p-4">
-                    <h3 className="font-bold">{item.title}</h3>
-                    <p className="text-teal-600 mt-2">{item.price}</p>
-                  </div>
-                </Link>
-              ))}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm font-bold shrink-0">PR</div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{product.category || SITE_NAME}</p>
+                <p className="text-xs text-gray-500">Updated {new Date(productDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
+              </div>
             </div>
-          </>
-        )}
+
+            {productImages.length > 0 && (
+              <figure className="mb-8 overflow-hidden rounded-lg">
+                <Image
+                  src={productImages[0]}
+                  alt={product.title || ""}
+                  width={1200}
+                  height={720}
+                  unoptimized
+                  className="w-full h-auto object-cover rounded-lg"
+                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                />
+              </figure>
+            )}
+
+            <article id="details" className="prose prose-lg max-w-none">
+              {renderContentBlocks(product.description || "")}
+            </article>
+
+            {relatedProducts.length > 0 && (
+              <div className="mt-12">
+                <h2 className="text-2xl font-bold mb-6">Related Products</h2>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {relatedProducts.map((item) => (
+                    <Link key={item.slug} href={`/products/${item.slug}`} className="border rounded-lg overflow-hidden hover:shadow-md transition">
+                      {item.image && (
+                        <div className="w-full h-40 relative">
+                          <Image
+                            src={item.image}
+                            alt={item.title || ""}
+                            width={800}
+                            height={480}
+                            unoptimized
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                      )}
+
+                      <div className="p-4">
+                        <h3 className="font-bold line-clamp-2">{item.title}</h3>
+                        <p className="text-teal-600 mt-2 font-semibold">{item.price}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </main>
+
+          <aside className="lg:col-span-1">
+            <div className="sticky top-24 space-y-6">
+              <div className="bg-white border rounded-lg p-6 shadow">
+                <p className="text-sm text-gray-500">Price</p>
+                <p className="text-3xl font-bold text-teal-600 mt-2">{product.price || '—'}</p>
+
+                <div className="flex items-center gap-2 mt-4">
+                  <div className="flex items-center gap-1 text-yellow-400">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.561-.955L10 0l2.949 5.955 6.561.955-4.755 4.635 1.123 6.545z"/></svg>
+                    ))}
+                  </div>
+                  <div className="text-sm text-gray-600">{product.rating || '4.5'}</div>
+                </div>
+
+                <a href={product.affiliateLink || '#'} target="_blank" rel="noopener noreferrer" className="block mt-6 bg-red-500 hover:bg-red-600 text-white text-center py-3 rounded-lg font-semibold">Buy Now</a>
+              </div>
+
+              <div className="bg-white border rounded-lg p-4">
+                <p className="text-sm font-semibold">Quick Specs</p>
+                <ul className="text-sm text-gray-700 mt-2 space-y-1">
+                  {product.category && <li>Category: {product.category}</li>}
+                  {product.price && <li>Price: {product.price}</li>}
+                </ul>
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
   );

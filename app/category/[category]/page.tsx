@@ -122,7 +122,7 @@ export default async function CategoryPage({
       <div className="min-h-screen bg-white">
         {/* Hero Section */}
         <div className="bg-linear-to-r from-teal-600 to-teal-600 text-white py-16 sm:py-24">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
             <h1 className="text-4xl sm:text-5xl font-bold mb-6 capitalize">
               {category} Articles
             </h1>
@@ -133,7 +133,7 @@ export default async function CategoryPage({
         </div>
 
         {/* Main Content */}
-        <div className="max-w-5xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
           {/* Categories */}
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-4 text-gray-900">Browse Categories</h2>
@@ -226,7 +226,7 @@ export default async function CategoryPage({
 
           {/* CTA Section */}
           <section className="bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-lg p-8 md:p-12">
-            <div className="max-w-2xl mx-auto text-center">
+            <div className="w-full text-center">
               <h2 className="text-3xl font-bold mb-4">Don&apos;t miss out on new content</h2>
               <p className="text-blue-100 mb-6">
                 Subscribe to our newsletter to get the latest guides and reviews delivered to your inbox.

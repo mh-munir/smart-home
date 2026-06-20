@@ -13,29 +13,38 @@ export default function NewsletterForm({ source = "homepage" }) {
 
     setStatus("loading");
     try {
-      const res = await fetch("/api/subscribers", {
+      const apiUrl = typeof window !== "undefined" ? new URL("/api/subscribers", window.location.origin).href : "/api/subscribers";
+      // debug log the request URL (helps when dev server uses a different port)
+      // console.debug("Subscribing to:", apiUrl);
+
+      const res = await fetch(apiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), source }),
       });
 
-      const data = await res.json();
+      let data = null;
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        console.warn("/api/subscribers returned non-JSON response", parseErr);
+      }
 
-      if (res.ok && data.alreadySubscribed) {
+      if (res.ok && data?.alreadySubscribed) {
         setStatus("already");
-        setMessage(data.message);
+        setMessage(data.message || "You are already subscribed.");
       } else if (res.ok) {
         setStatus("success");
-        setMessage(data.message);
+        setMessage(data?.message || "Successfully subscribed!");
         setEmail("");
       } else {
         setStatus("error");
-        setMessage(data.error || "Something went wrong. Please try again.");
+        setMessage((data && (data.error || data.message)) || `Server error: ${res.status}`);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Newsletter subscribe failed:", error);
       setStatus("error");
-      setMessage("Network error. Please try again.");
+      setMessage(`Network error: ${error?.message || "Failed to fetch"}`);
     }
   };
 
