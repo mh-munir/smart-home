@@ -12,12 +12,6 @@ export default async function BlogsPage() {
     <div className="p-8 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">📝 Blogs</h1>
-        <Link
-          href="/admin/add?type=blog"
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          + Add Blog
-        </Link>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">

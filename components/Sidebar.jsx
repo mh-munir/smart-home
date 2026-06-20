@@ -14,16 +14,9 @@ const navSections = [
     label: "Content",
     items: [
       { href: "/admin/products", label: "Products", icon: "products" },
-      { href: "/admin/add?type=product", label: "Add Product", icon: "add" },
-      { href: "/admin/hero-slider", label: "Hero Slider", icon: "slider" },
-    ],
-  },
-  {
-    label: "Publishing",
-    items: [
+      { href: "/admin/add", label: "Add Content", icon: "add" },
       { href: "/admin/blogs", label: "Blogs", icon: "blogs" },
       { href: "/admin/guides", label: "Guides", icon: "guides" },
-      { href: "/admin/add?type=blog", label: "Add Blog", icon: "add" },
     ],
   },
   {
@@ -37,6 +30,7 @@ const navSections = [
     label: "System",
     items: [
       { href: "/admin/settings", label: "Settings", icon: "settings" },
+      { href: "/admin/hero-slider", label: "Hero Slider", icon: "slider" },
     ],
   },
 ];

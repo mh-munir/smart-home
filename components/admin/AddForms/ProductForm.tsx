@@ -100,13 +100,16 @@ export default function ProductForm() {
         if (!res.ok) throw new Error('Failed to load categories');
         const data = await res.json();
         if (!mounted) return;
-        if (Array.isArray(data) && data.length > 0) {
-          setCategories(data.filter(Boolean));
-        } else {
-          setCategories(defaultCats);
-        }
+        const list = Array.isArray(data) && data.length > 0 ? data.filter(Boolean) : defaultCats;
+        setCategories(list);
+        setProductData((prev) => {
+          // keep existing category if still present, otherwise pick the first available
+          const preferred = prev.category && list.includes(prev.category) ? prev.category : (list[0] || prev.category);
+          return { ...prev, category: preferred };
+        });
       } catch (err) {
         setCategories(defaultCats);
+        setProductData((prev) => ({ ...prev, category: defaultCats[0] || prev.category }));
       }
     }
 
@@ -299,7 +302,7 @@ export default function ProductForm() {
               </button>
 
               {showAddCategory && (
-                <form onSubmit={handleAddCategory} className="flex items-center gap-2 ml-2">
+                <div className="flex items-center gap-2 ml-2">
                   <input
                     type="text"
                     value={newCategory}
@@ -308,7 +311,8 @@ export default function ProductForm() {
                     className="border rounded p-2 text-sm"
                   />
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={() => handleAddCategory()}
                     disabled={isAddingCategory}
                     className="bg-teal-600 text-white px-3 py-1 rounded text-sm disabled:opacity-50"
                   >
@@ -321,7 +325,7 @@ export default function ProductForm() {
                   >
                     Cancel
                   </button>
-                </form>
+                </div>
               )}
             </div>
             {addCatError && <div className="text-sm text-red-600 mt-1">{addCatError}</div>}

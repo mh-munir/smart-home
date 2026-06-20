@@ -12,7 +12,6 @@ export default async function AdminGuidesPage() {
     <div className="p-8 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">📚 Guides</h1>
-        <Link href="/admin/add-guide" className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">+ Add Guide</Link>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
