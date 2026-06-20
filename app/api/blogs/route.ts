@@ -81,9 +81,10 @@ export async function POST(request: Request) {
       .trim()
       .slice(0, 180);
 
+    const slugBase = slugify(title).slice(0, 120);
     const newBlog = await Blog.create({
       title,
-      slug: `${slugify(title)}-${Date.now()}`,
+      slug: `${slugBase}-${Date.now()}`,
       category,
       content,
       description: description || '',

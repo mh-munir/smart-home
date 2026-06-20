@@ -10,10 +10,13 @@ export default function AdminSettingsPage() {
   const router = useRouter();
   const [siteTitle, setSiteTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
+  const [adminName, setAdminName] = useState("");
   const [logoFile, setLogoFile] = useState(null);
   const [faviconFile, setFaviconFile] = useState(null);
+  const [adminAvatarFile, setAdminAvatarFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
   const [favPreview, setFavPreview] = useState(null);
+  const [adminAvatarPreview, setAdminAvatarPreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -28,8 +31,10 @@ export default function AdminSettingsPage() {
         if (data) {
           setSiteTitle(data.title || "");
           setSubtitle(data.subtitle || "");
+          setAdminName(data.adminName || "");
           if (data.logo) setLogoPreview(data.logo);
           if (data.favicon) setFavPreview(data.favicon);
+          if (data.adminAvatar) setAdminAvatarPreview(data.adminAvatar);
         }
       })
       .catch(() => {});
@@ -47,9 +52,10 @@ export default function AdminSettingsPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const payload = { title: siteTitle, subtitle };
+      const payload = { title: siteTitle, subtitle, adminName };
       if (logoFile) payload.logoBase64 = await readFileAsDataUrl(logoFile);
       if (faviconFile) payload.faviconBase64 = await readFileAsDataUrl(faviconFile);
+      if (adminAvatarFile) payload.adminAvatarBase64 = await readFileAsDataUrl(adminAvatarFile);
 
       const res = await fetch("/api/settings", {
         method: "POST",
@@ -63,8 +69,10 @@ export default function AdminSettingsPage() {
         alert("Settings updated");
         setLogoPreview(data.settings.logo || logoPreview);
         setFavPreview(data.settings.favicon || favPreview);
+        setAdminAvatarPreview(data.settings.adminAvatar || adminAvatarPreview);
         setLogoFile(null);
         setFaviconFile(null);
+        setAdminAvatarFile(null);
         router.refresh();
       } else {
         alert("Error saving settings: " + (data?.error || "unknown"));
@@ -90,6 +98,14 @@ export default function AdminSettingsPage() {
     if (f) {
       setFaviconFile(f);
       setFavPreview(URL.createObjectURL(f));
+    }
+  }
+
+  function handleAdminAvatarChange(e) {
+    const f = e.target.files?.[0];
+    if (f) {
+      setAdminAvatarFile(f);
+      setAdminAvatarPreview(URL.createObjectURL(f));
     }
   }
 
@@ -130,6 +146,18 @@ export default function AdminSettingsPage() {
         </div>
 
         <div>
+          <label className="block text-gray-700 font-semibold mb-2">Admin Name</label>
+          <input
+            type="text"
+            value={adminName}
+            onChange={(e) => setAdminName(e.target.value)}
+            placeholder="Display name for the admin (e.g. John Doe)"
+            className="w-full border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          />
+          <p className="text-sm text-gray-500 mt-1">This name appears in the admin header and sidebar.</p>
+        </div>
+
+        <div>
           <label className="block text-gray-700 font-semibold mb-2">Logo (PNG/JPG, recommended 200x50)</label>
           <input type="file" accept="image/*" onChange={handleLogoChange} />
           {logoPreview ? (
@@ -166,10 +194,29 @@ export default function AdminSettingsPage() {
         </div>
 
         <div>
+          <label className="block text-gray-700 font-semibold mb-2">Admin Profile Image</label>
+          <p className="text-sm text-gray-500 mb-2">This image will be displayed in the admin header and sidebar.</p>
+          <input type="file" accept="image/*" onChange={handleAdminAvatarChange} />
+          {adminAvatarPreview ? (
+            <div className="mt-4">
+              <p className="text-sm text-gray-600 mb-2">Avatar preview</p>
+              <Image
+                src={adminAvatarPreview}
+                alt="admin-avatar-preview"
+                unoptimized
+                width={80}
+                height={80}
+                className="h-20 w-20 rounded-full object-cover border-2 border-gray-200"
+              />
+            </div>
+          ) : null}
+        </div>
+
+        <div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 rounded transition-colors disabled:opacity-50"
+            className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded transition-colors disabled:opacity-50"
           >
             {loading ? "Saving..." : "Save Settings"}
           </button>

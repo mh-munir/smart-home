@@ -17,7 +17,7 @@
           console.log('Response not an array:', typeof json);
           console.log(JSON.stringify(json, null, 2));
         }
-      } catch (err) {
+      } catch {
         console.log('Non-JSON response:', text.slice(0, 1000));
       }
       process.exit(0);

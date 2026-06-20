@@ -154,7 +154,7 @@ function ListField({ label, value = [], onChange, placeholder, hint }) {
         <button
           type="button"
           onClick={addItem}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
+          className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-sm font-semibold transition-colors"
         >
           + Add
         </button>
@@ -211,7 +211,8 @@ function FacebookPreview({ title, description, image, url }) {
             unoptimized
             width={1200}
             height={630}
-            className="w-full h-full object-cover"
+            className="object-cover"
+            style={{ width: '100%', height: 'auto' }}
           />
         ) : (
           <span className="text-gray-400 text-sm">No Image</span>
@@ -244,7 +245,8 @@ function TwitterPreview({ title, description, image, card }) {
                 unoptimized
                 width={card === "summary" ? 64 : 1200}
                 height={card === "summary" ? 64 : 480}
-                className="w-full h-full object-cover"
+                className="object-cover"
+                style={{ width: '100%', height: 'auto' }}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
@@ -791,7 +793,7 @@ export default function SeoModal({ isOpen, onClose, onSave }) {
                         { name: "", content: "", property: "", httpEquiv: "" },
                       ]);
                     }}
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
                   >
                     + Add Custom Meta Tag
                   </button>
@@ -874,7 +876,7 @@ ${seo.twitterCreator ? `<meta name="twitter:creator" content="${seo.twitterCreat
             <button
               onClick={handleSave}
               disabled={saving}
-              className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 shadow-sm"
+              className="px-6 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-colors disabled:opacity-50 shadow-sm"
             >
               {saving ? "Saving..." : "💾 Save SEO Settings"}
             </button>

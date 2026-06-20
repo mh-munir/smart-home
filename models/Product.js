@@ -91,6 +91,17 @@ const ProductSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
+    // Optional deal type for Best Deals listing (HOT DEAL, FLASH SALE, etc.)
+    dealType: {
+      type: String,
+      default: null,
+      index: true,
+    },
+    // Optional offer text (e.g., "20% off", "$10 off")
+    offer: {
+      type: String,
+      default: null,
+    },
     // High-traffic optimization fields
     views: {
       type: Number,

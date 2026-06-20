@@ -71,7 +71,7 @@ export async function PUT(req, { params }) {
 
     if (processedImages.length > 0) data.images = processedImages;
 
-    const guide = await Guide.findByIdAndUpdate(id, data, { new: true });
+    const guide = await Guide.findByIdAndUpdate(id, data, { returnDocument: 'after' });
     return Response.json(serializeGuide(guide.toObject()));
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

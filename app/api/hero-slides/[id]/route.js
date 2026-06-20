@@ -39,7 +39,7 @@ export async function PUT(req, { params }) {
         order: Number(data.order || 0),
         isActive: data.isActive ?? true,
       },
-      { new: true }
+      { returnDocument: 'after' }
     );
 
     invalidateHeroSlidesCache();

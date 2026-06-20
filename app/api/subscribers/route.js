@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { connectDB, hasMongoDBConfig } from "@/lib/db";
 import Subscriber from "@/models/Subscriber";
+import fs from "fs";
+import path from "path";
 
 // GET - Fetch all subscribers (admin)
 export async function GET(request) {
@@ -83,6 +85,36 @@ export async function POST(request) {
       subscribedAt: new Date(),
       ip,
     });
+
+    // Create a notification for the admin
+    try {
+      const NOTIFICATIONS_PATH = path.join(process.cwd(), "data", "notifications.json");
+      let notifications = [];
+      try {
+        notifications = JSON.parse(fs.readFileSync(NOTIFICATIONS_PATH, "utf8"));
+      } catch {
+        notifications = [];
+      }
+
+      const notification = {
+        id: `sub-${Date.now()}`,
+        type: "subscriber",
+        title: "New Subscriber",
+        message: `${normalizedEmail} just subscribed to the newsletter.`,
+        email: normalizedEmail,
+        read: false,
+        createdAt: new Date().toISOString(),
+      };
+
+      notifications.unshift(notification);
+      // Keep only the last 100 notifications
+      notifications = notifications.slice(0, 100);
+
+      fs.mkdirSync(path.dirname(NOTIFICATIONS_PATH), { recursive: true });
+      fs.writeFileSync(NOTIFICATIONS_PATH, JSON.stringify(notifications, null, 2), "utf8");
+    } catch (notifErr) {
+      console.error("Failed to create notification:", notifErr);
+    }
 
     return NextResponse.json({
       message: "Successfully subscribed! Thank you for joining our newsletter.",

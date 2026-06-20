@@ -25,6 +25,9 @@ function serializeProduct(product) {
     affiliateLinks: affiliateLinks,
     category: product.category || null,
     description: product.description || null,
+    bestDeal: product.bestDeal || false,
+    dealType: product.dealType || null,
+    offer: product.offer || null,
     clicks: product.clicks || 0,
     conversions: product.conversions || 0,
     createdAt: product.createdAt?.toISOString() || null,
@@ -94,7 +97,7 @@ export async function PUT(req, { params }) {
       data.image = processedImages[0];
     }
 
-    const product = await Product.findByIdAndUpdate(id, data, { new: true });
+    const product = await Product.findByIdAndUpdate(id, data, { returnDocument: 'after' });
     revalidatePath("/");
     revalidatePath("/blog");
     return Response.json(serializeProduct(product));

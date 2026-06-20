@@ -95,7 +95,7 @@ export default async function BlogPage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/blog"
-                className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition"
+                className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
               >
                 All Articles
               </Link>

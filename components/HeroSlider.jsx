@@ -77,7 +77,7 @@ export default function HeroSlider({ slides }) {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
               href={slides[activeIndex].ctaLink || "/blog"}
-              className="inline-flex items-center rounded-full bg-orange-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-orange-400">
+              className="inline-flex items-center rounded-full bg-red-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-red-600">
               {slides[activeIndex].ctaText || "Explore Products"}
             </Link>
             {/* Admin link removed: Manage Slider */}

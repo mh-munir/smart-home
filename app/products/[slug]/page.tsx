@@ -221,7 +221,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="mt-12 pt-8 border-t border-gray-200">
           <div className="bg-teal-50 p-6 rounded-lg mb-10">
             <h3 className="text-xl font-bold mb-4">Buy This Product</h3>
-            <a href={product.affiliateLink || "#"} target="_blank" rel="noopener noreferrer" className="inline-block bg-teal-600 text-white px-8 py-3 rounded-lg">Buy Now</a>
+            <a href={product.affiliateLink || "#"} target="_blank" rel="noopener noreferrer" className="inline-block bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-lg">Buy Now</a>
           </div>
         </div>
 

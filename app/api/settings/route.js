@@ -41,7 +41,7 @@ export async function POST(request) {
 
   try {
     const body = await request.json();
-    const { title = "", subtitle = "", logoBase64, faviconBase64, seo } = body || {};
+    const { title = "", subtitle = "", adminName = "", logoBase64, faviconBase64, adminAvatarBase64, seo } = body || {};
 
     // Load existing settings if present
     let existing = {};
@@ -51,7 +51,12 @@ export async function POST(request) {
       existing = {};
     }
 
-    const newSettings = { ...existing, title: title || existing.title || "", subtitle: subtitle || existing.subtitle || "" };
+    const newSettings = {
+      ...existing,
+      title: title || existing.title || "",
+      subtitle: subtitle || existing.subtitle || "",
+      adminName: adminName !== undefined ? adminName : (existing.adminName || ""),
+    };
     if (seo) {
       newSettings.seo = { ...(existing.seo || {}), ...seo };
     }
@@ -107,6 +112,30 @@ export async function POST(request) {
       } catch {
         fs.writeFileSync(path.join(PUBLIC_DIR, favFilename), buffer);
         newSettings.favicon = `/${favFilename}`;
+      }
+    }
+
+    if (adminAvatarBase64) {
+      const parsed = parseDataUrl(adminAvatarBase64);
+      let ext = "png";
+      let buffer;
+      let mime = "image/png";
+      if (parsed) {
+        mime = parsed.mime;
+        ext = parsed.mime.split("/")[1] || "png";
+        if (ext === "jpeg") ext = "jpg";
+        buffer = Buffer.from(parsed.base64, "base64");
+      } else {
+        buffer = Buffer.from(adminAvatarBase64, "base64");
+      }
+
+      const avatarFilename = `admin-avatar.${ext}`;
+      try {
+        const res = await saveBufferToStorage(buffer, avatarFilename, mime);
+        newSettings.adminAvatar = res.url;
+      } catch {
+        fs.writeFileSync(path.join(PUBLIC_DIR, avatarFilename), buffer);
+        newSettings.adminAvatar = `/${avatarFilename}`;
       }
     }
 

@@ -43,5 +43,7 @@
       "organizationUrl": "",
       "sameAs": []
     }
-  }
+  },
+  "adminName": "Admin",
+  "adminAvatar": "/admin-avatar.jpg"
 }

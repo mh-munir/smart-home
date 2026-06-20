@@ -30,7 +30,8 @@ export default function BlogCard({ article }: { article: BlogArticle }) {
             width={1200}
             height={720}
             unoptimized
-            className="w-full h-full object-cover"
+            className="object-cover"
+            style={{ width: '100%', height: 'auto' }}
           />
         </div>
 
@@ -46,10 +47,10 @@ export default function BlogCard({ article }: { article: BlogArticle }) {
             {article.title}
           </h3>
 
-          <p className="text-gray-600 mb-4 line-clamp-3">{article.excerpt}</p>
+          <p className="text-gray-600 mb-4 line-clamp-2 flex-1 text-sm">{article.excerpt}</p>
 
           <div className="mt-auto">
-            <div className="w-full bg-teal-500 text-white text-center py-3 rounded-md">View Post</div>
+            <div className="w-full bg-red-500 hover:bg-red-600 text-white text-center py-3 rounded-md cursor-pointer transition">View Post</div>
           </div>
         </div>
       </div>

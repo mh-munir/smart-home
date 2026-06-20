@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { GoogleAnalyticsComponent } from "@/components/GoogleAnalyticsComponent";
-import GoogleTagManager from "@/components/GoogleTagManager";
-import GoogleAdSenseScript from "@/components/GoogleAdSenseScript";
+import ClientScripts from "@/components/ClientScripts";
 import { generateHrefLangLinks } from "@/lib/multi-country-seo";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import fs from "fs";
@@ -245,12 +243,7 @@ export default function RootLayout({
         })}
       </head>
       <body className="min-h-full flex flex-col">
-        <GoogleTagManager />
-        <GoogleAnalyticsComponent
-          gtmId={process.env.NEXT_PUBLIC_GTM_ID}
-          ga4Id={process.env.NEXT_PUBLIC_GA4_ID}
-        />
-        <GoogleAdSenseScript />
+        <ClientScripts />
         <a href="#main-content" className="sr-only focus:not-sr-only">
           Skip to content
         </a>

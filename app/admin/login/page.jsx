@@ -93,7 +93,7 @@ export default async function AdminLoginPage({ searchParams }) {
           </div>
           <button
             type="submit"
-            className="w-full rounded-xl bg-teal-600 px-5 py-3 font-bold text-white transition-colors hover:bg-teal-700"
+            className="w-full rounded-xl bg-red-500 px-5 py-3 font-bold text-white transition-colors hover:bg-red-600"
           >
             Login
           </button>

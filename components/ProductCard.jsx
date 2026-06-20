@@ -45,8 +45,8 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
                 width={640}
                 height={256}
                 sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105 w-full h-full"
-                style={{ objectFit: 'cover' }}
+                className="transition-transform duration-500 group-hover:scale-105"
+                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                 priority={priority}
               />
             ) : (
@@ -97,7 +97,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
           <button
             type="button"
             onClick={() => router.push(`/products/${product.slug}`)}
-            className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-teal-600 hover:bg-teal-700 text-white px-3 py-3 rounded-md transition shadow-sm"
+            className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-red-500 hover:bg-red-600 text-white px-3 py-3 rounded-md transition shadow-sm"
             aria-label={`More details about ${product.title}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -124,7 +124,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
             <button
               type="button"
               onClick={() => router.push(`/products/${product.slug}`)}
-              className="flex-1 rounded-lg bg-teal-600 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-teal-700 transition flex items-center justify-center gap-2 shadow-sm"
+              className="flex-1 rounded-lg bg-red-500 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-red-600 transition flex items-center justify-center gap-2 shadow-sm"
               aria-label={`More details about ${product.title}`}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -153,7 +153,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
                     }).catch(() => {});
                   }
                 }}
-                className="block rounded-lg bg-teal-600 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-teal-700 transition"
+                className="block rounded-lg bg-red-500 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-red-600 transition"
               >
                 Buy on {mainLink.name}
               </a>
@@ -204,7 +204,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
               href={product.affiliateLink || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="block rounded-lg bg-teal-600 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-teal-700 transition"
+              className="block rounded-lg bg-red-500 text-white px-3 py-2 text-center font-semibold text-sm hover:bg-red-600 transition"
             >
               Buy Now
             </a>

@@ -111,10 +111,11 @@ const nextConfig: NextConfig = {
               "connect-src 'self' https: https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com;",
           },
-          // Aggressive cache for high traffic scenarios
+          // No-cache for HTML pages to prevent hydration mismatches
+          // (browser must always validate HTML with the server)
           {
             key: "Cache-Control",
-            value: "public, max-age=7200, s-maxage=86400, stale-while-revalidate=604800",
+            value: "no-cache, must-revalidate",
           },
           // Additional performance headers
           {

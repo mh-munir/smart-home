@@ -255,7 +255,7 @@ export default function HeroSliderAdminPage() {
             <button
               type="submit"
               disabled={saving}
-              className="w-full rounded-xl bg-orange-500 px-6 py-3 font-bold text-white transition-colors hover:bg-orange-600 disabled:opacity-60"
+              className="w-full rounded-xl bg-red-500 px-6 py-3 font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
             >
               {saving
                 ? "Saving..."

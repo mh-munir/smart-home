@@ -12,7 +12,7 @@ export default async function AdminGuidesPage() {
     <div className="p-8 min-h-screen">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">📚 Guides</h1>
-        <Link href="/admin/add-guide" className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700">+ Add Guide</Link>
+        <Link href="/admin/add-guide" className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">+ Add Guide</Link>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -29,9 +29,16 @@ export default async function AdminGuidesPage() {
               <tr key={g._id} className="border-b last:border-b-0">
                 <td className="px-6 py-4">{g.title}</td>
                 <td className="px-6 py-4">{g.category}</td>
-                <td className="px-6 py-4">
-                  <Link href={`/guides/${g.slug}`} className="text-teal-600 hover:underline mr-3">View</Link>
-                  <Link href={`/admin/guides/${g._id}/edit`} className="text-blue-600 hover:underline">Edit</Link>
+                <td className="px-6 py-4 flex items-center gap-2">
+                  <Link href={`/admin/guides/${g._id}/edit`} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">Edit</Link>
+                  <form method="post" action={`/api/guides/${g._id}/delete`}>
+                    <button
+                      type="submit"
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+                    >
+                      Delete
+                    </button>
+                  </form>
                 </td>
               </tr>
             ))}

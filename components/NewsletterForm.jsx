@@ -53,7 +53,7 @@ export default function NewsletterForm({ source = "homepage" }) {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {status === "loading" ? "Subscribing..." : "Subscribe"}
       </button>

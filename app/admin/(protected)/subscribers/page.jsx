@@ -40,16 +40,42 @@ export default function SubscribersPage() {
     fetchSubscribers(1, search);
   };
 
+  const handleDeactivate = async (id) => {
+    if (!confirm("Are you sure you want to deactivate this subscriber?")) return;
+    try {
+      const res = await fetch(`/api/subscribers/${id}`, { method: "PUT" });
+      if (res.ok) {
+        setSubscribers((prev) =>
+          prev.map((s) => (s._id === id ? { ...s, isActive: false } : s))
+        );
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to deactivate subscriber");
+        // Re-fetch to sync state
+        await fetchSubscribers(page, search);
+      }
+    } catch (err) {
+      console.error("Failed to deactivate subscriber:", err);
+      alert("Failed to deactivate subscriber. Please try again.");
+    }
+  };
+
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to remove this subscriber?")) return;
+    if (!confirm("Are you sure you want to permanently delete this subscriber? This cannot be undone.")) return;
     try {
       const res = await fetch(`/api/subscribers/${id}`, { method: "DELETE" });
       if (res.ok) {
         setSubscribers((prev) => prev.filter((s) => s._id !== id));
         setTotal((prev) => prev - 1);
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to delete subscriber");
+        // Re-fetch to sync state
+        await fetchSubscribers(page, search);
       }
     } catch (err) {
       console.error("Failed to delete subscriber:", err);
+      alert("Failed to delete subscriber. Please try again.");
     }
   };
 
@@ -73,7 +99,7 @@ export default function SubscribersPage() {
         />
         <button
           type="submit"
-          className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+          className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
         >
           Search
         </button>
@@ -151,12 +177,21 @@ export default function SubscribersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={() => handleDelete(sub._id)}
-                      className="text-red-500 hover:text-red-700 text-sm font-medium transition-colors"
-                    >
-                      Remove
-                    </button>
+                    {sub.isActive ? (
+                      <button
+                        onClick={() => handleDeactivate(sub._id)}
+                        className="text-orange-500 hover:text-orange-700 text-sm font-medium transition-colors"
+                      >
+                        Deactivate
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleDelete(sub._id)}
+                        className="text-red-500 hover:text-red-700 text-sm font-medium transition-colors"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

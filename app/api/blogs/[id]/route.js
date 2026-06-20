@@ -90,7 +90,7 @@ export async function PUT(req, { params }) {
       data.images = processedImages;
     }
 
-    const blog = await Blog.findByIdAndUpdate(id, data, { new: true }).populate("affiliateProducts");
+    const blog = await Blog.findByIdAndUpdate(id, data, { returnDocument: 'after' }).populate("affiliateProducts");
     return Response.json(serializeBlog(blog.toObject()));
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });

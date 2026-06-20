@@ -71,7 +71,7 @@ export default function GuidesPage() {
                   <span>•</span>
                   <span>Updated 3 days ago</span>
                 </div>
-                <Link href="/guides/beginner-smart-locks" className="mt-6 inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 font-semibold transition-colors">
+                <Link href="/guides/beginner-smart-locks" className="mt-6 inline-block bg-red-500 hover:bg-red-600 text-white px-6 py-3 font-semibold transition-colors">
                   Read Guide
                 </Link>
               </div>
@@ -100,7 +100,7 @@ export default function GuidesPage() {
                     <h3 className="text-lg font-serif font-bold text-gray-900 mb-3 hover:text-teal-600 cursor-pointer transition-colors line-clamp-2">
                       <Link href={`/guides/${guide.slug}`} className="block">{guide.title}</Link>
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                    <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-1">
                       {guide.excerpt}
                     </p>
                     <div className="flex items-center justify-between text-xs text-gray-600 pb-4 border-b border-gray-200 mb-4">
@@ -135,7 +135,7 @@ export default function GuidesPage() {
               />
               <button
                 type="submit"
-                className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 font-bold transition-colors"
+                className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 font-bold transition-colors"
               >
                 Subscribe
               </button>

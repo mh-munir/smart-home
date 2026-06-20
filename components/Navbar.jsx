@@ -75,10 +75,9 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16 sm:h-20">
-
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
             <Image
               src={settings.logo || "/logo.png"}
               alt="Logo"
@@ -86,18 +85,22 @@ export default function Navbar() {
               height={40}
               priority
               loading="eager"
-              className="h-8 w-auto object-contain"
+              className="h-8 object-contain"
+              style={{ width: "auto", height: "auto" }}
             />
-
-            {settings.subtitle && (
-              <span className="hidden lg:block text-xs text-gray-400 font-serif italic border-l border-gray-200 pl-3">
-                {settings.subtitle}
-              </span>
-            )}
           </Link>
 
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all md:hidden"
+            aria-label="Toggle menu"
+          >
+            {open ? <CloseIcon /> : <MenuIcon />}
+          </button>
+
           {/* Desktop Menu */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-8 shrink-0">
             {links.map((link) => (
               <Link
                 key={link.href}
@@ -108,18 +111,6 @@ export default function Navbar() {
               </Link>
             ))}
           </nav>
-
-          {/* Mobile Button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setOpen(!open)}
-              className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all"
-              aria-label="Toggle menu"
-            >
-              {open ? <CloseIcon /> : <MenuIcon />}
-            </button>
-          </div>
-
         </div>
       </div>
 
