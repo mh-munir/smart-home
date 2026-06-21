@@ -23,7 +23,8 @@ interface BlogData {
 
 const EditBlogPage = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
   const [loading, setLoading] = useState(true);
   const [blogData, setBlogData] = useState<BlogData>({
     mainHeading: '',
@@ -39,6 +40,7 @@ const EditBlogPage = () => {
 
   // Load existing blog
   useEffect(() => {
+    if (!id) return;
     let mounted = true;
     async function load() {
       try {

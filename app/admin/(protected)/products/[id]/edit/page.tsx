@@ -26,7 +26,8 @@ interface ProductData {
 
 const EditProductPage = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
   const [loading, setLoading] = useState(true);
   const [productData, setProductData] = useState<ProductData>({
     title: '',
@@ -45,6 +46,7 @@ const EditProductPage = () => {
 
   // Load existing product
   useEffect(() => {
+    if (!id) return;
     let mounted = true;
     async function load() {
       try {

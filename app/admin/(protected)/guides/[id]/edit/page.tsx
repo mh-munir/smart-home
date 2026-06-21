@@ -22,7 +22,8 @@ interface GuideData {
 
 const EditGuidePage = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id;
   const [loading, setLoading] = useState(true);
   const [guideData, setGuideData] = useState<GuideData>({
     title: '',
@@ -37,6 +38,7 @@ const EditGuidePage = () => {
 
   // Load existing guide
   useEffect(() => {
+    if (!id) return;
     let mounted = true;
     async function load() {
       try {
