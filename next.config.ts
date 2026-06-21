@@ -4,12 +4,15 @@ const isProd = process.env.NODE_ENV === "production";
 
 // Static baseline CSP for fallback. The middleware injects a per-request nonce
 // for inline scripts/styles — middleware's CSP will override this header at runtime.
-const baseCsp = [
+  const baseCsp = [
   "default-src 'self'",
   // Rely on per-request nonces + strict-dynamic in browsers that support it.
-  // Avoid 'unsafe-inline' in production.
   "script-src 'self' 'strict-dynamic' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com",
-  "style-src 'self' https://fonts.googleapis.com",
+  // Some libraries and Next internals inject inline styles (style attributes or
+  // inline <style> tags). To avoid blocking layout at runtime we allow
+  // 'unsafe-inline' for styles. This is a pragmatic trade-off; consider
+  // removing inline styles in the future to tighten CSP.
+  "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'",
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https: blob:",
   "media-src 'self' https:",

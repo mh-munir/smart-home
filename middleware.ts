@@ -19,7 +19,11 @@ export function middleware(request: NextRequest) {
     const csp = [
       "default-src 'self'",
       `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com`,
-      `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com 'unsafe-inline'`,
+      // Do not add nonce for style-src: many client libs add inline styles
+      // (style attributes) which are not covered by nonces; allow 'unsafe-inline'
+      // for styles to avoid blocking runtime style mutations. Consider hardening
+      // this later by removing inline styles and using hashed styles where possible.
+      `style-src 'self' https://fonts.googleapis.com 'unsafe-inline'`,
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' https:",
