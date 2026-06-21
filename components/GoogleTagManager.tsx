@@ -13,13 +13,15 @@ export default function GoogleTagManager({ nonce }: GTMProps) {
     return null;
   }
 
+  const saneNonce = nonce && nonce.length > 0 ? nonce : undefined;
+
   return (
     <>
       {/* Google Tag Manager Script */}
       <Script
         id="gtm-script"
         strategy="afterInteractive"
-        nonce={nonce}
+        nonce={saneNonce}
         dangerouslySetInnerHTML={{
           __html: `
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

@@ -9,11 +9,12 @@ export default function GoogleAdSenseScript({ nonce }: { nonce?: string }) {
   const adClient = formattedPublisherId.startsWith('pub-') ? `ca-${formattedPublisherId}` : formattedPublisherId;
 
   // Render a server-side <script> tag so the per-request nonce can be applied
+  const saneNonce = nonce && nonce.length > 0 ? nonce : undefined;
   return (
     <script
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
       async={true}
-      nonce={nonce}
+      {...(saneNonce ? { nonce: saneNonce } : {})}
       crossOrigin="anonymous"
       // @ts-ignore Allow data- attribute on script
       data-ad-client={adClient}

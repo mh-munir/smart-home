@@ -12,7 +12,9 @@ export default async function ClientScripts() {
   // Only load analytics/ads in production and when IDs are configured
   if (!isProd) return null;
 
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const rawNonce = (await headers()).get("x-nonce");
+  // coerce empty string to undefined to avoid rendering nonce="" in SSR
+  const nonce = rawNonce && rawNonce.length > 0 ? rawNonce : undefined;
 
   return (
     <>

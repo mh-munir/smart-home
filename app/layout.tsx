@@ -199,7 +199,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const nonce = (await headers()).get("x-nonce") ?? undefined;
+  const rawNonce = (await headers()).get("x-nonce");
+  const nonce = rawNonce && rawNonce.length > 0 ? rawNonce : undefined;
   return (
     <html
       lang="en"
@@ -227,7 +228,8 @@ export default async function RootLayout({
         {seoData.articlePublisher && <meta property="article:publisher" content={seoData.articlePublisher} />}
         {_structured?.organizationName && (
           <script
-            nonce={nonce}
+            suppressHydrationWarning
+            {...(nonce ? { nonce } : {})}
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify({

@@ -17,6 +17,7 @@ export function GoogleAnalyticsComponent({
   ga4Id = GA4_CONFIG.MEASUREMENT_ID,
   nonce,
 }: GoogleAnalyticsProps & { nonce?: string }) {
+  const saneNonce = nonce && nonce.length > 0 ? nonce : undefined;
   useEffect(() => {
     // Initialize dataLayer if not already present
     if (typeof window !== 'undefined' && !window.dataLayer) {
@@ -36,11 +37,11 @@ export function GoogleAnalyticsComponent({
   return (
     <>
       {/* Google Analytics 4 */}
-      <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="lazyOnload" nonce={nonce} />
+      <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="lazyOnload" nonce={saneNonce} />
       <Script
         id="ga4-script"
         strategy="lazyOnload"
-        nonce={nonce}
+        nonce={saneNonce}
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
