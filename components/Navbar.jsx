@@ -86,7 +86,6 @@ export default function Navbar() {
               priority
               loading="eager"
               className="h-8 object-contain"
-              style={{ width: "auto", height: "auto" }}
             />
           </Link>
 

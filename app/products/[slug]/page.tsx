@@ -255,7 +255,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     height={720}
                     className="w-full h-auto object-cover rounded-lg"
                     sizes="(max-width: 1024px) 100vw, 768px"
-                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                   />
               </figure>
             )}

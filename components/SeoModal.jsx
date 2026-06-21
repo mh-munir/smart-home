@@ -212,7 +212,6 @@ function FacebookPreview({ title, description, image, url }) {
             width={1200}
             height={630}
             className="object-cover"
-            style={{ width: '100%', height: 'auto' }}
           />
         ) : (
           <span className="text-gray-400 text-sm">No Image</span>
@@ -246,7 +245,6 @@ function TwitterPreview({ title, description, image, card }) {
                 width={card === "summary" ? 64 : 1200}
                 height={card === "summary" ? 64 : 480}
                 className="object-cover"
-                style={{ width: '100%', height: 'auto' }}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">

@@ -90,7 +90,7 @@ export function DonutChart({ percentage = 0 }) {
   const filled = (percentage / 100) * circumference;
 
   return (
-    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+    <div className="relative flex items-center justify-center">
       <svg width={size} height={size} className="-rotate-90">
         {/* Background track */}
         <circle
