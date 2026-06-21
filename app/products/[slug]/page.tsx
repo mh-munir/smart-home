@@ -20,6 +20,8 @@ type ProductDoc = {
   images?: string[];
   category?: string;
   affiliateLink?: string;
+  brand?: string;
+  isActive?: boolean;
   affiliateLinks?: Record<string, unknown>;
   createdAt?: Date;
   updatedAt?: Date;
@@ -116,8 +118,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     // ignore
   }
 
-  const productImages = product.images && product.images.length ? product.images : product.image ? [product.image] : [];
-  const productDate = product.createdAt?.toISOString?.() || new Date().toISOString();
+  // `product` has been checked above with `notFound()` so assert non-null here
+  const prod = product as ProductDoc;
+
+  const productImages = prod.images && prod.images.length ? prod.images : prod.image ? [prod.image] : [];
+  const productDate = prod.createdAt?.toISOString?.() || new Date().toISOString();
 
   const renderContentBlocks = (content = "") => {
     const paragraphs = content
@@ -178,7 +183,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <figure key={`img-${i}`} className="my-8">
               <Image
                 src={images[imageIndex]}
-                alt={`${product.title} - image ${imageIndex + 2}`}
+                alt={`${prod.title} - image ${imageIndex + 2}`}
                 width={1200}
                 height={720}
                 className="w-full h-auto rounded-sm object-cover"
@@ -197,7 +202,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <figure key={`extra-img-${imageIndex}`} className="my-8">
           <Image
             src={images[imageIndex]}
-            alt={`${product.title} - image ${imageIndex + 2}`}
+            alt={`${prod.title} - image ${imageIndex + 2}`}
             width={1200}
             height={720}
             className="w-full h-auto rounded-sm object-cover"
@@ -216,47 +221,47 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <div className="max-w-7xl mx-auto px-4 lg:px-4 min-h-screen bg-white">
       <SchemaMarkup
         type="Product"
-        title={product.title}
-        description={product.description}
+        title={prod.title}
+        description={prod.description}
         image={productImages[0]}
-        url={`${SITE_URL}/products/${product.slug}`}
-        datePublished={product.createdAt?.toISOString?.()}
-        dateModified={product.updatedAt?.toISOString?.()}
-        price={product.price}
-        priceCurrency={product.price?.toString().includes('USD') ? 'USD' : undefined}
-        sku={product._id?.toString?.()}
-        availability={(product as any)?.isActive ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'}
-        brand={(product as any)?.brand || SITE_NAME}
+        url={`${SITE_URL}/products/${prod.slug}`}
+        datePublished={prod.createdAt?.toISOString?.()}
+        dateModified={prod.updatedAt?.toISOString?.()}
+        price={prod.price}
+        priceCurrency={prod.price?.toString().includes('USD') ? 'USD' : undefined}
+        sku={prod._id?.toString?.()}
+        availability={prod.isActive ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'}
+        brand={prod.brand || SITE_NAME}
       />
       <div className="pt-8 pb-12 sm:pt-12 sm:pb-16">
         <div className="grid lg:grid-cols-3 gap-8 items-start">
           <main className="lg:col-span-2">
-            <h1 className="text-[2.5rem] sm:text-[3rem] leading-tight font-extrabold text-gray-900 mb-4 tracking-tight">{product.title}</h1>
+            <h1 className="text-[2.5rem] sm:text-[3rem] leading-tight font-extrabold text-gray-900 mb-4 tracking-tight">{prod.title}</h1>
 
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm font-bold shrink-0">PR</div>
               <div>
-                <p className="text-sm font-semibold text-gray-900">{product.category || SITE_NAME}</p>
+                <p className="text-sm font-semibold text-gray-900">{prod.category || SITE_NAME}</p>
                 <p className="text-xs text-gray-500">Updated {new Date(productDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
               </div>
             </div>
 
             {productImages.length > 0 && (
               <figure className="mb-8 overflow-hidden rounded-lg">
-                <Image
-                  src={productImages[0]}
-                  alt={product.title || ""}
-                  width={1200}
-                  height={720}
-                  className="w-full h-auto object-cover rounded-lg"
-                  sizes="(max-width: 1024px) 100vw, 768px"
-                  style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                />
+                  <Image
+                    src={productImages[0]}
+                    alt={prod.title || ""}
+                    width={1200}
+                    height={720}
+                    className="w-full h-auto object-cover rounded-lg"
+                    sizes="(max-width: 1024px) 100vw, 768px"
+                    style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                  />
               </figure>
             )}
 
             <article id="details" className="prose prose-lg max-w-none">
-              {renderContentBlocks(product.description || "")}
+              {renderContentBlocks(prod.description || "")}
             </article>
 
             {relatedProducts.length > 0 && (
@@ -293,7 +298,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <div className="sticky top-24 space-y-6">
               <div className="bg-white border rounded-lg p-6 shadow">
                 <p className="text-sm text-gray-500">Price</p>
-                <p className="text-3xl font-bold text-teal-600 mt-2">{product.price || '—'}</p>
+                <p className="text-3xl font-bold text-teal-600 mt-2">{prod.price || '—'}</p>
 
                 <div className="flex items-center gap-2 mt-4">
                   <div className="flex items-center gap-1 text-yellow-400">
@@ -301,17 +306,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                       <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.49 6.91l6.561-.955L10 0l2.949 5.955 6.561.955-4.755 4.635 1.123 6.545z"/></svg>
                     ))}
                   </div>
-                  <div className="text-sm text-gray-600">{product.rating || '4.5'}</div>
+                  <div className="text-sm text-gray-600">{prod.rating || '4.5'}</div>
                 </div>
 
-                <a href={product.affiliateLink || '#'} target="_blank" rel="noopener noreferrer" className="block mt-6 bg-red-500 hover:bg-red-600 text-white text-center py-3 rounded-lg font-semibold">Buy Now</a>
+                <a href={prod.affiliateLink || '#'} target="_blank" rel="noopener noreferrer" className="block mt-6 bg-red-500 hover:bg-red-600 text-white text-center py-3 rounded-lg font-semibold">Buy Now</a>
               </div>
 
               <div className="bg-white border rounded-lg p-4">
                 <p className="text-sm font-semibold">Quick Specs</p>
                 <ul className="text-sm text-gray-700 mt-2 space-y-1">
-                  {product.category && <li>Category: {product.category}</li>}
-                  {product.price && <li>Price: {product.price}</li>}
+                  {prod.category && <li>Category: {prod.category}</li>}
+                  {prod.price && <li>Price: {prod.price}</li>}
                 </ul>
               </div>
             </div>

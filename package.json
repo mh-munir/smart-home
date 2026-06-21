@@ -39,4 +39,11 @@
     "tailwindcss": "^4",
     "typescript": "^5"
   }
+  ,
+  "overrides": {
+    "postcss": "^8.5.10",
+    "next": {
+      "postcss": "^8.5.10"
+    }
+  }
 }
