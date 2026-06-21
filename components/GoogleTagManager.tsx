@@ -1,6 +1,10 @@
 import Script from 'next/script';
 
-export default function GoogleTagManager() {
+interface GTMProps {
+  nonce?: string | undefined;
+}
+
+export default function GoogleTagManager({ nonce }: GTMProps) {
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
   const isProd = process.env.NODE_ENV === 'production';
@@ -14,7 +18,8 @@ export default function GoogleTagManager() {
       {/* Google Tag Manager Script */}
       <Script
         id="gtm-script"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: `
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -32,7 +37,7 @@ export default function GoogleTagManager() {
           height="0"
           width="0"
           style={{ display: 'none', visibility: 'hidden' }}
-        ></iframe>
+        />
       </noscript>
     </>
   );

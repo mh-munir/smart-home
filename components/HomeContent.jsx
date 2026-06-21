@@ -49,7 +49,7 @@ export default function HomeContent() {
                     width={1200}
                     height={720}
                     className="w-full h-72 object-cover lg:h-full"
-                    unoptimized
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                   />
                 ) : (
                   <div className="h-72 bg-gray-100" />

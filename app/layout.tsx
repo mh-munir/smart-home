@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientScripts from "@/components/ClientScripts";
+import { headers } from "next/headers";
 import { generateHrefLangLinks } from "@/lib/multi-country-seo";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import fs from "fs";
@@ -181,6 +182,9 @@ export const metadata: Metadata = {
     yandex: _verificationYandex,
     other: _verificationBing ? { "msvalidate.01": _verificationBing } : undefined,
   },
+  icons: {
+    icon: faviconPath,
+  },
   // include extraMetaTags for head mapping
   // (we still map them into <head/> below)
 };
@@ -190,11 +194,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
   return (
     <html
       lang="en"
@@ -222,6 +227,7 @@ export default function RootLayout({
         {seoData.articlePublisher && <meta property="article:publisher" content={seoData.articlePublisher} />}
         {_structured?.organizationName && (
           <script
+            nonce={nonce}
             type="application/ld+json"
             dangerouslySetInnerHTML={{
               __html: JSON.stringify({

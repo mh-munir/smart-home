@@ -1,11 +1,57 @@
 import { NextResponse } from "next/server";
 import { connectDB, hasMongoDBConfig } from "@/lib/db";
 import Subscriber from "@/models/Subscriber";
+import { requireAdminSession } from "@/lib/admin-auth";
 import fs from "fs";
 import path from "path";
 
+// Simple file-based rate limiter (per-IP). Not distributed — good for simple deployments.
+const RATE_LIMIT_PATH = path.join(process.cwd(), "data", "rate-limits.json");
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const RATE_LIMIT_MAX = 10; // max requests per window per IP
+
+function isIpRateLimited(ip) {
+  try {
+    let store = {};
+    try {
+      const raw = fs.readFileSync(RATE_LIMIT_PATH, "utf8");
+      store = JSON.parse(raw || "{}");
+    } catch (e) {
+      store = {};
+    }
+
+    const now = Date.now();
+    const windowStart = now - RATE_LIMIT_WINDOW_MS;
+    const timestamps = Array.isArray(store[ip]) ? store[ip].filter((t) => t >= windowStart) : [];
+
+    if (timestamps.length >= RATE_LIMIT_MAX) {
+      return true;
+    }
+
+    timestamps.push(now);
+    store[ip] = timestamps;
+
+    try {
+      fs.mkdirSync(path.dirname(RATE_LIMIT_PATH), { recursive: true });
+      fs.writeFileSync(RATE_LIMIT_PATH, JSON.stringify(store, null, 2), "utf8");
+    } catch (e) {
+      // swallow file write errors — rate limiting is best-effort
+      console.warn("Rate limit write failed:", e?.message || e);
+    }
+
+    return false;
+  } catch (err) {
+    console.error("Rate limit check error:", err);
+    // In case of error, do not block the request
+    return false;
+  }
+}
+
 // GET - Fetch all subscribers (admin)
 export async function GET(request) {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
+
   if (!hasMongoDBConfig()) {
     return NextResponse.json({ error: "Database not configured" }, { status: 500 });
   }
@@ -57,6 +103,12 @@ export async function POST(request) {
     const body = await request.json();
     const { email } = body;
 
+    // Basic spam protection: rate-limit by IP
+    const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || request.headers.get("x-real-ip") || "unknown";
+    if (isIpRateLimited(ip)) {
+      return NextResponse.json({ error: "Too many requests" }, { status: 429 });
+    }
+
     if (!email || !email.trim()) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
@@ -76,7 +128,7 @@ export async function POST(request) {
     }
 
     // Get IP for logging
-    const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || request.headers.get("x-real-ip") || null;
+    // ip variable already derived above; keep using it
 
     const subscriber = await Subscriber.create({
       email: normalizedEmail,

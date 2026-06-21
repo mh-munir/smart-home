@@ -192,7 +192,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 alt={article.title || ""}
                 width={1200}
                 height={720}
-                unoptimized
+                sizes="100vw"
                 className="w-full h-full object-cover"
               />
             </figure>
@@ -321,8 +321,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                           alt={`${article.title} - image ${imageIndex + 2}`}
                           width={1200}
                           height={720}
-                          unoptimized
                           className="w-full h-auto rounded-sm object-cover"
+                          sizes="(max-width: 1024px) 100vw, 768px"
                           loading="lazy"
                         />
                       </figure>
@@ -341,8 +341,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                     alt={`${article.title} - image ${imageIndex + 2}`}
                     width={1200}
                     height={720}
-                    unoptimized
                     className="w-full h-auto rounded-sm object-cover"
+                    sizes="(max-width: 1024px) 100vw, 768px"
                     loading="lazy"
                   />
                 </figure>

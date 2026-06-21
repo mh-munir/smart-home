@@ -18,14 +18,13 @@ export async function POST(request) {
   const password = String(formData.get("password") || "");
   const nextPath = sanitizeNextPath(String(formData.get("next") || "/admin"));
 
-  console.log("[LOGIN] Form received - email:", email, "password length:", password.length);
+  // Avoid logging sensitive information such as passwords or secret presence
 
   try {
     // Try MongoDB-based authentication first
-    console.log("[LOGIN] Attempting authentication for:", email);
     await connectDB();
     const adminUser = await AdminUser.findOne({ email });
-    console.log("[LOGIN] Admin user found:", !!adminUser);
+    // adminUser presence checked
 
     if (adminUser) {
       // Check if account is active
@@ -41,32 +40,28 @@ export async function POST(request) {
       }
 
       // Verify password
-      console.log("[LOGIN] Verifying password...");
       let isPasswordValid = false;
       try {
         isPasswordValid = await verifyPassword(password, adminUser.password);
-        console.log("[LOGIN] Password valid:", isPasswordValid);
       } catch (pwError) {
         console.error("[LOGIN] Password verification error:", pwError);
         isPasswordValid = false;
       }
 
       if (!isPasswordValid) {
-        console.log("[LOGIN] Invalid credentials for:", email);
+        console.warn("[LOGIN] Invalid credentials");
         await adminUser.incrementLoginAttempts();
         return redirectToLogin(request.url, "invalid_credentials", nextPath);
       }
 
       // Reset login attempts
       await adminUser.resetLoginAttempts();
-      console.log("[LOGIN] Login attempts reset");
 
       // Create session token
       const sessionToken = createSessionToken({
         email: adminUser.email,
         name: adminUser.fullName,
       });
-      console.log("[LOGIN] Session token created");
 
       const cookieStore = await cookies();
       cookieStore.set(ADMIN_SESSION_COOKIE, sessionToken, {
@@ -76,17 +71,13 @@ export async function POST(request) {
         sameSite: "strict",
         secure: process.env.NODE_ENV === "production",
       });
-      console.log("[LOGIN] Cookie set, redirecting to:", nextPath);
+      // Cookie set; redirecting
 
       return NextResponse.redirect(new URL(nextPath, request.url));
     }
 
-    // Admin not found in database, try fallback auth
-    console.log("[LOGIN] Admin user not found in database for email:", email);
-    console.log("[LOGIN] Database auth failed, trying env var fallback");
-    console.log("[LOGIN] ADMIN_PASSWORD set:", !!process.env.ADMIN_PASSWORD);
+    // Admin not found in database, try fallback auth via environment variable
     const envAuthValid = process.env.ADMIN_PASSWORD && verifyAdminCredentials(email, password);
-    console.log("[LOGIN] Env var auth valid:", envAuthValid);
     
     if (envAuthValid) {
       const sessionToken = createSessionToken({

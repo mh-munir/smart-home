@@ -56,7 +56,7 @@ export default function HeroSlider({ slides }) {
               fill
               sizes="100vw"
               className="object-cover"
-              priority={index === 0 || isFallbackLogo}
+              preload={index === 0 || isFallbackLogo}
               onError={() => setBrokenMap((s) => ({ ...s, [slide._id]: true }))}
             />
           </div>

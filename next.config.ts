@@ -1,12 +1,65 @@
 import type { NextConfig } from "next";
 
+const securityHeaders = [
+  {
+    key: "X-DNS-Prefetch-Control",
+    value: "on",
+  },
+  {
+    key: "X-Frame-Options",
+    value: "SAMEORIGIN",
+  },
+  {
+    key: "X-Content-Type-Options",
+    value: "nosniff",
+  },
+  {
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
+  },
+  {
+    key: "Referrer-Policy",
+    value: "strict-origin-when-cross-origin",
+  },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+  },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  {
+    key: "X-Permitted-Cross-Domain-Policies",
+    value: "none",
+  },
+  // Content-Security-Policy — static baseline; middleware adds dynamic nonce at runtime
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self' https: data:",
+      "script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net 'unsafe-inline'",
+      "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: https: blob:",
+      "media-src 'self' https:",
+      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com",
+      "frame-src https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'self'",
+      "upgrade-insecure-requests",
+    ].join("; "),
+  },
+];
+
 const nextConfig: NextConfig = {
-  
   // High-traffic performance optimization
   compress: true,
   generateEtags: true,
-  poweredByHeader: false, // Remove X-Powered-By header
-  
+  poweredByHeader: false,
+
   // Image optimization for SEO and Core Web Vitals
   images: {
     remotePatterns: [
@@ -34,7 +87,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "smart-home-products.vercel.app",
       },
-      // Local development hosts (allow images served from the local Next server)
+      // Local development hosts
       {
         protocol: "http",
         hostname: "localhost",
@@ -45,7 +98,6 @@ const nextConfig: NextConfig = {
         hostname: "127.0.0.1",
         port: "3000",
       },
-      // Match localhost/127.0.0.1 on any port (useful when dev server switches ports)
       {
         protocol: "http",
         hostname: "localhost",
@@ -55,80 +107,31 @@ const nextConfig: NextConfig = {
         hostname: "127.0.0.1",
       },
     ],
-    // Modern image formats for better Core Web Vitals
     formats: ["image/avif", "image/webp"],
-    // Device sizes for responsive images
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
-    // Image sizes for responsive behavior
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    // Aggressive caching for images
-    minimumCacheTTL: 31536000, // 1 year for versioned images
+    minimumCacheTTL: 31536000,
     unoptimized: false,
-    // Dangerously allow SVG
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // SEO and Security Headers
+  // Security & performance headers
   async headers() {
     return [
       {
+        // Apply security headers to every route
         source: "/:path*",
+        headers: [...securityHeaders],
+      },
+      {
+        // Immutable caching for Next.js hashed static assets
+        source: "/_next/static/:path*",
         headers: [
-          // Security headers
-          {
-            key: "X-DNS-Prefetch-Control",
-            value: "on",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "SAMEORIGIN",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
-          },
-          {
-            key: "X-UA-Compatible",
-            value: "IE=edge",
-          },
-          {
-            key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
-          },
-          {
-            key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
-          },
-          // Performance headers
-          {
-            key: "Content-Security-Policy",
-            value:
-              "default-src 'self' https: data:; " +
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
-              "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://analytics.google.com https://www.googleadservices.com https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
-              "img-src 'self' https: data: https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com; " +
-              "connect-src 'self' https: https://www.google-analytics.com https://www.googletagmanager.com https://analytics.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://*.adtrafficquality.google; " +
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com;",
-          },
-          // No-cache for HTML pages to prevent hydration mismatches
-          // (browser must always validate HTML with the server)
           {
             key: "Cache-Control",
-            value: "no-cache, must-revalidate",
-          },
-          // Additional performance headers
-          {
-            key: "Accept-Encoding",
-            value: "gzip, deflate, br",
-          },
-          {
-            key: "X-Content-Type-Options",
-            value: "nosniff",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
-      // Special handling for static assets
       {
         source: "/static/:path*",
         headers: [
@@ -139,15 +142,21 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/robots.txt",
+        source: "/(favicon|favicon.ico|robots.txt|sitemap.xml)",
         headers: [
           {
             key: "Cache-Control",
             value: "public, max-age=86400, s-maxage=86400",
           },
+        ],
+      },
+      {
+        // Long cache for public images
+        source: "/uploads/:path*",
+        headers: [
           {
-            key: "Content-Type",
-            value: "text/plain",
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },

@@ -9,6 +9,7 @@ export async function GET(request) {
     path: "/",
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
   });
 
   return NextResponse.redirect(new URL("/admin/login", request.url));

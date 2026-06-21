@@ -37,17 +37,15 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
       <div className="flex-1 flex flex-col pb-4">
         
           {/* Image Header */}
-          <div className="w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
+          <div className="relative w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
             {product.image ? (
               <Image
                 src={product.image}
                 alt={product.title}
-                width={640}
-                height={256}
+                fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
-                className="transition-transform duration-500 group-hover:scale-105"
-                style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
-                priority={priority}
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                preload={priority}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-4xl">

@@ -1,4 +1,5 @@
 import { getGuideBySlug } from '@/lib/guides';
+import { sanitizeHtml } from '@/lib/sanitizeHtml';
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -29,7 +30,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
 
       <div className="max-w-4xl mx-auto p-8">
         <article className="prose max-w-none">
-          <div dangerouslySetInnerHTML={{ __html: guide.content }} />
+          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(guide.content) }} />
         </article>
       </div>
     </main>

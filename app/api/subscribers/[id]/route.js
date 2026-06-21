@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { connectDB, hasMongoDBConfig } from "@/lib/db";
 import Subscriber from "@/models/Subscriber";
+import { requireAdminSession } from "@/lib/admin-auth";
 
 // PUT - Soft-delete (deactivate) a subscriber
 export async function PUT(request, { params }) {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
+
   if (!hasMongoDBConfig()) {
     return NextResponse.json({ error: "Database not configured" }, { status: 500 });
   }
@@ -31,6 +35,9 @@ export async function PUT(request, { params }) {
 
 // DELETE - Permanently remove a subscriber
 export async function DELETE(request, { params }) {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
+
   if (!hasMongoDBConfig()) {
     return NextResponse.json({ error: "Database not configured" }, { status: 500 });
   }

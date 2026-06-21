@@ -4,8 +4,12 @@ import Product from "@/models/Product";
 import Blog from "@/models/Blog";
 import Subscriber from "@/models/Subscriber";
 import Guide from "@/models/Guide";
+import { requireAdminSession } from "@/lib/admin-auth";
 
 export async function GET() {
+  const unauthorized = await requireAdminSession();
+  if (unauthorized) return unauthorized;
+
   if (!hasMongoDBConfig()) {
     return NextResponse.json({ error: "Database not configured" }, { status: 500 });
   }

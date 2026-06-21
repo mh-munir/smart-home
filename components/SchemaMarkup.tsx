@@ -1,5 +1,6 @@
 import React from 'react';
 import { DEFAULT_LOGO, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/site';
+import { headers } from 'next/headers';
 
 interface SchemaMarkupProps {
   title?: string;
@@ -10,9 +11,15 @@ interface SchemaMarkupProps {
   datePublished?: string;
   dateModified?: string;
   type?: 'Organization' | 'WebSite' | 'NewsArticle' | 'Product';
+  // Optional product-specific fields
+  price?: string | number;
+  priceCurrency?: string;
+  sku?: string;
+  availability?: string;
+  brand?: string;
 }
 
-export default function SchemaMarkup({
+export default async function SchemaMarkup({
   title = 'SmartHome Affiliate - Home Smart Products & Reviews',
   description = 'Expert reviews of home smart products and devices. Find the best smart home solutions.',
   image = DEFAULT_OG_IMAGE,
@@ -21,7 +28,14 @@ export default function SchemaMarkup({
   datePublished = new Date().toISOString(),
   dateModified = new Date().toISOString(),
   type = 'WebSite',
+  price,
+  priceCurrency,
+  sku,
+  availability,
+  brand,
 }: SchemaMarkupProps) {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
   const schemas: Array<Record<string, unknown>> = [
     // Organization Schema
     {
@@ -113,7 +127,7 @@ export default function SchemaMarkup({
   ];
 
   // If an article type is requested, add a NewsArticle schema using provided dates
-  if (type === 'NewsArticle' || datePublished) {
+  if (type === 'NewsArticle') {
     schemas.push({
       '@context': 'https://schema.org',
       '@type': 'NewsArticle',
@@ -127,11 +141,42 @@ export default function SchemaMarkup({
     });
   }
 
+  // Product schema (when requested)
+  if (type === 'Product') {
+    const offer: Record<string, unknown> = {
+      '@type': 'Offer',
+      url,
+      availability: availability || 'https://schema.org/InStock',
+    };
+
+    if (price !== undefined && price !== null) {
+      // Attempt to normalize price to a number if possible
+      const numeric = typeof price === 'number' ? price : Number(String(price).replace(/[^0-9\.]/g, ''));
+      if (!Number.isNaN(numeric)) offer.price = numeric;
+    }
+
+    if (priceCurrency) offer.priceCurrency = priceCurrency;
+
+    const productSchema: Record<string, unknown> = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: title,
+      description: description,
+      image: image ? [image] : undefined,
+      sku: sku || undefined,
+      brand: brand ? { '@type': 'Brand', name: brand } : { '@type': 'Brand', name: author || SITE_NAME },
+      offers: offer,
+    };
+
+    schemas.push(productSchema);
+  }
+
   return (
     <>
       {schemas.map((schema, index) => (
         <script
           key={index}
+          nonce={nonce}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(schema),

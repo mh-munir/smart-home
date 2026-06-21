@@ -1,10 +1,9 @@
-"use client";
-
 import GoogleTagManager from "@/components/GoogleTagManager";
 import { GoogleAnalyticsComponent } from "@/components/GoogleAnalyticsComponent";
 import GoogleAdSenseScript from "@/components/GoogleAdSenseScript";
+import { headers } from "next/headers";
 
-export default function ClientScripts() {
+export default async function ClientScripts() {
   const isProd = process.env.NODE_ENV === "production";
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
   const ga4Id = process.env.NEXT_PUBLIC_GA4_ID;
@@ -13,13 +12,15 @@ export default function ClientScripts() {
   // Only load analytics/ads in production and when IDs are configured
   if (!isProd) return null;
 
+  const nonce = (await headers()).get("x-nonce") ?? undefined;
+
   return (
     <>
-      {gtmId ? <GoogleTagManager /> : null}
-      {(ga4Id || gtmId) ? (
-        <GoogleAnalyticsComponent gtmId={gtmId} ga4Id={ga4Id} />
+      {gtmId ? <GoogleTagManager nonce={nonce} /> : null}
+      {ga4Id ? (
+        <GoogleAnalyticsComponent nonce={nonce} ga4Id={ga4Id} />
       ) : null}
-      {adsense ? <GoogleAdSenseScript /> : null}
+      {adsense ? <GoogleAdSenseScript nonce={nonce} /> : null}
     </>
   );
 }

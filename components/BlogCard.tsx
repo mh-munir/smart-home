@@ -29,9 +29,8 @@ export default function BlogCard({ article }: { article: BlogArticle }) {
             alt={article.title || ""}
             width={1200}
             height={720}
-            unoptimized
-            className="object-cover"
-            style={{ width: '100%', height: 'auto' }}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="h-full w-full object-cover"
           />
         </div>
 

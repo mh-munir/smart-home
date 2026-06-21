@@ -1,11 +1,10 @@
-'use client';
+ 'use client';
 
 import Script from 'next/script';
 import { useEffect } from 'react';
-import { GTM_CONFIG, GA4_CONFIG } from '@/lib/google-ads';
+import { GA4_CONFIG } from '@/lib/google-ads';
 
 interface GoogleAnalyticsProps {
-  gtmId?: string;
   ga4Id?: string;
 }
 
@@ -15,9 +14,9 @@ interface GoogleAnalyticsProps {
  * AdSense is handled separately in GoogleAdSenseScript component
  */
 export function GoogleAnalyticsComponent({
-  gtmId = GTM_CONFIG.GTM_ID,
   ga4Id = GA4_CONFIG.MEASUREMENT_ID,
-}: GoogleAnalyticsProps) {
+  nonce,
+}: GoogleAnalyticsProps & { nonce?: string }) {
   useEffect(() => {
     // Initialize dataLayer if not already present
     if (typeof window !== 'undefined' && !window.dataLayer) {
@@ -27,38 +26,21 @@ export function GoogleAnalyticsComponent({
 
   // Don't render if tracking IDs are not configured
   const isProd = process.env.NODE_ENV === 'production';
-  const isPlaceholder = gtmId === 'GTM-XXXXXXXXX' && ga4Id === 'G-XXXXXXXXXX';
+  const isPlaceholder = ga4Id === 'G-XXXXXXXXXX';
 
   // Only load analytics in production with valid IDs to avoid affecting Lighthouse locally
-  if (!isProd || isPlaceholder) {
+  if (!isProd || !ga4Id || isPlaceholder) {
     return null;
   }
 
   return (
     <>
-      {/* Google Tag Manager */}
-      <Script
-        id="gtm-script"
-        strategy="lazyOnload"
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','${gtmId}');
-          `,
-        }}
-      />
-
       {/* Google Analytics 4 */}
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
-        strategy="lazyOnload"
-      />
+      <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`} strategy="lazyOnload" nonce={nonce} />
       <Script
         id="ga4-script"
         strategy="lazyOnload"
+        nonce={nonce}
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
@@ -75,16 +57,6 @@ export function GoogleAnalyticsComponent({
           `,
         }}
       />
-
-      {/* GTM NoScript (Fallback) */}
-      <noscript>
-        <iframe
-          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
-          height="0"
-          width="0"
-          className="hidden invisible"
-        />
-      </noscript>
     </>
   );
 }

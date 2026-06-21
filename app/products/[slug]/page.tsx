@@ -3,7 +3,8 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
+import SchemaMarkup from '@/components/SchemaMarkup';
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -31,17 +32,39 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     await connectDB();
     const entry = (await Product.findOne({ slug }).lean()) as ProductDoc | null;
     if (entry) {
+      const productUrl = `${SITE_URL}/products/${entry.slug}`;
+      const productImage = entry.image || entry.images?.[0] || DEFAULT_OG_IMAGE;
+      const productDesc = entry.description
+        ? entry.description.replace(/[#*_\[\]]/g, "").slice(0, 160)
+        : `Buy ${entry.title} - best price and reviews on ${SITE_NAME}`;
+
       return {
         title: `${entry.title} | ${SITE_NAME}`,
-        description: entry.description || `${entry.title}`,
+        description: productDesc,
+        keywords: `${entry.title}, ${entry.category || "smart home"}, buy online, best price, review`,
         alternates: {
-          canonical: `${SITE_URL}/products/${entry.slug}`,
+          canonical: productUrl,
         },
         openGraph: {
           title: entry.title,
-          description: entry.description || "",
-          url: `${SITE_URL}/products/${entry.slug}`,
-          type: "article",
+          description: productDesc,
+          url: productUrl,
+          siteName: SITE_NAME,
+          type: "website",
+          images: [
+            {
+              url: productImage,
+              width: 1200,
+              height: 630,
+              alt: entry.title || "",
+            },
+          ],
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: entry.title,
+          description: productDesc,
+          images: [productImage],
         },
       };
     }
@@ -158,8 +181,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 alt={`${product.title} - image ${imageIndex + 2}`}
                 width={1200}
                 height={720}
-                unoptimized
                 className="w-full h-auto rounded-sm object-cover"
+                sizes="(max-width: 1024px) 100vw, 768px"
                 loading="lazy"
               />
             </figure>
@@ -177,8 +200,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             alt={`${product.title} - image ${imageIndex + 2}`}
             width={1200}
             height={720}
-            unoptimized
             className="w-full h-auto rounded-sm object-cover"
+            sizes="(max-width: 1024px) 100vw, 768px"
             loading="lazy"
           />
         </figure>
@@ -191,6 +214,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   return (
     <div className="max-w-7xl mx-auto px-4 lg:px-4 min-h-screen bg-white">
+      <SchemaMarkup
+        type="Product"
+        title={product.title}
+        description={product.description}
+        image={productImages[0]}
+        url={`${SITE_URL}/products/${product.slug}`}
+        datePublished={product.createdAt?.toISOString?.()}
+        dateModified={product.updatedAt?.toISOString?.()}
+        price={product.price}
+        priceCurrency={product.price?.toString().includes('USD') ? 'USD' : undefined}
+        sku={product._id?.toString?.()}
+        availability={(product as any)?.isActive ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'}
+        brand={(product as any)?.brand || SITE_NAME}
+      />
       <div className="pt-8 pb-12 sm:pt-12 sm:pb-16">
         <div className="grid lg:grid-cols-3 gap-8 items-start">
           <main className="lg:col-span-2">
@@ -211,8 +248,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                   alt={product.title || ""}
                   width={1200}
                   height={720}
-                  unoptimized
                   className="w-full h-auto object-cover rounded-lg"
+                  sizes="(max-width: 1024px) 100vw, 768px"
                   style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
                 />
               </figure>
@@ -235,7 +272,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                             alt={item.title || ""}
                             width={800}
                             height={480}
-                            unoptimized
+                            sizes="(max-width: 768px) 100vw, 33vw"
                             className="object-cover w-full h-full"
                           />
                         </div>

@@ -1,11 +1,27 @@
-import HeroSlider from "@/components/HeroSlider";
+import dynamic from "next/dynamic";
+import NewsletterForm from "@/components/NewsletterForm";
 import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
 import SchemaMarkup from "@/components/SchemaMarkup";
-import NewsletterForm from "@/components/NewsletterForm";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
+
+// Lazy-load heavy client components to reduce initial JS bundle
+const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
+  ssr: true,
+  loading: () => (
+    <section className="relative overflow-hidden bg-gray-950 text-white `min-h-[420px]` flex items-center">
+      <div className="max-w-7xl mx-auto px-4 py-20 md:py-28">
+        <div className="h-10 w-64 bg-white/10 rounded animate-pulse" />
+        <div className="h-16 w-96 bg-white/10 rounded mt-6 animate-pulse" />
+        <div className="h-6 w-80 bg-white/10 rounded mt-4 animate-pulse" />
+      </div>
+    </section>
+  ),
+});
+
+// `NewsletterForm` is a client component — import it directly so Next handles hydration.
 
 export const metadata = {
   title: "Home Smart Products - Best Smart Home Devices Reviews & Buying Guide 2026",
