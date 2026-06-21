@@ -16,7 +16,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
 
   return (
     <main className="bg-white">
-      <div className="`bg-gradient-to-r` from-rose-500 to-purple-600 text-white py-12">
+      <div className="bg-linear-to-r from-rose-500 to-purple-600 text-white py-12">
         <div className="max-w-4xl mx-auto px-4">
           {guide.category && (
             <div className="mb-3">

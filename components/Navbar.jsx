@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -44,8 +44,10 @@ const CloseIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-export default function Navbar() {
+function Navbar() {
   const [open, setOpen] = useState(false);
+
+  
 
   const [settings, setSettings] = useState({
     subtitle: "Make your home smarter",
@@ -72,6 +74,8 @@ export default function Navbar() {
     loadSettings();
   }, []);
 
+  
+
   return (
     <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-2 lg:px-4">
@@ -85,9 +89,11 @@ export default function Navbar() {
               height={40}
               priority
               loading="eager"
-              className="h-8 object-contain"
+              className="w-auto h-auto object-contain"
             />
           </Link>
+
+          {/* Logo */}
 
           {/* Mobile hamburger */}
           <button
@@ -140,3 +146,5 @@ export default function Navbar() {
     </header>
   );
 }
+
+export default memo(Navbar);

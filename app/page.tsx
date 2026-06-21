@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import NewsletterForm from "@/components/NewsletterForm";
+import NewsletterClientWrapper from "@/components/NewsletterClientWrapper";
 import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
 import SchemaMarkup from "@/components/SchemaMarkup";
@@ -8,10 +8,10 @@ import { getProducts } from "@/lib/products";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Lazy-load heavy client components to reduce initial JS bundle
-const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
+  const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
   ssr: true,
   loading: () => (
-    <section className="relative overflow-hidden bg-gray-950 text-white `min-h-[420px]` flex items-center">
+    <section className="relative overflow-hidden bg-gray-950 text-white min-h-105 flex items-center">
       <div className="max-w-7xl mx-auto px-4 py-20 md:py-28">
         <div className="h-10 w-64 bg-white/10 rounded animate-pulse" />
         <div className="h-16 w-96 bg-white/10 rounded mt-6 animate-pulse" />
@@ -183,7 +183,7 @@ export default async function Home() {
             <p className="text-gray-700 mb-6">
               Subscribe to get the latest smart home reviews and buying guides delivered to your inbox.
             </p>
-            <NewsletterForm source="homepage" />
+            <NewsletterClientWrapper source="homepage" />
           </div>
         </section>
 

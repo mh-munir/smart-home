@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const isProd = process.env.NODE_ENV === "production";
 
-// Static baseline CSP for fallback. The middleware injects a per-request nonce
-// for inline scripts/styles — middleware's CSP will override this header at runtime.
+// Static baseline CSP for fallback. The proxy injects a per-request nonce
+// for inline scripts/styles — proxy's CSP will override this header at runtime.
   const baseCsp = [
   "default-src 'self'",
   // Rely on per-request nonces + strict-dynamic in browsers that support it.
@@ -41,7 +41,7 @@ const securityHeaders = [
         { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
       ]
     : []),
-  // Fallback static CSP; middleware will emit the runtime nonce-enabled CSP.
+  // Fallback static CSP; proxy will emit the runtime nonce-enabled CSP.
   { key: "Content-Security-Policy", value: baseCsp },
 ];
 
@@ -107,51 +107,60 @@ const nextConfig: NextConfig = {
 
   // Security & performance headers
   async headers() {
-    return [
+    const headersList = [
       {
         // Apply security headers to every route
         source: "/:path*",
         headers: [...securityHeaders],
       },
-      {
-        // Immutable caching for Next.js hashed static assets
-        source: "/_next/static/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/static/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        source: "/(favicon|favicon.ico|robots.txt|sitemap.xml)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=86400, s-maxage=86400",
-          },
-        ],
-      },
-      {
-        // Long cache for public images
-        source: "/uploads/:path*",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
     ];
+
+    // Only set long-lived immutable Cache-Control headers in production.
+    // Setting these in development can interfere with Next.js dev behavior.
+    if (isProd) {
+      headersList.push(
+        {
+          // Immutable caching for Next.js hashed static assets
+          source: "/_next/static/:path*",
+          headers: [
+            {
+              key: "Cache-Control",
+              value: "public, max-age=31536000, immutable",
+            },
+          ],
+        },
+        {
+          source: "/static/:path*",
+          headers: [
+            {
+              key: "Cache-Control",
+              value: "public, max-age=31536000, immutable",
+            },
+          ],
+        },
+        {
+          source: "/(favicon|favicon.ico|robots.txt|sitemap.xml)",
+          headers: [
+            {
+              key: "Cache-Control",
+              value: "public, max-age=86400, s-maxage=86400",
+            },
+          ],
+        },
+        {
+          // Long cache for public images
+          source: "/uploads/:path*",
+          headers: [
+            {
+              key: "Cache-Control",
+              value: "public, max-age=31536000, immutable",
+            },
+          ],
+        }
+      );
+    }
+
+    return headersList;
   },
 };
 

@@ -158,7 +158,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 pt-8 pb-12 sm:pt-12 sm:pb-16">
         {/* Hero Header */}
         <div className="mb-8 rounded-2xl overflow-hidden shadow-sm">
-          <div className="`bg-gradient-to-r` from-teal-600 to-indigo-600 p-8 text-white">
+          <div className="bg-linear-to-r from-teal-600 to-indigo-600 p-8 text-white">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 {article.category && (

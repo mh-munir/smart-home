@@ -14,7 +14,7 @@ export interface BlogArticle {
   category?: string;
 }
 
-export default function BlogCard({ article }: { article: BlogArticle }) {
+function BlogCard({ article }: { article: BlogArticle }) {
   const image = article.image || "/placeholder.jpg";
 
   return (
@@ -56,3 +56,5 @@ export default function BlogCard({ article }: { article: BlogArticle }) {
     </Link>
   );
 }
+
+export default React.memo(BlogCard);

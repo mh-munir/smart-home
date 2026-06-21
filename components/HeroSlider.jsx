@@ -1,10 +1,10 @@
 "use client";
 
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-export default function HeroSlider({ slides }) {
+function HeroSlider({ slides }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [brokenMap, setBrokenMap] = useState({});
   const LOCAL_FALLBACK = "/logo.png";
@@ -55,15 +55,15 @@ export default function HeroSlider({ slides }) {
               alt={slide.title}
               fill
               sizes="100vw"
-              className="object-cover"
-              preload={index === 0 || isFallbackLogo}
+              className={isFallbackLogo ? "object-contain" : "object-cover"}
+              priority={index === 0 || isFallbackLogo}
               onError={() => setBrokenMap((s) => ({ ...s, [slide._id]: true }))}
             />
           </div>
         );
       })}
 
-      <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 `min-h-[420px]` flex items-center">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 min-h-105 flex items-center">
         <div className="max-w-3xl">
           <p className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-1 text-sm uppercase tracking-[0.24em] text-orange-100">
             Featured Smart Home Picks
@@ -103,3 +103,5 @@ export default function HeroSlider({ slides }) {
     </section>
   );
 }
+
+export default React.memo(HeroSlider);

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, memo } from "react";
 
-export default function NewsletterForm({ source = "homepage" }) {
+function NewsletterForm({ source = "homepage" }) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState(null); // null | "loading" | "success" | "already" | "error"
   const [message, setMessage] = useState("");
@@ -86,3 +86,5 @@ export default function NewsletterForm({ source = "homepage" }) {
     </form>
   );
 }
+
+export default memo(NewsletterForm);

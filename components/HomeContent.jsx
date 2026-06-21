@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import ProductCard from "./ProductCard";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function HomeContent() {
+function HomeContent() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +55,7 @@ export default function HomeContent() {
                   <div className="h-72 bg-gray-100" />
                 )}
 
-                <div className="absolute inset-0 `bg-gradient-to-t` from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
 
                 <div className="absolute bottom-6 left-6 z-10 text-white">
                   {main.category && <div className="text-xs uppercase text-teal-200 font-semibold mb-2">{main.category}</div>}
@@ -89,3 +89,5 @@ export default function HomeContent() {
     </section>
   );
 }
+
+export default memo(HomeContent);

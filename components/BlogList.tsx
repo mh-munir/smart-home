@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import BlogCard, { BlogArticle } from "./BlogCard";
 
-export default function BlogList({ articles = [], pageSize = 12 }: { articles?: BlogArticle[]; pageSize?: number }) {
+function BlogList({ articles = [], pageSize = 12 }: { articles?: BlogArticle[]; pageSize?: number }) {
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil((articles || []).length / pageSize));
 
@@ -61,3 +61,5 @@ export default function BlogList({ articles = [], pageSize = 12 }: { articles?: 
     </>
   );
 }
+
+export default memo(BlogList);

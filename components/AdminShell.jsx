@@ -182,10 +182,9 @@ export default function AdminShell({ children }) {
                 <Image
                   src={adminAvatar}
                   alt="Admin avatar"
-                  unoptimized
                   width={32}
                   height={32}
-                  className="w-8 h-8 rounded-full object-cover"
+                  className="rounded-full object-cover w-auto h-auto"
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-semibold shadow-sm">
@@ -258,10 +257,9 @@ export default function AdminShell({ children }) {
                 <Image
                   src={adminAvatar}
                   alt="Admin avatar"
-                  unoptimized
                   width={36}
                   height={36}
-                  className="w-9 h-9 rounded-full object-cover shadow-md ring-2 ring-white group-hover:ring-primary-100 transition-all"
+                  className="rounded-full object-cover shadow-md ring-2 ring-white group-hover:ring-primary-100 transition-all w-auto h-auto"
                 />
               ) : (
                 <div className="w-9 h-9 rounded-full bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-primary-500/20 ring-2 ring-white group-hover:ring-primary-100 transition-all">

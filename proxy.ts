@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 const CSP_HEADER = 'Content-Security-Policy';
 const NONCE_HEADER = 'x-nonce';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   try {
     const array = new Uint8Array(16);
     globalThis.crypto.getRandomValues(array);
@@ -61,7 +61,7 @@ export function middleware(request: NextRequest) {
 
     return res;
   } catch (err) {
-    console.error('Middleware error setting CSP nonce:', err);
+    console.error('Proxy error setting CSP nonce:', err);
     return NextResponse.next();
   }
 }

@@ -259,8 +259,7 @@ export default function HeroSliderAdminPage() {
                     alt="Preview"
                     width={1200}
                     height={480}
-                    className="object-cover"
-                    unoptimized
+                    className="object-cover w-auto"
                   />
                 </div>
               ) : null}
@@ -360,7 +359,6 @@ export default function HeroSliderAdminPage() {
                       fill
                       sizes="(max-width: 1280px) 100vw, 40vw"
                       className="object-cover"
-                      unoptimized
                     />
                   </div>
                   <div className="p-5">

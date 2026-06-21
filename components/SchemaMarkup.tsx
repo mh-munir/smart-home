@@ -34,7 +34,9 @@ export default async function SchemaMarkup({
   availability,
   brand,
 }: SchemaMarkupProps) {
-  const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const rawNonce = (await headers()).get('x-nonce');
+  // coerce empty string -> undefined so React doesn't render nonce=""
+  const nonce = rawNonce && rawNonce.length > 0 ? rawNonce : undefined;
 
   const schemas: Array<Record<string, unknown>> = [
     // Organization Schema
@@ -176,7 +178,10 @@ export default async function SchemaMarkup({
       {schemas.map((schema, index) => (
         <script
           key={index}
-          nonce={nonce}
+          // suppressHydrationWarning: nonce may be injected by middleware/runtime
+          // in some environments (dev/proxy), avoid noisy hydration warnings.
+          suppressHydrationWarning
+          {...(nonce ? { nonce } : {})}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(schema),

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import Image from "next/image";
 
 const DEFAULT_SEO = {
@@ -203,17 +203,16 @@ function FacebookPreview({ title, description, image, url }) {
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50 mb-4">
       <p className="text-xs text-gray-500 px-4 pt-3 pb-1 font-medium">📘 Facebook Preview</p>
-      <div className="bg-gray-200 h-40 flex items-center justify-center">
-        {image ? (
-          <Image
-            src={image}
-            alt="OG"
-            unoptimized
-            width={1200}
-            height={630}
-            className="object-cover"
-          />
-        ) : (
+      <div className="bg-gray-200 h-40 relative overflow-hidden">
+          {image ? (
+            <Image
+              src={image}
+              alt="OG"
+              fill
+              className="absolute inset-0 object-cover"
+              priority={false}
+            />
+          ) : (
           <span className="text-gray-400 text-sm">No Image</span>
         )}
       </div>
@@ -236,15 +235,14 @@ function TwitterPreview({ title, description, image, card }) {
       <p className="text-xs text-gray-500 px-4 pt-3 pb-1 font-medium">🐦 Twitter Preview</p>
       <div className="p-3">
         <div className={`flex ${card === "summary" ? "" : ""} gap-3`}>
-           <div className={`bg-gray-200 rounded-lg overflow-hidden ${card === "summary" ? "w-16 h-16 shrink-0" : "w-full h-48"}`}>
+           <div className={`bg-gray-200 rounded-lg overflow-hidden relative ${card === "summary" ? "w-16 h-16 shrink-0" : "w-full h-48"}`}>
             {image ? (
               <Image
                 src={image}
                 alt="Twitter"
-                unoptimized
-                width={card === "summary" ? 64 : 1200}
-                height={card === "summary" ? 64 : 480}
-                className="object-cover"
+                fill
+                className="absolute inset-0 object-cover"
+                priority={false}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
@@ -266,7 +264,7 @@ function TwitterPreview({ title, description, image, card }) {
   );
 }
 
-export default function SeoModal({ isOpen, onClose, onSave }) {
+function SeoModal({ isOpen, onClose, onSave }) {
   const [seo, setSeo] = useState(DEFAULT_SEO);
   const [activeTab, setActiveTab] = useState("basic");
   const [saving, setSaving] = useState(false);
@@ -884,3 +882,5 @@ ${seo.twitterCreator ? `<meta name="twitter:creator" content="${seo.twitterCreat
     </div>
   );
 }
+
+export default memo(SeoModal);

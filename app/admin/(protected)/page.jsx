@@ -1,11 +1,13 @@
 import React from "react";
 import Link from "next/link";
+import LineChart from "@/components/admin/LineChartClient";
+import DonutChart from "@/components/admin/DonutChartClient";
 import { connectDB, hasMongoDBConfig } from "@/lib/db";
 import Product from "@/models/Product";
 import Blog from "@/models/Blog";
 import Subscriber from "@/models/Subscriber";
 import Guide from "@/models/Guide";
-import { LineChart, DonutChart } from "@/components/admin/DashboardCharts";
+// Charts are rendered inside client wrappers (LineChartClient / DonutChartClient)
 
 function fmt(n) {
   if (typeof n !== "number") return "0";

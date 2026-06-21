@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { useRouter } from "next/navigation";
 
 /* ───── Icons ───── */
@@ -75,7 +75,7 @@ const socialLinks = [
 
 /* ───── Component ───── */
 
-export default function TopNavbar() {
+function TopNavbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
@@ -85,7 +85,7 @@ export default function TopNavbar() {
     e.preventDefault();
     const q = searchQuery.trim();
     if (q) {
-      router.push(`/?search=${encodeURIComponent(q)}`);
+      router.push(`/products?q=${encodeURIComponent(q)}`);
       searchRef.current?.blur();
     }
   }
@@ -217,3 +217,5 @@ export default function TopNavbar() {
     </div>
   );
 }
+
+export default memo(TopNavbar);

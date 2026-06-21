@@ -1,8 +1,9 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import SeoModal from "@/components/SeoModal";
+const SeoModal = dynamic(() => import("@/components/SeoModal"), { ssr: false, loading: () => null });
 import Image from "next/image";
 
 export default function AdminSettingsPage() {
@@ -166,10 +167,9 @@ export default function AdminSettingsPage() {
               <Image
                 src={logoPreview}
                 alt="logo-preview"
-                unoptimized
                 width={200}
                 height={50}
-                className="h-16 object-contain"
+                className="w-auto h-auto object-contain"
               />
             </div>
           ) : null}
@@ -184,7 +184,6 @@ export default function AdminSettingsPage() {
               <Image
                 src={favPreview}
                 alt="favicon-preview"
-                unoptimized
                 width={32}
                 height={32}
                 className="h-8 w-8 object-contain"
@@ -203,7 +202,6 @@ export default function AdminSettingsPage() {
               <Image
                 src={adminAvatarPreview}
                 alt="admin-avatar-preview"
-                unoptimized
                 width={80}
                 height={80}
                 className="h-20 w-20 rounded-full object-cover border-2 border-gray-200"

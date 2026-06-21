@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -130,7 +131,7 @@ const Icon = ({ name, isActive }) => {
   }
 };
 
-export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
+function Sidebar({ mobileOpen = false, onClose = () => {} }) {
   const pathname = usePathname();
 
   return (
@@ -254,5 +255,7 @@ export default function Sidebar({ mobileOpen = false, onClose = () => {} }) {
         </div>
       </aside>
     </>
-  );
-}
+    );
+  }
+
+  export default memo(Sidebar);

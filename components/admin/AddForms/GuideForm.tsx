@@ -198,10 +198,9 @@ export default function GuideForm() {
               <Image
                 src={guideData.mainImagePreview}
                 alt="Preview"
-                unoptimized
                 width={800}
                 height={480}
-                className="mt-4 max-h-48 rounded-lg"
+                className="mt-4 max-h-48 rounded-lg w-auto"
                 loading="lazy"
               />
             )}
@@ -248,10 +247,9 @@ export default function GuideForm() {
                 <Image
                   src={section.imagePreview}
                   alt={`Step ${index + 2} Preview`}
-                  unoptimized
                   width={800}
                   height={480}
-                  className="mt-4 max-h-48 rounded-lg border object-cover shadow-sm"
+                  className="mt-4 max-h-48 rounded-lg border object-cover shadow-sm w-auto"
                   loading="lazy"
                 />
               )}

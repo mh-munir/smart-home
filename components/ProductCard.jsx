@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
+import React, { useMemo, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function ProductCard({ product, showBuyButton = true, priority = false }) {
+function ProductCard({ product, showBuyButton = true, priority = false }) {
   const [showAffiliateMenu, setShowAffiliateMenu] = useState(false);
   const router = useRouter();
 
   const formattedDate = useMemo(() => {
     if (!product?.createdAt) return null;
     return new Intl.DateTimeFormat('en-US', { timeZone: 'UTC' }).format(new Date(product.createdAt));
-  }, [product.createdAt]);
+  }, [product?.createdAt]);
   // Memoized active affiliate links
   const affiliateLinks = useMemo(() => {
     const links = [];
@@ -27,10 +27,28 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
       });
     }
     return links;
-  }, [product.affiliateLinks]);
+  }, [product?.affiliateLinks]);
 
   const mainLink = affiliateLinks.length > 0 ? affiliateLinks[0] : null;
   const otherLinks = affiliateLinks.slice(1);
+
+  const handleAffiliateClick = useCallback(() => {
+    if (typeof window !== 'undefined' && product?._id && mainLink) {
+      fetch('/api/track-conversion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: product._id,
+          affiliateId: mainLink.id,
+          type: 'click',
+        }),
+      }).catch(() => {});
+    }
+  }, [product?._id, mainLink]);
+
+  const handleMoreDetails = useCallback(() => {
+    if (product?.slug) router.push(`/products/${product.slug}`);
+  }, [router, product?.slug]);
 
   return (
     <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden transition-transform duration-300 transform-gpu hover:-translate-y-1 hover:shadow-lg h-full flex flex-col">
@@ -38,19 +56,18 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
         
           {/* Image Header */}
           <div className="relative w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
-            {product.image ? (
+            {product?.image ? (
               <Image
                 src={product.image}
                 alt={product.title}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
-                preload={priority}
+                priority={priority}
+                loading={priority ? 'eager' : 'lazy'}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl">
-                🛒
-              </div>
+              <div className="w-full h-full flex items-center justify-center text-4xl">🛒</div>
             )}
           </div>
 
@@ -97,19 +114,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
               href={mainLink.url}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => {
-                if (typeof window !== 'undefined' && product._id) {
-                  fetch('/api/track-conversion', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      productId: product._id,
-                      affiliateId: mainLink.id,
-                      type: 'click',
-                    }),
-                  }).catch(() => {});
-                }
-              }}
+              onClick={handleAffiliateClick}
               className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-red-500 hover:bg-red-600 text-white px-3 py-3 rounded-md transition shadow-sm"
               aria-label={`Buy on ${mainLink.name}`}
             >
@@ -121,7 +126,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
           ) : (
             <button
               type="button"
-              onClick={() => router.push(`/products/${product.slug}`)}
+              onClick={handleMoreDetails}
               className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-red-500 hover:bg-red-600 text-white px-3 py-3 rounded-md transition shadow-sm"
               aria-label={`More details about ${product.title}`}
             >
@@ -136,3 +141,5 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
     </article>
   );
 }
+
+export default React.memo(ProductCard);
