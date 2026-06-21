@@ -19,6 +19,8 @@ export default function HeroSliderAdminPage() {
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
 
   useEffect(() => {
     fetchSlides();
@@ -27,13 +29,27 @@ export default function HeroSliderAdminPage() {
   async function fetchSlides() {
     try {
       const res = await fetch("/api/hero-slides?all=true");
-      if (!res.ok) throw new Error("Failed to fetch slides");
+
+      if (!res.ok) {
+        // If unauthorized, redirect to login so admin can authenticate
+        if (res.status === 401) {
+          const next = encodeURIComponent("/admin/hero-slider");
+          window.location.href = `/admin/login?next=${next}`;
+          return;
+        }
+
+        const text = await res.text().catch(() => "");
+        throw new Error(`Failed to fetch slides (${res.status}) ${text}`);
+      }
+
       const ct = res.headers.get("content-type") || "";
       if (!ct.includes("application/json")) throw new Error("Not JSON");
       const data = await res.json();
       setSlides(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error fetching slides:", error);
+      // Show a friendly message to the admin
+      alert("Could not load slides: " + (error?.message || "Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -48,8 +64,44 @@ export default function HeroSliderAdminPage() {
     }));
   }
 
+  async function handleFileChange(event) {
+    const file = event.target?.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setUploadError(null);
+
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: fd,
+      });
+
+      const json = await res.json();
+      if (!res.ok || json.error) throw new Error(json.error || "Upload failed");
+
+      // server returns { url }
+      setForm((cur) => ({ ...cur, image: json.url || json.key || cur.image }));
+    } catch (err) {
+      console.error("Upload error:", err);
+      setUploadError(err?.message || "Upload failed");
+      alert("Image upload failed: " + (err?.message || ""));
+    } finally {
+      setUploading(false);
+    }
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
+    // Require an image (uploaded or existing) before saving
+    if (!form.image) {
+      alert("Please upload an image before saving.");
+      return;
+    }
+
     setSaving(true);
 
     const method = editingId ? "PUT" : "POST";
@@ -137,9 +189,9 @@ export default function HeroSliderAdminPage() {
               <h2 className="text-2xl font-bold text-gray-900">
                 {editingId ? "Edit Slide" : "Add New Slide"}
               </h2>
-              <p className="mt-1 text-sm text-gray-500">
-                Set the image URL, title, description, and CTA for each slide.
-              </p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Upload an image, set the title, description, and CTA for each slide.
+                  </p>
             </div>
             {editingId ? (
               <button
@@ -181,19 +233,37 @@ export default function HeroSliderAdminPage() {
               />
             </div>
 
+            {/* Image URL field removed — upload only UI below */}
+
             <div>
               <label className="mb-2 block font-semibold text-gray-700">
-                Image URL
+                Upload image
               </label>
               <input
-                type="url"
-                name="image"
-                value={form.image}
-                onChange={handleChange}
-                required
-                placeholder="https://example.com/hero-image.jpg"
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
                 className="w-full rounded-lg border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
+
+              {uploading ? (
+                <p className="mt-2 text-sm text-gray-500">Uploading image...</p>
+              ) : uploadError ? (
+                <p className="mt-2 text-sm text-red-600">{uploadError}</p>
+              ) : null}
+
+              {form.image ? (
+                <div className="mt-3 w-full overflow-hidden rounded-lg max-h-48">
+                  <Image
+                    src={form.image}
+                    alt="Preview"
+                    width={1200}
+                    height={480}
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+              ) : null}
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
@@ -254,7 +324,7 @@ export default function HeroSliderAdminPage() {
 
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || uploading}
               className="w-full rounded-xl bg-red-500 px-6 py-3 font-bold text-white transition-colors hover:bg-red-600 disabled:opacity-60"
             >
               {saving
