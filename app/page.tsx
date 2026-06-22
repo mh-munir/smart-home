@@ -4,10 +4,24 @@ import Image from "next/image";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
-import { getCategories } from "@/lib/categories";
+import { getCategories, getCategoriesWithProducts } from "@/lib/categories";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Lazy-load heavy client components to reduce initial JS bundle
+const ServiceCategories = dynamic(() => import("@/components/ServiceCategories"), {
+  ssr: true,
+  loading: () => (
+    <section className="max-w-7xl mx-auto px-4 py-12">
+      <div className="h-8 w-64 bg-gray-100 rounded animate-pulse mb-6" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-64 bg-gray-100 rounded-xl animate-pulse" />
+        ))}
+      </div>
+    </section>
+  ),
+});
+
 const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
   ssr: true,
   loading: () => (
@@ -68,10 +82,11 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [products, heroSlides, categories] = await Promise.all([
+  const [products, heroSlides, categories, categoriesWithProducts] = await Promise.all([
     getProducts(),
     getHeroSlides(),
     getCategories(),
+    getCategoriesWithProducts(),
   ]);
 
   const featuredProducts = products?.slice(0, 4) || [];
@@ -89,7 +104,11 @@ export default async function Home() {
         {/* Hero Section */}
         <HeroSlider slides={heroSlides} categories={categories} />
 
+        {/* Dynamic Service Category Sections — auto-generated from database */}
+        <ServiceCategories categoriesWithProducts={categoriesWithProducts} />
+
         {/* Featured header design (renders 3-per-row ProductCard grid) */}
+        
         <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
           <div className="w-full">
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-4 items-start">
