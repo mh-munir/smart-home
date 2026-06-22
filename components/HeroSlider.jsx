@@ -4,7 +4,8 @@ import { useEffect, useState, useCallback, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-function HeroSlider({ slides }) {
+function HeroSlider({ slides, categories }) {
+  const cats = categories || [];
   const [activeIndex, setActiveIndex] = useState(0);
   const [brokenMap, setBrokenMap] = useState({});
   const LOCAL_FALLBACK = "/logo.png";
@@ -90,8 +91,30 @@ function HeroSlider({ slides }) {
         </div>
       </div>
 
+      {/* Categories bar at the bottom of the hero slider */}
+      {cats.length > 0 && (
+        <div className="relative z-20 bg-black/60 backdrop-blur-sm border-t border-white/10">
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
+              <span className="text-xs font-semibold text-white/60 uppercase tracking-wider whitespace-nowrap">
+                Browse:
+              </span>
+              {cats.map((cat) => (
+                <Link
+                  key={cat._id}
+                  href={`/category/${encodeURIComponent(cat.name)}`}
+                  className="inline-flex items-center rounded-full bg-white/10 hover:bg-white/20 px-4 py-1.5 text-sm font-medium text-white transition-colors whitespace-nowrap"
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       {slides.length > 1 ? (
-        <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-3">
+        <div className="absolute bottom-12 left-1/2 z-20 flex -translate-x-1/2 gap-3">
           {slides.map((slide, index) => (
             <button
               key={slide._id}

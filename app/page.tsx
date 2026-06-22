@@ -4,6 +4,7 @@ import Image from "next/image";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
+import { getCategories } from "@/lib/categories";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Lazy-load heavy client components to reduce initial JS bundle
@@ -67,9 +68,10 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [products, heroSlides] = await Promise.all([
+  const [products, heroSlides, categories] = await Promise.all([
     getProducts(),
     getHeroSlides(),
+    getCategories(),
   ]);
 
   const featuredProducts = products?.slice(0, 4) || [];
@@ -85,7 +87,7 @@ export default async function Home() {
       />
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <HeroSlider slides={heroSlides} />
+        <HeroSlider slides={heroSlides} categories={categories} />
 
         {/* Featured header design (renders 3-per-row ProductCard grid) */}
         <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
