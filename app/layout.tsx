@@ -194,6 +194,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#ffffff",
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({
@@ -211,8 +213,14 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        {/* Preconnect to critical third-party origins for faster resource loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+        {/* DNS prefetch for non-critical third-party origins */}
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="icon" href={faviconPath} />
         {seoData.applicationName && <meta name="application-name" content={seoData.applicationName} />}
         {seoData.msTileColor && <meta name="msapplication-TileColor" content={seoData.msTileColor} />}

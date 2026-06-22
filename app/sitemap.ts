@@ -96,12 +96,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: now,
         changeFrequency: 'weekly',
         priority: 0.8,
-      },
-      {
-        url: `${SITE_URL}/blog`,
-        lastModified: now,
-        changeFrequency: 'weekly',
-        priority: 0.7,
       }
     );
 
@@ -141,8 +135,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     return entries;
-  } catch (error) {
-    console.error('Sitemap generation error:', error);
+  } catch {
     // Return minimal fallback
     return [
       {

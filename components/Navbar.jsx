@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -66,8 +66,8 @@ function Navbar() {
 
         const data = await res.json();
         if (data) setSettings(data);
-      } catch (error) {
-        console.error("Settings load failed", error);
+      } catch {
+        // Settings load failed silently
       }
     };
 
@@ -99,7 +99,9 @@ function Navbar() {
           <button
             onClick={() => setOpen(!open)}
             className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-all md:hidden"
-            aria-label="Toggle menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            aria-controls="mobile-navigation"
           >
             {open ? <CloseIcon /> : <MenuIcon />}
           </button>
@@ -127,7 +129,7 @@ function Navbar() {
             onClick={() => setOpen(false)}
           />
 
-          <nav className="fixed top-20 left-0 right-0 bg-white border-b border-gray-100 z-50 p-4 md:hidden">
+          <nav id="mobile-navigation" className="fixed top-20 left-0 right-0 bg-white border-b border-gray-100 z-50 p-4 md:hidden" role="navigation" aria-label="Mobile navigation">
             <div className="flex flex-col gap-1">
               {links.map((link) => (
                 <Link

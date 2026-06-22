@@ -8,6 +8,7 @@ import SchemaMarkup from '@/components/SchemaMarkup';
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 type ProductDoc = {
   _id?: { toString?: () => string };
@@ -47,13 +48,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         alternates: {
           canonical: productUrl,
         },
-        openGraph: {
-          title: entry.title,
-          description: productDesc,
-          url: productUrl,
-          siteName: SITE_NAME,
-          type: "website",
-          images: [
+          openGraph: {
+            title: entry.title,
+            description: productDesc,
+            url: productUrl,
+            siteName: SITE_NAME,
+            type: "website" as const,
+            images: [
             {
               url: productImage,
               width: 1200,
@@ -106,11 +107,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
   if (!product) notFound();
 
-  // Related products (from DB when available)
+  // Fetch related products in parallel with the main product (already fetched above)
   let relatedProducts: Array<ProductDoc> = [];
   try {
     if (product && product.category) {
-      await connectDB();
+      // Reuse existing connection — no need for another connectDB() call
       const list = (await Product.find({ category: product.category }).sort({ createdAt: -1 }).limit(4).lean()) as ProductDoc[];
       relatedProducts = list.filter((p) => p.slug !== product?.slug).slice(0, 3);
     }
@@ -255,7 +256,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     height={720}
                     className="w-full h-auto object-cover rounded-lg"
                     priority
-                    loading="eager"
                     sizes="(max-width: 1024px) 100vw, 768px"
                   />
               </figure>

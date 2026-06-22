@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,6 +8,10 @@ function HeroSlider({ slides }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [brokenMap, setBrokenMap] = useState({});
   const LOCAL_FALLBACK = "/logo.png";
+
+  const handleSlideError = useCallback((slideId) => {
+    setBrokenMap((s) => ({ ...s, [slideId]: true }));
+  }, []);
 
   useEffect(() => {
     if (!slides?.length || slides.length === 1) return;
@@ -56,8 +60,9 @@ function HeroSlider({ slides }) {
               fill
               sizes="100vw"
               className={isFallbackLogo ? "object-contain" : "object-cover"}
-              priority={index === 0 || isFallbackLogo}
-              onError={() => setBrokenMap((s) => ({ ...s, [slide._id]: true }))}
+              priority={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
+              onError={() => handleSlideError(slide._id)}
             />
           </div>
         );
@@ -104,4 +109,4 @@ function HeroSlider({ slides }) {
   );
 }
 
-export default React.memo(HeroSlider);
+export default memo(HeroSlider);

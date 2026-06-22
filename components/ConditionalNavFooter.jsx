@@ -3,9 +3,21 @@
 import { usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 
-const TopNavbar = dynamic(() => import("@/components/TopNavbar"), { ssr: false });
-const Navbar = dynamic(() => import("@/components/Navbar"), { ssr: false });
-const Footer = dynamic(() => import("@/components/Footer"), { ssr: false });
+// Dynamic imports for code splitting - heavy components loaded on demand
+const TopNavbar = dynamic(() => import("@/components/TopNavbar"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const Navbar = dynamic(() => import("@/components/Navbar"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const Footer = dynamic(() => import("@/components/Footer"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export function ConditionalNavbar() {
   const pathname = usePathname();

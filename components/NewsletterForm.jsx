@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, memo } from "react";
+import { useState } from "react";
 
 function NewsletterForm({ source = "homepage" }) {
   const [email, setEmail] = useState("");
@@ -27,7 +27,6 @@ function NewsletterForm({ source = "homepage" }) {
       try {
         data = await res.json();
       } catch (parseErr) {
-        console.warn("/api/subscribers returned non-JSON response", parseErr);
       }
 
       if (res.ok && data?.alreadySubscribed) {
@@ -42,7 +41,6 @@ function NewsletterForm({ source = "homepage" }) {
         setMessage((data && (data.error || data.message)) || `Server error: ${res.status}`);
       }
     } catch (error) {
-      console.error("Newsletter subscribe failed:", error);
       setStatus("error");
       setMessage(`Network error: ${error?.message || "Failed to fetch"}`);
     }
@@ -50,7 +48,11 @@ function NewsletterForm({ source = "homepage" }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+      <label htmlFor={`newsletter-email-${source}`} className="sr-only">
+        Email address
+      </label>
       <input
+        id={`newsletter-email-${source}`}
         type="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -58,6 +60,7 @@ function NewsletterForm({ source = "homepage" }) {
         className="flex-1 px-4 py-3 border border-gray-300 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-100"
         required
         disabled={status === "loading"}
+        autoComplete="email"
       />
       <button
         type="submit"
@@ -87,4 +90,4 @@ function NewsletterForm({ source = "homepage" }) {
   );
 }
 
-export default memo(NewsletterForm);
+export default NewsletterForm;

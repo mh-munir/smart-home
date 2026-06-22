@@ -1,6 +1,5 @@
 "use client";
 
-import { memo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -158,7 +157,7 @@ function Sidebar({ mobileOpen = false, onClose = () => {} }) {
       >
         {/* Brand */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-white/5">
-            <div className="flex items-center justify-center w-9 h-9 rounded-lase  from-primary-500 to-primary-600 shadow-lg shadow-primary-500/25">
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-linear-to-br from-primary-500 to-primary-600 shadow-lg shadow-primary-500/25">
             <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
               <polyline points="9 22 9 12 15 12 15 22" />
@@ -258,4 +257,4 @@ function Sidebar({ mobileOpen = false, onClose = () => {} }) {
     );
   }
 
-  export default memo(Sidebar);
+export default Sidebar;

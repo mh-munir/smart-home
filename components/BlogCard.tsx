@@ -1,7 +1,7 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
-import React from "react";
 import Image from "next/image";
 
 export interface BlogArticle {
@@ -31,6 +31,7 @@ function BlogCard({ article }: { article: BlogArticle }) {
             height={720}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="h-full w-full object-cover"
+            loading="lazy"
           />
         </div>
 
@@ -57,4 +58,4 @@ function BlogCard({ article }: { article: BlogArticle }) {
   );
 }
 
-export default React.memo(BlogCard);
+export default memo(BlogCard);

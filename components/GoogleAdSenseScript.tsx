@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import { isAdSenseEnabled } from '@/lib/adsense-config';
 
 export default function GoogleAdSenseScript({ nonce }: { nonce?: string }) {
@@ -8,16 +9,14 @@ export default function GoogleAdSenseScript({ nonce }: { nonce?: string }) {
   const formattedPublisherId = publisherId.startsWith('pub-') ? publisherId : `pub-${publisherId}`;
   const adClient = formattedPublisherId.startsWith('pub-') ? `ca-${formattedPublisherId}` : formattedPublisherId;
 
-  // Render a server-side <script> tag so the per-request nonce can be applied
+  // Use next/script with lazyOnload strategy to avoid blocking rendering
   const saneNonce = nonce && nonce.length > 0 ? nonce : undefined;
   return (
-    <script
+    <Script
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-      async={true}
-      {...(saneNonce ? { nonce: saneNonce } : {})}
+      strategy="lazyOnload"
+      nonce={saneNonce}
       crossOrigin="anonymous"
-      // @ts-ignore Allow data- attribute on script
-      data-ad-client={adClient}
     />
   );
 }

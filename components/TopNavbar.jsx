@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import { useRouter } from "next/navigation";
 
 /* ───── Icons ───── */
@@ -137,6 +137,8 @@ function TopNavbar() {
           <form
             onSubmit={handleSearch}
             className="hidden sm:flex items-center"
+            role="search"
+            aria-label="Site search"
           >
             <div
               className={`relative flex items-center rounded-xl border transition-all duration-300 ease-out ${desktopSearchClass}`}
@@ -189,6 +191,8 @@ function TopNavbar() {
           <form
             onSubmit={handleSearch}
             className="flex sm:hidden items-center flex-1 max-w-45"
+            role="search"
+            aria-label="Site search"
           >
             <div className="relative flex items-center w-full rounded-lg border border-white/8 bg-white/4 focus-within:border-teal-500/50 focus-within:bg-white/7 transition-all duration-300">
               <div className="flex items-center justify-center pl-2.5">

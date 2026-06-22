@@ -268,9 +268,3 @@ export function trackContactForm(contactType: string): void {
   });
 }
 
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-    gtag?: (...args: unknown[]) => void;
-  }
-}

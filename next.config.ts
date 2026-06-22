@@ -51,6 +51,21 @@ const nextConfig: NextConfig = {
   generateEtags: true,
   poweredByHeader: false,
 
+  // Optimize server-side packages — don't bundle mongoose into edge/runtime
+  serverExternalPackages: ["mongoose", "bcryptjs", "sanitize-html"],
+
+  // Experimental performance optimizations
+  experimental: {
+    // Optimize package imports to reduce bundle size
+    optimizePackageImports: ["next/image", "next/link", "next/font/google"],
+  },
+
+  // Compiler optimizations
+  compiler: {
+    // Remove console.log in production for smaller bundles
+    removeConsole: isProd ? { exclude: ["error", "warn"] } : false,
+  },
+
   // Image optimization for SEO and Core Web Vitals
   images: {
     remotePatterns: [
@@ -115,50 +130,11 @@ const nextConfig: NextConfig = {
       },
     ];
 
-    // Only set long-lived immutable Cache-Control headers in production.
-    // Setting these in development can interfere with Next.js dev behavior.
-    if (isProd) {
-      headersList.push(
-        {
-          // Immutable caching for Next.js hashed static assets
-          source: "/_next/static/:path*",
-          headers: [
-            {
-              key: "Cache-Control",
-              value: "public, max-age=31536000, immutable",
-            },
-          ],
-        },
-        {
-          source: "/static/:path*",
-          headers: [
-            {
-              key: "Cache-Control",
-              value: "public, max-age=31536000, immutable",
-            },
-          ],
-        },
-        {
-          source: "/(favicon|favicon.ico|robots.txt|sitemap.xml)",
-          headers: [
-            {
-              key: "Cache-Control",
-              value: "public, max-age=86400, s-maxage=86400",
-            },
-          ],
-        },
-        {
-          // Long cache for public images
-          source: "/uploads/:path*",
-          headers: [
-            {
-              key: "Cache-Control",
-              value: "public, max-age=31536000, immutable",
-            },
-          ],
-        }
-      );
-    }
+    // Cache-Control headers are NOT set here because Vercel's Edge Network
+    // handles caching automatically for static assets (_next/static, uploads,
+    // favicons, etc.). Adding custom Cache-Control headers triggers a Vercel
+    // deployment warning and can interfere with the CDN's built-in caching
+    // strategy. If you need fine-grained control, use vercel.json instead.
 
     return headersList;
   },

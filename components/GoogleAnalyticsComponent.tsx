@@ -20,7 +20,7 @@ export function GoogleAnalyticsComponent({
   const saneNonce = nonce && nonce.length > 0 ? nonce : undefined;
   useEffect(() => {
     // Initialize dataLayer if not already present
-    if (typeof window !== 'undefined' && !window.dataLayer) {
+    if (!window.dataLayer) {
       window.dataLayer = window.dataLayer || [];
     }
   }, []);
@@ -68,7 +68,7 @@ export function GoogleAnalyticsComponent({
 export function useTracking() {
   useEffect(() => {
     // Track page view
-    if (typeof window !== 'undefined' && window.gtag) {
+    if (window.gtag) {
       window.gtag('event', 'page_view', {
         page_path: window.location.pathname,
         page_title: document.title,
@@ -91,7 +91,7 @@ export function useProductTracking(product: Record<string, unknown> | null) {
   } | null;
 
   useEffect(() => {
-    if (!product || typeof window === 'undefined' || !window.gtag) return;
+    if (!product || !window.gtag) return;
 
     const p = product as TrackedProduct;
     const price = p?.price;

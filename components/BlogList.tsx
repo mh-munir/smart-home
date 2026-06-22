@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, memo } from "react";
+import { useState, useMemo, memo } from "react";
 import BlogCard, { BlogArticle } from "./BlogCard";
 
 function BlogList({ articles = [], pageSize = 12 }: { articles?: BlogArticle[]; pageSize?: number }) {

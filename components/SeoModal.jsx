@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import Image from "next/image";
 
 const DEFAULT_SEO = {
@@ -317,7 +317,6 @@ function SeoModal({ isOpen, onClose, onSave }) {
         alert("Error: " + (data?.error || "Failed to save"));
       }
     } catch (err) {
-      console.error(err);
       alert("Error saving SEO settings");
     } finally {
       setSaving(false);

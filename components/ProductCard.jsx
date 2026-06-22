@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, memo } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
@@ -142,4 +142,4 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
   );
 }
 
-export default React.memo(ProductCard);
+export default memo(ProductCard);

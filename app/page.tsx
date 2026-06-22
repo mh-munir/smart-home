@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import NewsletterClientWrapper from "@/components/NewsletterClientWrapper";
 import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
 import SchemaMarkup from "@/components/SchemaMarkup";
@@ -8,7 +7,7 @@ import { getProducts } from "@/lib/products";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Lazy-load heavy client components to reduce initial JS bundle
-  const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
+const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
   ssr: true,
   loading: () => (
     <section className="relative overflow-hidden bg-gray-950 text-white min-h-105 flex items-center">
@@ -21,7 +20,16 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
   ),
 });
 
-// `NewsletterForm` is a client component — import it directly so Next handles hydration.
+// Dynamic import for Newsletter with SSR (required in server components)
+const NewsletterClientWrapper = dynamic(() => import("@/components/NewsletterClientWrapper"), {
+  ssr: true,
+  loading: () => (
+    <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex-1 h-12 bg-gray-200 rounded animate-pulse" />
+      <div className="w-32 h-12 bg-gray-200 rounded animate-pulse" />
+    </div>
+  ),
+});
 
 export const metadata = {
   title: "Home Smart Products - Best Smart Home Devices Reviews & Buying Guide 2026",
@@ -158,31 +166,16 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Featured products rendered above; HomeContent removed to avoid duplication */}
-
-        {/* Main Content Area */}
-        <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-
-            {/* Left column (content handled above) */}
-            <div className="lg:col-span-2"></div>
-
-            {/* Right column intentionally left blank — Latest/Favorites moved above */}
-            <aside className="lg:col-span-1" />
-          </div>
-        </section>
-
-        {/* (Products grid is handled in HomeContent) */}
-
         {/* Newsletter Section */}
         <section className="py-16 bg-gray-50 border-gray-200 w-full">
-          <div className="max-w-5xl mx-auto px-4 lg:px-8 text-center">
+        <div className="max-w-5xl mx-auto px-4 lg:px-8 text-center">
             <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3">
               Get Smart Home Tips
             </h3>
             <p className="text-gray-700 mb-6">
               Subscribe to get the latest smart home reviews and buying guides delivered to your inbox.
             </p>
+            {/* Newsletter loaded dynamically - below the fold */}
             <NewsletterClientWrapper source="homepage" />
           </div>
         </section>

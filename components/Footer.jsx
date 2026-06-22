@@ -13,10 +13,16 @@ function Footer() {
             <p className="text-sm leading-relaxed mb-4">
               Expert smart home reviews and buying guides to help you make the best decisions for your home.
             </p>
-            <div className="flex gap-4 text-lg">
-              <Link href="#" className="hover:text-teal-400 transition-colors">f</Link>
-              <Link href="#" className="hover:text-teal-400 transition-colors">𝕏</Link>
-              <Link href="#" className="hover:text-teal-400 transition-colors">📷</Link>
+            <div className="flex gap-4 text-lg" role="list" aria-label="Social media links">
+              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors" aria-label="Facebook">
+                <span aria-hidden="true">f</span>
+              </a>
+              <a href="https://x.com/" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors" aria-label="X (Twitter)">
+                <span aria-hidden="true">𝕏</span>
+              </a>
+              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:text-teal-400 transition-colors" aria-label="Instagram">
+                <span aria-hidden="true">📷</span>
+              </a>
             </div>
           </div>
 

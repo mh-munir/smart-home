@@ -1,4 +1,3 @@
-import React from 'react';
 import { DEFAULT_LOGO, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/site';
 import { headers } from 'next/headers';
 
@@ -39,21 +38,9 @@ export default async function SchemaMarkup({
   const nonce = rawNonce && rawNonce.length > 0 ? rawNonce : undefined;
 
   const schemas: Array<Record<string, unknown>> = [
-    // Organization Schema
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: author || SITE_NAME,
-      url: url || SITE_URL,
-      logo: image || DEFAULT_LOGO,
-      description: description || 'Expert reviews and buying guides for home smart products',
-      sameAs: [
-        'https://www.facebook.com/smarthomeaffiliate',
-        'https://twitter.com/smarthomeaffiliate',
-        'https://www.instagram.com/smarthomeaffiliate',
-        'https://www.youtube.com/smarthomeaffiliate',
-      ],
-    },
+    // Organization Schema is emitted once in layout.tsx from site-settings.json
+    // to avoid duplicate structured data. Only emit WebSite and page-specific schemas here.
+
     // WebSite Schema
     {
       '@context': 'https://schema.org',

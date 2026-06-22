@@ -124,8 +124,7 @@ const ProductSchema = new mongoose.Schema(
 ProductSchema.index({ category: 1, rating: -1 });
 ProductSchema.index({ category: 1, clicks: -1 });
 
-// TTL index for automatic cleanup (optional)
-ProductSchema.index({ createdAt: 1 }, { expireAfterSeconds: 7776000 }); // 90 days
+// Note: TTL index removed — products should not be auto-deleted.
 
 // Create text index for full-text search
 ProductSchema.index({ title: "text", description: "text" });
