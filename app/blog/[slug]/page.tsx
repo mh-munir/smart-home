@@ -186,14 +186,13 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </div>
 
           {articleImages.length > 0 && (
-            <figure className="w-full h-64 sm:h-96 overflow-hidden">
+            <figure className="w-full h-64 sm:h-96 overflow-hidden relative">
               <Image
                 src={articleImages[0]}
                 alt={article.title || ""}
-                width={1200}
-                height={720}
+                fill
                 sizes="100vw"
-                className="w-full h-full object-cover"
+                className="object-cover"
               />
             </figure>
           )}
@@ -314,14 +313,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                   (i === paragraphs.length - 1 && imageIndex < images.length);
                 if (shouldInsert) {
                   blocks.push(
-                    <figure key={`img-${i}`} className="my-8">
-                        { }
+                    <figure key={`img-${i}`} className="my-8 relative w-full aspect-5/3">
                         <Image
                           src={images[imageIndex]}
                           alt={`${article.title} - image ${imageIndex + 2}`}
-                          width={1200}
-                          height={720}
-                          className="w-full h-auto rounded-sm object-cover"
+                          fill
+                          className="rounded-sm object-cover"
                           sizes="(max-width: 1024px) 100vw, 768px"
                           loading="lazy"
                         />
@@ -335,13 +332,12 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             // Render any remaining images
             while (imageIndex < images.length) {
               blocks.push(
-                <figure key={`extra-img-${imageIndex}`} className="my-8">
+                <figure key={`extra-img-${imageIndex}`} className="my-8 relative w-full aspect-5/3">
                   <Image
                     src={images[imageIndex]}
                     alt={`${article.title} - image ${imageIndex + 2}`}
-                    width={1200}
-                    height={720}
-                    className="w-full h-auto rounded-sm object-cover"
+                    fill
+                    className="rounded-sm object-cover"
                     sizes="(max-width: 1024px) 100vw, 768px"
                     loading="lazy"
                   />

@@ -79,12 +79,14 @@ const geistSans = localFont({
   src: "../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2",
   variable: "--font-geist-sans",
   display: 'swap',
+  preload: false,
 });
 
 const geistMono = localFont({
   src: "../node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2",
   variable: "--font-geist-mono",
   display: 'swap',
+  preload: false,
 });
 
 // Derive safe, correctly-typed metadata values from `seoData`

@@ -123,18 +123,18 @@ export default function CategorySlider({ categories }) {
         {categories.map((category) => (
           <Link
             key={category._id}
-            href={`/category/${category.slug}`}
+            href={`/products?category=${encodeURIComponent(category.name)}`}
             className="snap-start flex gap-2 border border-red-200 rounded-sm hover:shadow-md transition-shadow `flex-shrink-0`"
             style={{ minWidth: "200px", maxWidth: "260px" }}
           >
             {category.thumbnail ? (
-              <div className="w-16 h-16 overflow-hidden bg-gray-100 shrink-0">
+              <div className="w-16 h-16 overflow-hidden bg-gray-100 shrink-0 relative">
                 <Image
-                  width={64}
-                  height={64}
+                  fill
+                  sizes="64px"
                   src={category.thumbnail}
                   alt={category.name}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  className="object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
             ) : (

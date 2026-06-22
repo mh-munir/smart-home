@@ -121,8 +121,8 @@ export function DonutChart({ percentage = 0 }) {
         </defs>
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold text-gray-900">{percentage}%</span>
-        <span className="text-xs text-gray-500">Engagement</span>
+        <span className="text-3xl font-extrabold bg-linear-to-br from-indigo-600 via-blue-500 to-cyan-500 bg-clip-text text-transparent">{percentage}<span className="text-lg">%</span></span>
+        <span className="text-[10px] font-medium uppercase tracking-widest text-gray-400 mt-0.5">Engagement</span>
       </div>
     </div>
   );

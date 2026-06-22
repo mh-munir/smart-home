@@ -147,7 +147,9 @@ export default async function Home() {
                       {allProducts.slice(0, 3).map((product, idx) => (
                         <li key={product._id} className="flex items-start gap-4">
                           {product.image ? (
-                            <Image src={product.image} alt={product.title} width={96} height={64} className="rounded-md object-cover w-24 h-16" />
+                            <div className="w-24 h-16 relative rounded-md overflow-hidden">
+                              <Image src={product.image} alt={product.title} fill sizes="96px" className="object-cover" />
+                            </div>
                           ) : (
                             <div className="w-24 h-16 bg-gray-100 rounded-md flex items-center justify-center text-sm">🛒</div>
                           )}
@@ -169,7 +171,9 @@ export default async function Home() {
                       {allProducts.slice(3, 6).map((p) => (
                         <a key={p._id} href={`/products/${p.slug}`} className="flex items-center gap-4 bg-gray-50 p-2 rounded hover:bg-gray-100">
                           {p.image ? (
-                            <Image src={p.image} alt={p.title} width={80} height={56} className="rounded-sm object-cover w-20 h-14" />
+                            <div className="w-20 h-14 relative rounded-sm overflow-hidden">
+                              <Image src={p.image} alt={p.title} fill sizes="80px" className="object-cover" />
+                            </div>
                           ) : (
                             <div className="w-16 h-10 bg-gray-100 rounded-sm" />
                           )}

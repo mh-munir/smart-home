@@ -181,13 +181,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         const shouldInsert = (i > 0 && i % 3 === 0) || (i === paragraphs.length - 1 && imageIndex < images.length);
         if (shouldInsert) {
           blocks.push(
-            <figure key={`img-${i}`} className="my-8">
+            <figure key={`img-${i}`} className="my-8 relative w-full aspect-5/3">
               <Image
                 src={images[imageIndex]}
                 alt={`${prod.title} - image ${imageIndex + 2}`}
-                width={1200}
-                height={720}
-                className="w-full h-auto rounded-sm object-cover"
+                fill
+                className="rounded-sm object-cover"
                 sizes="(max-width: 1024px) 100vw, 768px"
                 loading="lazy"
               />
@@ -200,13 +199,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
     while (imageIndex < images.length) {
       blocks.push(
-        <figure key={`extra-img-${imageIndex}`} className="my-8">
+        <figure key={`extra-img-${imageIndex}`} className="my-8 relative w-full aspect-5/3">
           <Image
             src={images[imageIndex]}
             alt={`${prod.title} - image ${imageIndex + 2}`}
-            width={1200}
-            height={720}
-            className="w-full h-auto rounded-sm object-cover"
+            fill
+            className="rounded-sm object-cover"
             sizes="(max-width: 1024px) 100vw, 768px"
             loading="lazy"
           />
@@ -248,13 +246,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </div>
 
             {productImages.length > 0 && (
-              <figure className="mb-8 overflow-hidden rounded-lg">
+              <figure className="mb-8 overflow-hidden rounded-lg relative w-full aspect-5/3">
                   <Image
                     src={productImages[0]}
                     alt={prod.title || ""}
-                    width={1200}
-                    height={720}
-                    className="w-full h-auto object-cover rounded-lg"
+                    fill
+                    className="object-cover rounded-lg"
                     priority
                     sizes="(max-width: 1024px) 100vw, 768px"
                   />
@@ -276,10 +273,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                           <Image
                             src={item.image}
                             alt={item.title || ""}
-                            width={800}
-                            height={480}
+                            fill
                             sizes="(max-width: 768px) 100vw, 33vw"
-                            className="object-cover w-full h-full"
+                            className="object-cover"
                           />
                         </div>
                       )}

@@ -10,7 +10,7 @@ export default function ServiceCategories({ categoriesWithProducts }) {
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
+    <section className="max-w-7xl mx-auto px-4 lg:px-4 pt-12 bg-white">
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="h-1 w-8 bg-teal-500 rounded-full" />

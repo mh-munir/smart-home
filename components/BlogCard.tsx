@@ -23,14 +23,13 @@ function BlogCard({ article }: { article: BlogArticle }) {
       className="group block bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition"
     >
       <div className="flex flex-col h-full">
-        <div className="w-full h-48 bg-gray-100 overflow-hidden">
+        <div className="w-full h-48 bg-gray-100 overflow-hidden relative">
           <Image
             src={image}
             alt={article.title || ""}
-            width={1200}
-            height={720}
+            fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="h-full w-full object-cover"
+            className="object-cover"
             loading="lazy"
           />
         </div>

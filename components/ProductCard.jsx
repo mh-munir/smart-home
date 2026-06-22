@@ -69,6 +69,16 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
             ) : (
               <div className="w-full h-full flex items-center justify-center text-4xl">🛒</div>
             )}
+
+            {/* Offer Badge */}
+            {product?.offer && (
+              <div className="absolute top-0 right-0 z-10 overflow-hidden rounded-bl-xl">
+<div className="bg-linear-to-br from-red-500 via-red-600 to-rose-700 text-white px-3 py-1.5 shadow-lg backdrop-blur-sm">
+                  <span className="text-[10px] font-medium uppercase tracking-wider opacity-90 block leading-tight">Deal</span>
+                  <span className="text-sm font-extrabold leading-tight block drop-shadow-sm">{product.offer}</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Content */}
