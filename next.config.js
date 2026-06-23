@@ -1,10 +1,10 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
 
 const isProd = process.env.NODE_ENV === "production";
 
 // Static baseline CSP for fallback. The proxy injects a per-request nonce
 // for inline scripts/styles — proxy's CSP will override this header at runtime.
-  const baseCsp = [
+const baseCsp = [
   "default-src 'self'",
   // Rely on per-request nonces + strict-dynamic in browsers that support it.
   "script-src 'self' 'strict-dynamic' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com",
@@ -45,7 +45,7 @@ const securityHeaders = [
   { key: "Content-Security-Policy", value: baseCsp },
 ];
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   // High-traffic performance optimization
   compress: true,
   generateEtags: true,

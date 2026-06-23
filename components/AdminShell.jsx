@@ -28,25 +28,48 @@ export default function AdminShell({ children }) {
       .catch(() => {});
   }, []);
 
-  // Fetch notifications
-  const fetchNotifications = () => {
-    fetch("/api/admin/notifications", { credentials: "same-origin" })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data?.notifications) {
-          setNotifications(data.notifications);
-          setUnreadCount(data.unreadCount || 0);
-        }
-      })
-      .catch(() => {});
-  };
-
+  // Fetch notifications – stop polling on 401 (not logged in)
   useEffect(() => {
-    fetchNotifications();
-    // Poll for new notifications every 30 seconds
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    // Skip on the login page – there's no session to fetch notifications for
+    if (isLoginPage) return;
+
+    const controller = new AbortController();
+    let pollInterval = null;
+    let stopped = false;
+
+    const doFetch = () => {
+      if (stopped) return;
+      fetch("/api/admin/notifications", {
+        credentials: "same-origin",
+        signal: controller.signal,
+      })
+        .then((r) => {
+          if (r.status === 401) {
+            // Not authenticated – stop polling entirely
+            stopped = true;
+            if (pollInterval) clearInterval(pollInterval);
+            return null;
+          }
+          return r.json();
+        })
+        .then((data) => {
+          if (data?.notifications) {
+            setNotifications(data.notifications);
+            setUnreadCount(data.unreadCount || 0);
+          }
+        })
+        .catch(() => {});
+    };
+
+    doFetch();
+    pollInterval = setInterval(doFetch, 30000);
+
+    return () => {
+      stopped = true;
+      if (pollInterval) clearInterval(pollInterval);
+      controller.abort();
+    };
+  }, [isLoginPage]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
