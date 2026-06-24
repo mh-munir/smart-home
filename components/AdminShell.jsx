@@ -61,11 +61,25 @@ export default function AdminShell({ children }) {
     };
 
     doFetch();
+
+    // Use Visibility API to avoid polling when tab is hidden (reduces CPU/network waste)
+    const handleVisibility = () => {
+      if (document.hidden) {
+        if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+      } else {
+        if (!stopped && !pollInterval) {
+          doFetch();
+          pollInterval = setInterval(doFetch, 30000);
+        }
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
     pollInterval = setInterval(doFetch, 30000);
 
     return () => {
       stopped = true;
       if (pollInterval) clearInterval(pollInterval);
+      document.removeEventListener("visibilitychange", handleVisibility);
       controller.abort();
     };
   }, [isLoginPage]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, memo } from "react";
+import { useState, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -48,35 +48,13 @@ const CloseIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
-function Navbar() {
+function Navbar({ settings: serverSettings }) {
   const [open, setOpen] = useState(false);
 
-  
-
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState(serverSettings || {
     subtitle: "Make your home smarter",
     logo: "/logo.png",
   });
-
-  useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const res = await fetch("/api/settings");
-
-        if (!res.ok) return;
-
-        const ct = res.headers.get("content-type") || "";
-        if (!ct.includes("application/json")) return;
-
-        const data = await res.json();
-        if (data) setSettings(data);
-      } catch {
-        // Settings load failed silently
-      }
-    };
-
-    loadSettings();
-  }, []);
 
   
 
@@ -91,8 +69,7 @@ function Navbar() {
               alt="Logo"
               width={160}
               height={40}
-              preload
-              loading="eager"
+              loading="lazy"
               placeholder="blur"
               blurDataURL={BLUR_DATA_URL}
               className="w-auto h-auto object-contain"

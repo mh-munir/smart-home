@@ -3,6 +3,9 @@ import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
 import Link from "next/link";
 import SchemaMarkup from "@/components/SchemaMarkup";
+import HomepageClientWidgets from "@/components/HomepageClientWidgets";
+import HeroSliderWrapper from "@/components/HeroSliderWrapper";
+import HeroSliderServer from "@/components/HeroSliderServer";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
 import { getCategoriesWithProducts } from "@/lib/categories";
@@ -23,38 +26,10 @@ const ServiceCategories = dynamic(() => import("@/components/ServiceCategories")
   ),
 });
 
-const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
-  ssr: true,
-  loading: () => (
-    <section className="relative overflow-hidden bg-gray-950 text-white min-h-105 flex items-center">
-      <div className="max-w-7xl mx-auto px-4 py-20 md:py-28">
-        <div className="h-10 w-64 bg-white/10 rounded animate-pulse" />
-        <div className="h-16 w-96 bg-white/10 rounded mt-6 animate-pulse" />
-        <div className="h-6 w-80 bg-white/10 rounded mt-4 animate-pulse" />
-      </div>
-    </section>
-  ),
-});
-
 // Dynamic import for Newsletter with SSR (required in server components)
 const TrustSection = dynamic(() => import("@/components/TrustSection"), {
   ssr: true,
   loading: () => null,
-});
-
-const StickyAffiliateCTA = dynamic(() => import("@/components/StickyAffiliateCTA"), {
-  ssr: true,
-  loading: () => null,
-});
-
-const NewsletterClientWrapper = dynamic(() => import("@/components/NewsletterClientWrapper"), {
-  ssr: true,
-  loading: () => (
-    <div className="flex flex-col sm:flex-row gap-3">
-      <div className="flex-1 h-12 bg-gray-200 rounded animate-pulse" />
-      <div className="w-32 h-12 bg-gray-200 rounded animate-pulse" />
-    </div>
-  ),
 });
 
 export const metadata = {
@@ -111,8 +86,13 @@ export default async function Home() {
         type="WebSite"
       />
       <main className="min-h-screen bg-white">
-        {/* Hero Section */}
-        <HeroSlider slides={heroSlides} />
+        {/* Hero Section — server shell for LCP + client overlay for interactivity */}
+        <div className="relative overflow-hidden">
+          <HeroSliderServer slides={heroSlides} />
+          <div className="absolute inset-0 z-30">
+            <HeroSliderWrapper slides={heroSlides} />
+          </div>
+        </div>
 
         {/* Dynamic Service Category Sections — auto-generated from database */}
         <ServiceCategories categoriesWithProducts={categoriesWithProducts} />
@@ -201,25 +181,11 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Newsletter Section */}
-        <section className="py-16 bg-gray-50 border-gray-200 w-full">
-        <div className="max-w-5xl mx-auto px-4 lg:px-8 text-center">
-            <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3">
-              Get Smart Home Tips
-            </h3>
-            <p className="text-gray-700 mb-6">
-              Subscribe to get the latest smart home reviews and buying guides delivered to your inbox.
-            </p>
-            {/* Newsletter loaded dynamically - below the fold */}
-            <NewsletterClientWrapper source="homepage" />
-          </div>
-        </section>
+        {/* Below-the-fold homepage widgets */}
+        <HomepageClientWidgets />
 
         {/* Trust Section */}
         <TrustSection />
-
-        {/* Sticky Affiliate CTA */}
-        <StickyAffiliateCTA />
 
         {/* About Section */}
         <section className="max-w-7xl mx-auto px-4 lg:px-4 py-16 bg-white">

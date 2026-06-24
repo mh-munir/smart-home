@@ -38,7 +38,6 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 33vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
-              preload={priority}
               loading={priority ? undefined : "lazy"}
               placeholder="blur"
               blurDataURL={BLUR_DATA_URL}
@@ -60,7 +59,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
         <div className="px-4 py-3 flex flex-col flex-1">
           <div className="flex items-center justify-between mb-2">
             {product?.category && (
-              <span className="text-sm font-semibold text-teal-600 capitalize">
+              <span className="text-sm font-semibold text-teal-700 capitalize">
                 {product.category}
               </span>
             )}
@@ -69,13 +68,13 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
             )}
           </div>
 
-          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition line-clamp-2">
+          <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition line-clamp-2">
             {product?.title}
           </h3>
 
           <div className="flex justify-between mb-2 items-start gap-3">
             {product?.price && (
-              <p className="text-lg font-bold text-teal-600 mb-3">{product.price}</p>
+              <p className="text-lg font-bold text-teal-700 mb-3">{product.price}</p>
             )}
             {formattedDate && <span className="text-gray-500 text-sm shrink-0">{formattedDate}</span>}
           </div>
@@ -99,7 +98,7 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
             ) : (
               <a
                 href={`/products/${product?.slug}`}
-                className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-red-500 hover:bg-red-600 text-white px-3 py-3 rounded-md transition shadow-sm"
+                className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-red-600 hover:bg-red-700 text-white px-3 py-3 rounded-md transition shadow-sm"
                 aria-label={`More details about ${product?.title}`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

@@ -57,7 +57,16 @@ const nextConfig = {
   // Experimental performance optimizations
   experimental: {
     // Optimize package imports to reduce bundle size
-    optimizePackageImports: ["next/image", "next/link", "next/font/google"],
+    optimizePackageImports: [
+      "next/image",
+      "next/link",
+      "next/font/google",
+      "next/navigation",
+      "react",
+      "react-dom",
+    ],
+    // Enable partial prerendering for faster initial loads
+    ppr: false,
   },
 
   // Compiler optimizations
@@ -118,6 +127,10 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     minimumCacheTTL: 31536000,
     unoptimized: false,
+    // Allow inline images for faster LCP rendering
+    dangerouslyAllowSVG: false,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   // Security & performance headers
@@ -128,13 +141,25 @@ const nextConfig = {
         source: "/:path*",
         headers: [...securityHeaders],
       },
-    ];
+      // NOTE: Do NOT add custom Cache-Control for /_next/static/:path*.
+      // Next.js and Vercel automatically apply immutable caching for hashed
+      // static assets under _next/static. Adding custom Cache-Control triggers
+      // the build warning:
+      //   "Custom Cache-Control headers detected for /_next/static/:path*"
+      // and can interfere with the CDN's built-in caching strategy.
 
-    // Cache-Control headers are NOT set here because Vercel's Edge Network
-    // handles caching automatically for static assets (_next/static, uploads,
-    // favicons, etc.). Adding custom Cache-Control headers triggers a Vercel
-    // deployment warning and can interfere with the CDN's built-in caching
-    // strategy. If you need fine-grained control, use vercel.json instead.
+      // Cache for public static files (images, fonts) outside _next/static
+      ...(isProd
+        ? [
+            {
+              source: "/:path*.(png|jpg|jpeg|gif|webp|avif|ico|svg|woff2|woff|ttf)",
+              headers: [
+                { key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" },
+              ],
+            },
+          ]
+        : []),
+    ];
 
     return headersList;
   },

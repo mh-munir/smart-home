@@ -10,6 +10,14 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Fix WCAG AA color-contrast failures:
+     teal-600 #009689 → #00796b  (3.66 → 5.7:1 on white)
+     red-500  #fb2c36 → #dc2626  (3.8  → 4.6:1 on white)
+     red-600  #dc2626 → #b91c1c  (hover states stay distinct) */
+  --color-teal-600: #00796b;
+  --color-red-500: #dc2626;
+  --color-red-600: #b91c1c;
 }
 
 /* Dark mode support */

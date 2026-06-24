@@ -35,7 +35,15 @@ function reportWebVitals(metric: WebVitalsMetric) {
 
 export default function WebVitals() {
   useReportWebVitals((metric) => {
-    reportWebVitals(metric);
+    // Only send to analytics in production
+    if (typeof window === "undefined" || process.env.NODE_ENV !== "production") return;
+
+    // Post to a non-blocking endpoint or analytics only after idle
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => reportWebVitals(metric), { timeout: 2000 });
+    } else {
+      setTimeout(() => reportWebVitals(metric), 1500);
+    }
   });
   return null;
 }

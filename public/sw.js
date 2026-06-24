@@ -60,15 +60,31 @@ self.addEventListener("fetch", (event) => {
       }
 
       // Cache-first for static assets
+      // For Next.js runtime chunks we prefer network-first to avoid serving stale
+      // JS/CSS bundles from an old service worker cache which can cause module
+      // mismatches. Other large static assets (uploads) remain cache-first.
+      if (request.url.includes("/_next/static/")) {
+        return fetch(request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              const responseClone = networkResponse.clone();
+              caches.open(CACHE_NAME).then((cache) => {
+                cache.put(request, responseClone);
+              });
+            }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse);
+
+      }
+
       if (
-        request.url.includes("/_next/static/") ||
         request.url.includes("/uploads/") ||
-        request.url.endsWith(".js") ||
-        request.url.endsWith(".css") ||
         request.url.endsWith(".png") ||
         request.url.endsWith(".jpg") ||
         request.url.endsWith(".webp") ||
-        request.url.endsWith(".avif")
+        request.url.endsWith(".avif") ||
+        request.url.endsWith(".css")
       ) {
         return cachedResponse || fetch(request).then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {

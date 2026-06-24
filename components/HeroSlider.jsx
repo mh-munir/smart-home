@@ -28,10 +28,10 @@ function HeroSlider({ slides }) {
     return (
       <section className="relative overflow-hidden bg-linear-to-r from-orange-500 to-red-600 text-white">
         <div className="max-w-7xl mx-auto px-4 py-20 md:py-28 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.1] text-balance mb-4">
             Smart Home Gadgets Guide
           </h1>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto text-orange-50">
+          <p className="text-lg md:text-xl max-w-2xl mx-auto text-orange-50/90 font-light leading-relaxed tracking-wide">
             Find the best smart home products with expert reviews and buying
             guides.
           </p>
@@ -45,7 +45,7 @@ function HeroSlider({ slides }) {
   const isFallbackLogo = src === LOCAL_FALLBACK;
 
   return (
-    <section className="relative overflow-hidden bg-gray-950 text-white min-h-105 md:min-h-130">
+    <section className="relative overflow-hidden bg-gray-950 text-white h-full min-h-105 md:min-h-130">
       {/* Single background image — only the active slide is in the DOM */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black/45 z-10" />
@@ -55,8 +55,7 @@ function HeroSlider({ slides }) {
           fill
           sizes="100vw"
           className={isFallbackLogo ? "object-contain" : "object-cover"}
-          preload
-          fetchPriority="high"
+          priority
           onError={() => handleSlideError(activeSlide._id)}
           placeholder="blur"
           blurDataURL={BLUR_DATA_URL}
@@ -65,13 +64,10 @@ function HeroSlider({ slides }) {
 
       <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 min-h-105 md:min-h-130 flex items-center">
         <div className="max-w-3xl">
-          <p className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-1 text-sm uppercase tracking-[0.24em] text-orange-100">
-            Featured Smart Home Picks
-          </p>
-          <h1 className="mt-6 text-4xl font-bold leading-tight md:text-6xl">
+          <h1 className="mt-6 text-4xl font-medium tracking-tight leading-14 md:text-5xl max-w-xl">
             {activeSlide.title}
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-gray-100 md:text-xl">
+          <p className="mt-5 max-w-2xl text-sm font-light leading-8 tracking-wide text-white/90 drop-shadow-sm md:text-xl lg:text-2xl">
             {activeSlide.description}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">

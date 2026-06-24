@@ -1,17 +1,30 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import ClientScripts from "@/components/ClientScripts";
 import { headers } from "next/headers";
 import { generateHrefLangLinks } from "@/lib/multi-country-seo";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import fs from "fs";
 import path from "path";
-import { ConditionalNavbar, ConditionalFooter } from "@/components/ConditionalNavFooter";
-import { CompareProvider } from "@/components/CompareProvider";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import PublicLayoutShell from "@/components/PublicLayoutShell";
+import DeferredProviders from "@/components/DeferredProviders";
 import DeferredScripts from "@/components/DeferredScripts";
 import WebVitals from "@/components/WebVitals";
+
+// Read site settings once at module level for server-side rendering
+let navSettings = { subtitle: "Make your home smarter", logo: "/logo.png" };
+try {
+  const settingsPath = path.join(process.cwd(), "data", "site-settings.json");
+  if (fs.existsSync(settingsPath)) {
+    const raw = fs.readFileSync(settingsPath, "utf8");
+    const settings = JSON.parse(raw || "{}");
+    if (settings?.logo || settings?.subtitle) {
+      navSettings = { subtitle: settings.subtitle || "Make your home smarter", logo: settings.logo || "/logo.png" };
+    }
+  }
+} catch {
+  // ignore
+}
 
 type ExtraMetaTag = { name?: string; content?: string; property?: string; httpEquiv?: string };
 
@@ -93,6 +106,8 @@ const geistMono = localFont({
   preload: false,
 });
 
+// Client-only widgets are imported directly; they are client components.
+
 // Derive safe, correctly-typed metadata values from `seoData`
 const _baseUrl = typeof seoData.canonicalUrl === "string" && seoData.canonicalUrl.trim() ? seoData.canonicalUrl : SITE_URL;
 const _metaTitle = typeof seoData.metaTitle === "string" && seoData.metaTitle.trim() ? seoData.metaTitle : siteTitle || "Home Smart Products - Best Smart Home Devices & Reviews 2026 | SmartHome Affiliate";
@@ -151,7 +166,13 @@ const _structured = seoData.structuredData && typeof seoData.structuredData === 
 const _extraMeta = Array.isArray(seoData.extraMetaTags) ? seoData.extraMetaTags.filter(Boolean) as ExtraMetaTag[] : undefined;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(String(_baseUrl)),
+  metadataBase: (() => {
+    try {
+      return new URL(String(_baseUrl));
+    } catch {
+      return new URL('https://smart-home-products.vercel.app');
+    }
+  })(),
   title: _metaTitle,
   description: _metaDescription,
   keywords: _keywords,
@@ -265,21 +286,15 @@ export default async function RootLayout({
         })}
       </head>
       <body className="min-h-full flex flex-col">
-        <ClientScripts />
-        <WebVitals />
-        <ThemeProvider>
-        <CompareProvider>
+        {/* Deferred providers — avoids blocking hydration for theme/compare */}
+        <DeferredProviders>
             <a href="#main-content" className="sr-only focus:not-sr-only">
               Skip to content
             </a>
-            <ConditionalNavbar/>
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
-            <ConditionalFooter/>
+            <PublicLayoutShell navSettings={navSettings}>{children}</PublicLayoutShell>
             <DeferredScripts />
-          </CompareProvider>
-        </ThemeProvider>
+            <WebVitals />
+        </DeferredProviders>
       </body>
     </html>
   );
