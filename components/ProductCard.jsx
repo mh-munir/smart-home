@@ -1,18 +1,15 @@
 "use client";
 
-import { useMemo, useState, useCallback, memo } from 'react';
+import { useMemo, useCallback, memo } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import CompareButton from './CompareButton';
 
 function ProductCard({ product, showBuyButton = true, priority = false }) {
-  const [showAffiliateMenu, setShowAffiliateMenu] = useState(false);
-  const router = useRouter();
-
   const formattedDate = useMemo(() => {
     if (!product?.createdAt) return null;
     return new Intl.DateTimeFormat('en-US', { timeZone: 'UTC' }).format(new Date(product.createdAt));
   }, [product?.createdAt]);
-  // Memoized active affiliate links
+
   const affiliateLinks = useMemo(() => {
     const links = [];
     if (product?.affiliateLinks && typeof product?.affiliateLinks === 'object') {
@@ -30,7 +27,6 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
   }, [product?.affiliateLinks]);
 
   const mainLink = affiliateLinks.length > 0 ? affiliateLinks[0] : null;
-  const otherLinks = affiliateLinks.slice(1);
 
   const handleAffiliateClick = useCallback(() => {
     if (typeof window !== 'undefined' && product?._id && mainLink) {
@@ -46,16 +42,12 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
     }
   }, [product?._id, mainLink]);
 
-  const handleMoreDetails = useCallback(() => {
-    if (product?.slug) router.push(`/products/${product.slug}`);
-  }, [router, product?.slug]);
-
   return (
     <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden transition-transform duration-300 transform-gpu hover:-translate-y-1 hover:shadow-lg h-full flex flex-col">
       <div className="flex-1 flex flex-col pb-4">
-        
           {/* Image Header */}
           <div className="relative w-full h-40 bg-linear-to-br from-teal-50 to-teal-100 overflow-hidden">
+            <CompareButton product={product} />
             {product?.image ? (
               <Image
                 src={product.image}
@@ -73,7 +65,7 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
             {/* Offer Badge */}
             {product?.offer && (
               <div className="absolute top-0 right-0 z-10 overflow-hidden rounded-bl-xl">
-<div className="bg-linear-to-br from-red-500 via-red-600 to-rose-700 text-white px-3 py-1.5 shadow-lg backdrop-blur-sm">
+                <div className="bg-linear-to-br from-red-500 via-red-600 to-rose-700 text-white px-3 py-1.5 shadow-lg backdrop-blur-sm">
                   <span className="text-[10px] font-medium uppercase tracking-wider opacity-90 block leading-tight">Deal</span>
                   <span className="text-sm font-extrabold leading-tight block drop-shadow-sm">{product.offer}</span>
                 </div>
@@ -101,11 +93,9 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
             </h3>
 
             <div className="flex justify-between mb-2 items-start">
-              {/* Price and Description */}
               {product.price && (
                 <p className="text-lg font-bold text-teal-600 mb-3">{product.price}</p>
               )}
-
               {formattedDate && <span className="text-gray-500">{formattedDate}</span>}
             </div>
 
@@ -115,7 +105,6 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
               </p>
             )}
           </div>
-        
 
         {/* Footer - single CTA (affiliate buy or details) */}
         <div className="px-4">
@@ -134,9 +123,8 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
               Buy on {mainLink.name}
             </a>
           ) : (
-            <button
-              type="button"
-              onClick={handleMoreDetails}
+            <a
+              href={`/products/${product.slug}`}
               className="flex w-full items-center gap-2 text-md font-semibold justify-center bg-red-500 hover:bg-red-600 text-white px-3 py-3 rounded-md transition shadow-sm"
               aria-label={`More details about ${product.title}`}
             >
@@ -144,7 +132,7 @@ function ProductCard({ product, showBuyButton = true, priority = false }) {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
               More Details
-            </button>
+            </a>
           )}
         </div>
       </div>

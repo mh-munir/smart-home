@@ -8,6 +8,9 @@ import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import fs from "fs";
 import path from "path";
 import { ConditionalNavbar, ConditionalFooter } from "@/components/ConditionalNavFooter";
+import { CompareProvider } from "@/components/CompareProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import DeferredScripts from "@/components/DeferredScripts";
 
 type ExtraMetaTag = { name?: string; content?: string; property?: string; httpEquiv?: string };
 
@@ -215,15 +218,13 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Preconnect to critical third-party origins for faster resource loading */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        {/* DNS prefetch for non-critical third-party origins */}
+        {/* DNS prefetch for third-party origins — loaded only in production */}
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="icon" href={faviconPath} />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0d9488" />
         {seoData.applicationName && <meta name="application-name" content={seoData.applicationName} />}
         {seoData.msTileColor && <meta name="msapplication-TileColor" content={seoData.msTileColor} />}
         {seoData.appleMobileWebAppCapable && <meta name="apple-mobile-web-app-capable" content={seoData.appleMobileWebAppCapable} />}
@@ -264,14 +265,19 @@ export default async function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <ClientScripts />
-        <a href="#main-content" className="sr-only focus:not-sr-only">
-          Skip to content
-        </a>
-        <ConditionalNavbar/>
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <ConditionalFooter/>
+        <ThemeProvider>
+        <CompareProvider>
+            <a href="#main-content" className="sr-only focus:not-sr-only">
+              Skip to content
+            </a>
+            <ConditionalNavbar/>
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+            <ConditionalFooter/>
+            <DeferredScripts />
+          </CompareProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

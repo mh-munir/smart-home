@@ -93,14 +93,16 @@ export default async function AdminDashboard() {
         ]);
 
       // ── Product aggregates (all-time) ──
-      const [productAgg = {}] = await Product.aggregate([
+      const [rawProductAgg] = await Product.aggregate([
         { $group: { _id: null, clicksSum: { $sum: "$clicks" }, conversionsSum: { $sum: "$conversions" }, viewsSum: { $sum: "$views" } } },
       ]);
+      const productAgg = rawProductAgg ? { clicksSum: Number(rawProductAgg.clicksSum) || 0, conversionsSum: Number(rawProductAgg.conversionsSum) || 0, viewsSum: Number(rawProductAgg.viewsSum) || 0 } : { clicksSum: 0, conversionsSum: 0, viewsSum: 0 };
 
       // ── Blog aggregates (all-time) ──
-      const [blogAgg = {}] = await Blog.aggregate([
+      const [rawBlogAgg] = await Blog.aggregate([
         { $group: { _id: null, clicksSum: { $sum: "$clicks" }, viewsSum: { $sum: "$views" } } },
       ]);
+      const blogAgg = rawBlogAgg ? { clicksSum: Number(rawBlogAgg.clicksSum) || 0, viewsSum: Number(rawBlogAgg.viewsSum) || 0 } : { clicksSum: 0, viewsSum: 0 };
 
       const totalClicks = (productAgg.clicksSum || 0) + (blogAgg.clicksSum || 0);
       const totalConversions = productAgg.conversionsSum || 0;
@@ -158,18 +160,18 @@ export default async function AdminDashboard() {
         }));
 
       // ── Recent products (top by clicks) ──
-      recentProducts = await Product.find()
+      recentProducts = (await Product.find()
         .sort({ clicks: -1 })
         .limit(5)
         .select("title clicks conversions views category createdAt")
-        .lean();
+        .lean()).map((p) => ({ ...p, _id: String(p._id) }));
 
       // ── Recent blogs (top by views) ──
-      recentBlogs = await Blog.find()
+      recentBlogs = (await Blog.find()
         .sort({ views: -1 })
         .limit(5)
         .select("title views clicks author createdAt")
-        .lean();
+        .lean()).map((b) => ({ ...b, _id: String(b._id) }));
     } catch (err) {
       console.error("Admin dashboard query failed:", err);
     }

@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import ProductForm from '../../../../components/admin/AddForms/ProductForm';
-import BlogForm from '../../../../components/admin/AddForms/BlogForm';
-import GuideForm from '../../../../components/admin/AddForms/GuideForm';
+import ProductForm from '@/components/admin/AddForms/ProductForm';
+import BlogForm from '@/components/admin/AddForms/BlogForm';
+import GuideForm from '@/components/admin/AddForms/GuideForm';
 
 export default function AdminAddPage() {
   const search = useSearchParams();

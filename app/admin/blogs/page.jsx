@@ -1,12 +1,20 @@
 export const dynamic = "force-dynamic";
 
-import { connectDB } from "@/lib/db";
+import { connectDB, hasMongoDBConfig } from "@/lib/db";
 import Blog from "@/models/Blog";
 import Link from "next/link";
 
 export default async function BlogsPage() {
-  await connectDB();
-  const blogs = await Blog.find({}).sort({ date: -1 }).lean().exec();
+  let blogs = [];
+
+  if (hasMongoDBConfig()) {
+    try {
+      await connectDB();
+      blogs = (await Blog.find({}).sort({ date: -1 }).lean().exec()).map((b) => ({ ...b, _id: String(b._id) }));
+    } catch (err) {
+      console.error("Blogs page query failed:", err);
+    }
+  }
 
   return (
     <div className="p-8 min-h-screen">

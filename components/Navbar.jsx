@@ -3,6 +3,9 @@
 import { useState, useEffect, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false });
 
 const links = [
   { href: "/", label: "Home" },
@@ -107,7 +110,7 @@ function Navbar() {
           </button>
 
           {/* Desktop Menu */}
-          <nav className="hidden md:flex items-center gap-8 shrink-0">
+          <nav className="hidden md:flex items-center gap-6 shrink-0" aria-label="Main navigation">
             {links.map((link) => (
               <Link
                 key={link.href}
@@ -117,6 +120,17 @@ function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <Link
+              href="/search"
+              className="text-gray-600 hover:text-teal-600 font-medium transition-colors text-lg"
+              aria-label="Search products and articles"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </Link>
+            <ThemeToggle />
           </nav>
         </div>
       </div>

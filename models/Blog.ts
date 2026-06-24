@@ -84,4 +84,11 @@ const BlogSchema = new Schema<IBlog>(
   { timestamps: true }
 );
 
+// Indexes for efficient queries
+BlogSchema.index({ slug: 1 });
+BlogSchema.index({ category: 1 });
+BlogSchema.index({ createdAt: -1 });
+BlogSchema.index({ published: 1, createdAt: -1 });
+BlogSchema.index({ title: "text", description: "text" });
+
 export default models.Blog || model<IBlog>("Blog", BlogSchema);

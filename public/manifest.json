@@ -1,0 +1,48 @@
+{
+  "name": "SmartHome Affiliate - Best Smart Home Products & Reviews",
+  "short_name": "SmartHome",
+  "description": "Find the best smart home products with expert reviews, buying guides, and affiliate recommendations.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0d9488",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["shopping", "lifestyle", "technology"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Products",
+      "short_name": "Products",
+      "url": "/products",
+      "description": "Browse all smart home products"
+    },
+    {
+      "name": "Best Deals",
+      "short_name": "Deals",
+      "url": "/best-deals",
+      "description": "View the best deals"
+    },
+    {
+      "name": "Blog",
+      "short_name": "Blog",
+      "url": "/blog",
+      "description": "Read smart home guides"
+    }
+  ]
+}

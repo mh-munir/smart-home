@@ -34,50 +34,50 @@ export default function CategorySlider({ categories }) {
     };
   }, [checkScroll, categories]);
 
-  const scroll = (direction) => {
+  const scroll = useCallback((direction) => {
     const el = scrollRef.current;
     if (!el) return;
     const cardWidth = el.querySelector(":scope > a, :scope > div")?.offsetWidth || 200;
     const gap = 16;
     el.scrollBy({ left: direction * (cardWidth + gap) * 2, behavior: "smooth" });
-  };
+  }, []);
 
-  // Mouse drag scrolling
-  const onMouseDown = (e) => {
+  const onMouseDown = useCallback((e) => {
     const el = scrollRef.current;
     if (!el) return;
     setIsDragging(true);
     dragState.current = { startX: e.pageX - el.offsetLeft, scrollLeft: el.scrollLeft };
     el.style.cursor = "grabbing";
     el.style.userSelect = "none";
-  };
+  }, []);
 
-  const onMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
+  const onMouseMove = useCallback((e) => {
     const el = scrollRef.current;
     if (!el) return;
+    e.preventDefault();
     const x = e.pageX - el.offsetLeft;
     el.scrollLeft = dragState.current.scrollLeft - (x - dragState.current.startX);
-  };
+  }, []);
 
-  const onMouseUp = () => {
+  const onMouseUp = useCallback(() => {
     setIsDragging(false);
     const el = scrollRef.current;
     if (el) {
       el.style.cursor = "grab";
       el.style.userSelect = "";
     }
-  };
+  }, []);
 
+  // Only attach document-level listeners while dragging
   useEffect(() => {
+    if (!isDragging) return;
     document.addEventListener("mousemove", onMouseMove);
     document.addEventListener("mouseup", onMouseUp);
     return () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseUp);
     };
-  });
+  }, [isDragging, onMouseMove, onMouseUp]);
 
   if (!categories || categories.length === 0) return null;
 
@@ -124,7 +124,7 @@ export default function CategorySlider({ categories }) {
           <Link
             key={category._id}
             href={`/products?category=${encodeURIComponent(category.name)}`}
-            className="snap-start flex gap-2 border border-red-200 rounded-sm hover:shadow-md transition-shadow `flex-shrink-0`"
+            className="snap-start flex gap-2 border border-red-200 rounded-sm hover:shadow-md transition-shadow shrink-0"
             style={{ minWidth: "200px", maxWidth: "260px" }}
           >
             {category.thumbnail ? (
@@ -134,11 +134,12 @@ export default function CategorySlider({ categories }) {
                   sizes="64px"
                   src={category.thumbnail}
                   alt={category.name}
+                  loading="lazy"
                   className="object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>
             ) : (
-              <div className="w-16 h-16 `bg-gradient-to-br` from-teal-50 to-teal-100 flex items-center justify-center shrink-0">
+              <div className="w-16 h-16 bg-linear-to-br from-teal-50 to-teal-100 flex items-center justify-center shrink-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-8 w-8 text-teal-300"

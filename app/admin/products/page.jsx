@@ -1,12 +1,20 @@
 export const dynamic = "force-dynamic";
 
-import { connectDB } from "@/lib/db";
+import { connectDB, hasMongoDBConfig } from "@/lib/db";
 import Product from "@/models/Product";
 import Link from "next/link";
 
 export default async function ProductsPage() {
-  await connectDB();
-  const products = await Product.find({}).sort({ createdAt: -1 }).lean().exec();
+  let products = [];
+
+  if (hasMongoDBConfig()) {
+    try {
+      await connectDB();
+      products = (await Product.find({}).sort({ createdAt: -1 }).lean().exec()).map((p) => ({ ...p, _id: String(p._id) }));
+    } catch (err) {
+      console.error("Products page query failed:", err);
+    }
+  }
 
   return (
     <div className="p-8 min-h-screen">

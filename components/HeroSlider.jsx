@@ -40,53 +40,44 @@ function HeroSlider({ slides, categories }) {
     );
   }
 
+  const activeSlide = slides[activeIndex];
+  const src = brokenMap[activeSlide._id] ? LOCAL_FALLBACK : activeSlide.image;
+  const isFallbackLogo = src === LOCAL_FALLBACK;
+
   return (
-    <section className="relative overflow-hidden bg-gray-950 text-white">
-      <div className="absolute inset-0 bg-black/45 z-10" />
+    <section className="relative overflow-hidden bg-gray-950 text-white min-h-105 md:min-h-130">
+      {/* Single background image — only the active slide is in the DOM */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-black/45 z-10" />
+        <Image
+          src={src}
+          alt={activeSlide.title}
+          fill
+          sizes="100vw"
+          className={isFallbackLogo ? "object-contain" : "object-cover"}
+          priority
+          fetchPriority="high"
+          onError={() => handleSlideError(activeSlide._id)}
+        />
+      </div>
 
-      {slides.map((slide, index) => {
-        const src = brokenMap[slide._id] ? LOCAL_FALLBACK : slide.image;
-        const isFallbackLogo = src === LOCAL_FALLBACK;
-
-        return (
-          <div
-            key={slide._id}
-            className={`absolute inset-0 transition-opacity duration-700 ${
-              index === activeIndex ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <Image
-              src={src}
-              alt={slide.title}
-              fill
-              sizes="100vw"
-              className={isFallbackLogo ? "object-contain" : "object-cover"}
-              priority={index === 0}
-              loading={index === 0 ? "eager" : "lazy"}
-              onError={() => handleSlideError(slide._id)}
-            />
-          </div>
-        );
-      })}
-
-      <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 min-h-105 flex items-center">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 py-20 md:py-28 min-h-105 md:min-h-130 flex items-center">
         <div className="max-w-3xl">
           <p className="inline-flex items-center rounded-full border border-white/30 bg-white/10 px-4 py-1 text-sm uppercase tracking-[0.24em] text-orange-100">
             Featured Smart Home Picks
           </p>
           <h1 className="mt-6 text-4xl font-bold leading-tight md:text-6xl">
-            {slides[activeIndex].title}
+            {activeSlide.title}
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-8 text-gray-100 md:text-xl">
-            {slides[activeIndex].description}
+            {activeSlide.description}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
-              href={slides[activeIndex].ctaLink || "/blog"}
+              href={activeSlide.ctaLink || "/blog"}
               className="inline-flex items-center rounded-full bg-red-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-red-600">
-              {slides[activeIndex].ctaText || "Explore Products"}
+              {activeSlide.ctaText || "Explore Products"}
             </Link>
-            {/* Admin link removed: Manage Slider */}
           </div>
         </div>
       </div>

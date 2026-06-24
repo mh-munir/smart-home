@@ -1,12 +1,20 @@
 import Link from 'next/link';
-import { connectDB } from '@/lib/db';
+import { connectDB, hasMongoDBConfig } from '@/lib/db';
 import Guide from '@/models/Guide';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminGuidesPage() {
-  await connectDB();
-  const guides = await Guide.find({}).sort({ createdAt: -1 }).lean().exec();
+  let guides = [];
+
+  if (hasMongoDBConfig()) {
+    try {
+      await connectDB();
+      guides = (await Guide.find({}).sort({ createdAt: -1 }).lean().exec()).map((g) => ({ ...g, _id: String(g._id) }));
+    } catch (err) {
+      console.error("Guides page query failed:", err);
+    }
+  }
 
   return (
     <div className="p-8 min-h-screen">

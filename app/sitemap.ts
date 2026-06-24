@@ -6,10 +6,7 @@ import { SITE_URL } from '@/lib/site'
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
 
-/**
- * Generate main sitemap
- * Includes all main pages, blog articles, categories, and products
- */
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const products = await getProducts().catch(() => []);
@@ -17,7 +14,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const entries: MetadataRoute.Sitemap = [];
 
-    // Main static pages
     entries.push(
       {
         url: SITE_URL,

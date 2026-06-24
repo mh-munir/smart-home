@@ -36,6 +36,16 @@ const HeroSlider = dynamic(() => import("@/components/HeroSlider"), {
 });
 
 // Dynamic import for Newsletter with SSR (required in server components)
+const TrustSection = dynamic(() => import("@/components/TrustSection"), {
+  ssr: true,
+  loading: () => null,
+});
+
+const StickyAffiliateCTA = dynamic(() => import("@/components/StickyAffiliateCTA"), {
+  ssr: true,
+  loading: () => null,
+});
+
 const NewsletterClientWrapper = dynamic(() => import("@/components/NewsletterClientWrapper"), {
   ssr: true,
   loading: () => (
@@ -148,7 +158,7 @@ export default async function Home() {
                         <li key={product._id} className="flex items-start gap-4">
                           {product.image ? (
                             <div className="w-24 h-16 relative rounded-md overflow-hidden">
-                              <Image src={product.image} alt={product.title} fill sizes="96px" className="object-cover" />
+                              <Image src={product.image} alt={product.title} fill sizes="96px" loading="lazy" className="object-cover" />
                             </div>
                           ) : (
                             <div className="w-24 h-16 bg-gray-100 rounded-md flex items-center justify-center text-sm">🛒</div>
@@ -172,7 +182,7 @@ export default async function Home() {
                         <a key={p._id} href={`/products/${p.slug}`} className="flex items-center gap-4 bg-gray-50 p-2 rounded hover:bg-gray-100">
                           {p.image ? (
                             <div className="w-20 h-14 relative rounded-sm overflow-hidden">
-                              <Image src={p.image} alt={p.title} fill sizes="80px" className="object-cover" />
+                              <Image src={p.image} alt={p.title} fill sizes="80px" loading="lazy" className="object-cover" />
                             </div>
                           ) : (
                             <div className="w-16 h-10 bg-gray-100 rounded-sm" />
@@ -204,6 +214,12 @@ export default async function Home() {
             <NewsletterClientWrapper source="homepage" />
           </div>
         </section>
+
+        {/* Trust Section */}
+        <TrustSection />
+
+        {/* Sticky Affiliate CTA */}
+        <StickyAffiliateCTA />
 
         {/* About Section */}
         <section className="max-w-7xl mx-auto px-4 lg:px-4 py-16 bg-white">

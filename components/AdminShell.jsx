@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
-import Image from "next/image";
 
 export default function AdminShell({ children }) {
   const pathname = usePathname();
@@ -202,12 +201,13 @@ export default function AdminShell({ children }) {
             {/* Admin avatar - Mobile */}
             <button className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors">
               {adminAvatar ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={adminAvatar}
                   alt="Admin avatar"
                   width={32}
                   height={32}
-                  className="rounded-full object-cover w-auto h-auto"
+                  className="rounded-full object-cover"
                 />
               ) : (
                 <div className="w-8 h-8 rounded-full bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-semibold shadow-sm">
@@ -277,12 +277,13 @@ export default function AdminShell({ children }) {
             {/* Admin profile - Desktop */}
             <button className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-xl hover:bg-gray-100 transition-colors group">
               {adminAvatar ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                   src={adminAvatar}
                   alt="Admin avatar"
                   width={36}
                   height={36}
-                  className="rounded-full object-cover shadow-md ring-2 ring-white group-hover:ring-primary-100 transition-all w-auto h-auto"
+                  className="rounded-full object-cover shadow-md ring-2 ring-white group-hover:ring-primary-100 transition-all"
                 />
               ) : (
                 <div className="w-9 h-9 rounded-full bg-linear-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white text-sm font-bold shadow-md shadow-primary-500/20 ring-2 ring-white group-hover:ring-primary-100 transition-all">

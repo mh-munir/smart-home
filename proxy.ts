@@ -4,7 +4,31 @@ import type { NextRequest } from 'next/server';
 const CSP_HEADER = 'Content-Security-Policy';
 const NONCE_HEADER = 'x-nonce';
 
+// Paths that don't require authentication
+const PUBLIC_ADMIN_PATHS = ['/admin/login'];
+
+function isAdminRoute(pathname: string): boolean {
+  return pathname.startsWith('/admin');
+}
+
+function isPublicAdminPath(pathname: string): boolean {
+  return PUBLIC_ADMIN_PATHS.some((p) => pathname.startsWith(p));
+}
+
+function hasAdminSession(request: NextRequest): boolean {
+  const session = request.cookies.get('smart_home_admin_session');
+  return !!(session && session.value);
+}
+
 export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Admin auth check — redirect unauthenticated users to login
+  if (isAdminRoute(pathname) && !isPublicAdminPath(pathname) && !hasAdminSession(request)) {
+    const loginUrl = new URL('/admin/login', request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
   try {
     const array = new Uint8Array(16);
     globalThis.crypto.getRandomValues(array);
