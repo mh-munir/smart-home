@@ -1,5 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs";
-
 /** @type {import('next').NextConfig} */
 
 const isProd = process.env.NODE_ENV === "production";
@@ -18,7 +16,7 @@ const baseCsp = [
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https: blob:",
   "media-src 'self' https:",
-  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://*.sentry.io https://*.ingest.sentry.io https://sentry.io https://api.logrocket.com https://r.logrocket.io https://e.logrocket.com https://cdn.logrocket.io",
+  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://api.logrocket.com https://r.logrocket.io https://e.logrocket.com https://cdn.logrocket.io",
   "frame-src https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
   "object-src 'none'",
   "base-uri 'self'",
@@ -142,16 +140,4 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
-  silent: !process.env.CI,
-  org: process.env.SENTRY_ORG,
-  project: process.env.SENTRY_PROJECT,
-  sourcemaps: {
-    disable: !process.env.SENTRY_AUTH_TOKEN,
-  },
-  webpack: {
-    treeshake: {
-      removeDebugLogging: true,
-    },
-  },
-});
+export default nextConfig;

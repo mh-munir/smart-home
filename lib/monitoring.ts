@@ -1,15 +1,10 @@
 /**
- * Monitoring configuration helpers for Sentry and LogRocket.
+ * Monitoring configuration helpers for LogRocket.
  *
  * This file provides:
  * - Environment variable placeholders for integration
  * - Helper functions for initializing monitoring tools
  * - Type definitions for monitoring clients
- *
- * To enable Sentry:
- *   1. Set SENTRY_DSN in .env.local
- *   2. Sentry is already configured via sentry.server.config.ts / sentry.edge.config.ts
- *      and instrumentation.ts / instrumentation-client.ts
  *
  * To enable LogRocket:
  *   1. Set NEXT_PUBLIC_LOGROCKET_APP_ID in .env.local
@@ -19,7 +14,6 @@
 // ---------- Types ----------
 
 export interface MonitorConfig {
-  sentryDsn?: string;
   logrocketAppId?: string;
   environment: string;
   release?: string;
@@ -33,14 +27,12 @@ export interface MonitorConfig {
  */
 export function getMonitorConfig(): MonitorConfig {
   return {
-    sentryDsn:
-      process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN || undefined,
     logrocketAppId:
       process.env.NEXT_PUBLIC_LOGROCKET_APP_ID || undefined,
     environment:
       process.env.NODE_ENV || "development",
     release:
-      process.env.SENTRY_COMMIT_SHA || process.env.NEXT_PUBLIC_COMMIT_SHA || undefined,
+      process.env.NEXT_PUBLIC_COMMIT_SHA || undefined,
   };
 }
 
@@ -58,16 +50,6 @@ export async function reportError(
   if (config.environment !== "production") {
     console.error("[Monitor]", error, context);
     return;
-  }
-
-  // Sentry
-  if (config.sentryDsn) {
-    try {
-      const Sentry = await import("@sentry/nextjs");
-      Sentry.captureException(error, { extra: context });
-    } catch {
-      // Sentry not available — ignore
-    }
   }
 
   // LogRocket
@@ -95,15 +77,6 @@ export async function identifyUser(
     try {
       const LogRocket = (await import("logrocket")).default;
       LogRocket.identify(userId, traits);
-    } catch {
-      // ignore
-    }
-  }
-
-  if (config.sentryDsn) {
-    try {
-      const Sentry = await import("@sentry/nextjs");
-      Sentry.setUser({ id: userId, ...traits });
     } catch {
       // ignore
     }

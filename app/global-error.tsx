@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import * as Sentry from "@sentry/nextjs";
+import { useState } from "react";
 import "./globals.css";
 
 export default function GlobalError({
@@ -13,12 +12,10 @@ export default function GlobalError({
 }) {
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    Sentry.captureException(error);
-    if (process.env.NODE_ENV === "development") {
-      console.error("[GlobalError]", error);
-    }
-  }, [error]);
+  // Log error in development for debugging
+  if (process.env.NODE_ENV === "development") {
+    console.error("[GlobalError]", error);
+  }
 
   const handleCopy = () => {
     navigator.clipboard.writeText(error.message + (error.digest ? `\nDigest: ${error.digest}` : ""));

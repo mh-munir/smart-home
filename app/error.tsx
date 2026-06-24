@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import * as Sentry from "@sentry/nextjs";
 
 export default function Error({
   error,
@@ -13,12 +12,10 @@ export default function Error({
 }) {
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    Sentry.captureException(error);
-    if (process.env.NODE_ENV === "development") {
-      console.error("[ErrorBoundary]", error);
-    }
-  }, [error]);
+  // Log error in development for debugging
+  if (process.env.NODE_ENV === "development") {
+    console.error("[ErrorBoundary]", error);
+  }
 
   const handleCopy = () => {
     navigator.clipboard.writeText(error.message + (error.digest ? `\nDigest: ${error.digest}` : ""));
