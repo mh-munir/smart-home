@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BlogList from "@/components/BlogList";
+import NewsletterClientWrapper from "@/components/NewsletterClientWrapper";
 import type { BlogArticle } from "@/components/BlogCard";
 import { getLatestArticles, getAllBlogCategories } from "@/lib/blog";
 import { connectDB } from "@/lib/db";
@@ -122,20 +123,9 @@ export default async function BlogPage() {
               <p className="text-teal-100 mb-6">
                 Get the latest smart home tips, reviews, and guides delivered to your inbox weekly.
               </p>
-              <form className="flex flex-col sm:flex-row gap-3">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-3 rounded-lg text-white border border-white focus:outline-none"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="bg-white text-teal-600 font-bold px-6 py-3 rounded-lg hover:bg-gray-100 transition"
-                >
-                  Subscribe
-                </button>
-              </form>
+              <div className="[&_input]:bg-white [&_input]:text-gray-900 [&_button]:bg-white [&_button]:text-teal-700 [&_button:hover]:bg-gray-100">
+                <NewsletterClientWrapper source="blog" />
+              </div>
             </div>
           </section>
         </div>

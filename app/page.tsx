@@ -1,10 +1,11 @@
 import dynamic from "next/dynamic";
 import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
+import Link from "next/link";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
-import { getCategories, getCategoriesWithProducts } from "@/lib/categories";
+import { getCategoriesWithProducts } from "@/lib/categories";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Lazy-load heavy client components to reduce initial JS bundle
@@ -92,10 +93,9 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const [products, heroSlides, categories, categoriesWithProducts] = await Promise.all([
+  const [products, heroSlides, categoriesWithProducts] = await Promise.all([
     getProducts(),
     getHeroSlides(),
-    getCategories(),
     getCategoriesWithProducts(),
   ]);
 
@@ -112,7 +112,7 @@ export default async function Home() {
       />
       <main className="min-h-screen bg-white">
         {/* Hero Section */}
-        <HeroSlider slides={heroSlides} categories={categories} />
+        <HeroSlider slides={heroSlides} />
 
         {/* Dynamic Service Category Sections — auto-generated from database */}
         <ServiceCategories categoriesWithProducts={categoriesWithProducts} />
@@ -150,7 +150,7 @@ export default async function Home() {
                         <h3 className="text-2xl font-serif font-bold text-gray-900">The Latest</h3>
                         <div className="mt-2 h-1 w-32 bg-yellow-300 rounded" />
                       </div>
-                      <a href="/products" className="text-xs text-teal-600 font-semibold hidden sm:inline">See all</a>
+                      <Link href="/products" className="text-xs text-teal-600 font-semibold hidden sm:inline">See all</Link>
                     </div>
 
                     <ul className="space-y-5">
@@ -165,7 +165,7 @@ export default async function Home() {
                           )}
 
                           <div className="flex-1">
-                            <a href={`/products/${product.slug}`} className="text-sm font-semibold text-gray-900 hover:text-teal-600 line-clamp-2">{product.title}</a>
+                            <Link href={`/products/${product.slug}`} className="text-sm font-semibold text-gray-900 hover:text-teal-600 line-clamp-2">{product.title}</Link>
                             <div className="text-xs text-gray-500 mt-1">{product.category || 'Smart Home'}{product.price ? ` • ${product.price}` : ''}</div>
                             <div className="text-xs text-gray-400 mt-1">{Math.max(1, (idx + 1) * 2)} hours ago</div>
                           </div>

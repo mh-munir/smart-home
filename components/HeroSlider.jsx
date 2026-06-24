@@ -4,8 +4,7 @@ import { useEffect, useState, useCallback, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-function HeroSlider({ slides, categories }) {
-  const cats = categories || [];
+function HeroSlider({ slides }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [brokenMap, setBrokenMap] = useState({});
   const LOCAL_FALLBACK = "/logo.png";
@@ -55,7 +54,7 @@ function HeroSlider({ slides, categories }) {
           fill
           sizes="100vw"
           className={isFallbackLogo ? "object-contain" : "object-cover"}
-          priority
+          preload
           fetchPriority="high"
           onError={() => handleSlideError(activeSlide._id)}
         />

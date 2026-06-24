@@ -193,6 +193,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 fill
                 sizes="100vw"
                 className="object-cover"
+                preload
+                fetchPriority="high"
               />
             </figure>
           )}

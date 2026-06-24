@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllGuides } from "@/lib/guides";
+import NewsletterClientWrapper from "@/components/NewsletterClientWrapper";
 
 export default function GuidesPage() {
   const guides = getAllGuides();
@@ -126,20 +127,7 @@ export default function GuidesPage() {
             <p className="text-gray-600 mb-8 text-lg">
               Get new smart home guides and tips delivered to your inbox every week.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 border border-gray-300 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-100"
-                required
-              />
-              <button
-                type="submit"
-                className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 font-bold transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
+            <NewsletterClientWrapper source="guides" />
           </div>
         </section>
       </main>

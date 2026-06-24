@@ -9,24 +9,24 @@ function NewsletterForm({ source = "homepage" }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail) return;
 
     setStatus("loading");
-    try {
-      const apiUrl = typeof window !== "undefined" ? new URL("/api/subscribers", window.location.origin).href : "/api/subscribers";
-      // debug log the request URL (helps when dev server uses a different port)
-      // console.debug("Subscribing to:", apiUrl);
+    setMessage("");
 
-      const res = await fetch(apiUrl, {
+    try {
+      const res = await fetch("/api/subscribers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), source }),
+        body: JSON.stringify({ email: trimmedEmail, source }),
       });
 
       let data = null;
       try {
         data = await res.json();
-      } catch (parseErr) {
+      } catch {
+        // Non-JSON responses still surface through the HTTP status below.
       }
 
       if (res.ok && data?.alreadySubscribed) {
@@ -47,7 +47,7 @@ function NewsletterForm({ source = "homepage" }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
+    <form onSubmit={handleSubmit} className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
       <label htmlFor={`newsletter-email-${source}`} className="sr-only">
         Email address
       </label>
@@ -57,7 +57,7 @@ function NewsletterForm({ source = "homepage" }) {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Enter your email"
-        className="flex-1 px-4 py-3 border border-gray-300 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-100"
+        className="min-w-0 px-4 py-3 border border-gray-300 focus:outline-none focus:border-teal-600 focus:ring-1 focus:ring-teal-100"
         required
         disabled={status === "loading"}
         autoComplete="email"
@@ -70,20 +70,19 @@ function NewsletterForm({ source = "homepage" }) {
         {status === "loading" ? "Subscribing..." : "Subscribe"}
       </button>
 
-      {/* Status Messages */}
       {status === "success" && (
-        <div className="sm:col-span-2 text-center text-green-600 font-medium text-sm mt-2">
-          ✅ {message}
+        <div className="sm:col-span-2 text-center text-green-600 font-medium text-sm">
+          {message}
         </div>
       )}
       {status === "already" && (
-        <div className="sm:col-span-2 text-center text-yellow-600 font-medium text-sm mt-2">
-          ℹ️ {message}
+        <div className="sm:col-span-2 text-center text-yellow-600 font-medium text-sm">
+          {message}
         </div>
       )}
       {status === "error" && (
-        <div className="sm:col-span-2 text-center text-red-600 font-medium text-sm mt-2">
-          ❌ {message}
+        <div className="sm:col-span-2 text-center text-red-600 font-medium text-sm">
+          {message}
         </div>
       )}
     </form>

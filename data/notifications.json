@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "sub-1782297855674",
+    "type": "subscriber",
+    "title": "New Subscriber",
+    "message": "mhmunir914794@gmail.com just subscribed from blog.",
+    "email": "mhmunir914794@gmail.com",
+    "source": "blog",
+    "read": false,
+    "createdAt": "2026-06-24T10:44:15.675Z"
+  }
+]

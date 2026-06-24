@@ -9,6 +9,13 @@ import path from "path";
 const RATE_LIMIT_PATH = path.join(process.cwd(), "data", "rate-limits.json");
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const RATE_LIMIT_MAX = 10; // max requests per window per IP
+const SOURCE_REGEX = /^[a-z0-9_-]{1,40}$/i;
+
+function normalizeSource(source) {
+  if (typeof source !== "string") return "newsletter";
+  const trimmed = source.trim();
+  return SOURCE_REGEX.test(trimmed) ? trimmed.toLowerCase() : "newsletter";
+}
 
 function isIpRateLimited(ip) {
   try {
@@ -98,10 +105,9 @@ export async function POST(request) {
   }
 
   try {
-    await connectDB();
-
     const body = await request.json();
     const { email } = body;
+    const source = normalizeSource(body?.source);
 
     // Basic spam protection: rate-limit by IP
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0] || request.headers.get("x-real-ip") || "unknown";
@@ -121,6 +127,8 @@ export async function POST(request) {
 
     const normalizedEmail = email.trim().toLowerCase();
 
+    await connectDB();
+
     // Check if already subscribed
     const existing = await Subscriber.findOne({ email: normalizedEmail });
     if (existing) {
@@ -132,7 +140,7 @@ export async function POST(request) {
 
     const subscriber = await Subscriber.create({
       email: normalizedEmail,
-      source: "newsletter",
+      source,
       isActive: true,
       subscribedAt: new Date(),
       ip,
@@ -152,8 +160,9 @@ export async function POST(request) {
         id: `sub-${Date.now()}`,
         type: "subscriber",
         title: "New Subscriber",
-        message: `${normalizedEmail} just subscribed to the newsletter.`,
+        message: `${normalizedEmail} just subscribed from ${source}.`,
         email: normalizedEmail,
+        source,
         read: false,
         createdAt: new Date().toISOString(),
       };
