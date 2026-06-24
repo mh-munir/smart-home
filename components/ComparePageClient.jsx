@@ -4,6 +4,7 @@ import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCompare } from "./CompareProvider";
+import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 
 function ComparePageClient() {
   const { compareList, removeFromCompare, clearCompare } = useCompare();
@@ -26,14 +27,6 @@ function ComparePageClient() {
     );
   }
 
-  // Collect all unique affiliate links
-  const allAffiliateIds = new Set();
-  compareList.forEach((p) => {
-    if (p.affiliateLinks && typeof p.affiliateLinks === "object") {
-      Object.keys(p.affiliateLinks).forEach((k) => allAffiliateIds.add(k));
-    }
-  });
-
   const getMainAffiliate = (product) => {
     if (product.affiliateLinks && typeof product.affiliateLinks === "object") {
       const entries = Object.entries(product.affiliateLinks);
@@ -49,8 +42,45 @@ function ComparePageClient() {
     return null;
   };
 
+  const comparisonSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Smart home product comparison",
+    itemListElement: compareList.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Product",
+        name: product.title,
+        description: product.description,
+        image: product.image,
+        category: product.category,
+        url: product.slug ? `/products/${product.slug}` : undefined,
+        offers: product.price
+          ? {
+              "@type": "Offer",
+              price: Number(String(product.price).replace(/[^0-9.]/g, "")) || undefined,
+              priceCurrency: "USD",
+              availability: "https://schema.org/InStock",
+            }
+          : undefined,
+        aggregateRating: product.rating
+          ? {
+              "@type": "AggregateRating",
+              ratingValue: product.rating,
+              ratingCount: 1,
+            }
+          : undefined,
+      },
+    })),
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <div>
@@ -101,6 +131,8 @@ function ComparePageClient() {
                             fill
                             sizes="200px"
                             className="object-cover"
+                            placeholder="blur"
+                            blurDataURL={BLUR_DATA_URL}
                           />
                         </div>
                       ) : (

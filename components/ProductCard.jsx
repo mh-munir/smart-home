@@ -1,6 +1,7 @@
 import Image from "next/image";
 import AffiliateLinkButton from "./AffiliateLinkButton";
 import CompareButton from "./CompareButton";
+import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 
 function getFormattedDate(date) {
   if (!date) return null;
@@ -39,6 +40,8 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               preload={priority}
               loading={priority ? undefined : "lazy"}
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-4xl" aria-hidden="true">SH</div>

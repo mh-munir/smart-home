@@ -5,6 +5,8 @@ import { getBlogArticle, getLatestArticles } from "@/lib/blog";
 import { connectDB } from "@/lib/db";
 import Blog from "@/models/Blog";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import Breadcrumb from "@/components/Breadcrumb";
+import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -156,6 +158,14 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
     <div className="min-h-screen bg-white">
       {/* Main Article Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-4 pt-8 pb-12 sm:pt-12 sm:pb-16">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Blog", href: "/blog" },
+            ...(article.category ? [{ label: article.category, href: `/category/${encodeURIComponent(article.category)}` }] : []),
+            { label: article.title || "Article" },
+          ]}
+        />
         {/* Hero Header */}
         <div className="mb-8 rounded-2xl overflow-hidden shadow-sm">
           <div className="bg-linear-to-r from-teal-600 to-indigo-600 p-8 text-white">
@@ -195,6 +205,8 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
                 className="object-cover"
                 preload
                 fetchPriority="high"
+                placeholder="blur"
+                blurDataURL={BLUR_DATA_URL}
               />
             </figure>
           )}

@@ -7,6 +7,7 @@ import Product from "@/models/Product";
 import Blog from "@/models/Blog";
 import Subscriber from "@/models/Subscriber";
 import Guide from "@/models/Guide";
+import ContactMessage from "@/models/ContactMessage";
 // Charts are rendered inside client wrappers (LineChartClient / DonutChartClient)
 
 function fmt(n) {
@@ -56,6 +57,11 @@ const BlogsIcon = () => (
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
   </svg>
 );
+const MessagesIcon = () => (
+  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+  </svg>
+);
 
 export default async function AdminDashboard() {
   // ── Default zero-state data ──
@@ -64,6 +70,8 @@ export default async function AdminDashboard() {
     totalBlogs: 0,
     totalGuides: 0,
     totalSubscribers: 0,
+    totalMessages: 0,
+    unreadMessages: 0,
     totalClicks: 0,
     totalConversions: 0,
     totalViews: 0,
@@ -73,6 +81,7 @@ export default async function AdminDashboard() {
   let monthlyClicks = [];
   let recentProducts = [];
   let recentBlogs = [];
+  let recentMessages = [];
 
   if (hasMongoDBConfig()) {
     try {
@@ -83,13 +92,15 @@ export default async function AdminDashboard() {
       const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
 
       // ── Aggregate counts ──
-      const [totalProducts, totalBlogs, totalGuides, totalSubscribers, lastMonthSubscribers] =
+      const [totalProducts, totalBlogs, totalGuides, totalSubscribers, lastMonthSubscribers, totalMessages, unreadMessages] =
         await Promise.all([
           Product.countDocuments(),
           Blog.countDocuments(),
           Guide.countDocuments(),
           Subscriber.countDocuments({ isActive: true }),
           Subscriber.countDocuments({ isActive: true, subscribedAt: { $gte: lastMonthStart, $lt: thisMonthStart } }),
+          ContactMessage.countDocuments(),
+          ContactMessage.countDocuments({ isRead: false }),
         ]);
 
       // ── Product aggregates (all-time) ──
@@ -114,6 +125,8 @@ export default async function AdminDashboard() {
         totalBlogs,
         totalGuides,
         totalSubscribers,
+        totalMessages,
+        unreadMessages,
         totalClicks,
         totalConversions,
         totalViews,
@@ -172,6 +185,13 @@ export default async function AdminDashboard() {
         .limit(5)
         .select("title views clicks author createdAt")
         .lean()).map((b) => ({ ...b, _id: String(b._id) }));
+
+      // ── Recent messages ──
+      recentMessages = (await ContactMessage.find()
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .select("name email subject message isRead createdAt")
+        .lean()).map((m) => ({ ...m, _id: String(m._id) }));
     } catch (err) {
       console.error("Admin dashboard query failed:", err);
     }
@@ -189,6 +209,7 @@ export default async function AdminDashboard() {
     { label: "Products", value: fmt(stats.totalProducts), icon: ProductsIcon, color: "text-cyan-600 bg-cyan-50", href: "/admin/products" },
     { label: "Blog Posts", value: fmt(stats.totalBlogs), icon: BlogsIcon, color: "text-rose-600 bg-rose-50", href: "/admin/blogs" },
     { label: "Guides", value: fmt(stats.totalGuides), icon: BlogsIcon, color: "text-amber-600 bg-amber-50", href: "/admin/guides" },
+    { label: "Messages", value: fmt(stats.totalMessages), icon: MessagesIcon, color: "text-teal-600 bg-teal-50", href: "/admin/messages", badge: stats.unreadMessages > 0 ? `${stats.unreadMessages} unread` : null },
     { label: "Engagement Rate", value: `${stats.donutPercentage}%`, icon: ConversionsIcon, color: "text-indigo-600 bg-indigo-50" },
   ];
 
@@ -241,9 +262,14 @@ export default async function AdminDashboard() {
                 <div className={`p-2.5 rounded-xl ${card.color}`}>
                   <Icon />
                 </div>
-                {card.href && (
-                  <svg className="w-4 h-4 text-gray-400 hover:text-blue-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                )}
+                <div className="flex items-center gap-2">
+                  {card.badge && (
+                    <span className="text-xs font-medium text-teal-700 bg-teal-100 px-2 py-0.5 rounded-full">{card.badge}</span>
+                  )}
+                  {card.href && (
+                    <svg className="w-4 h-4 text-gray-400 hover:text-blue-600 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                  )}
+                </div>
               </div>
               <p className="text-2xl font-bold text-gray-900">{card.value}</p>
               <p className="text-sm text-gray-500 mt-0.5">{card.label}</p>
@@ -293,6 +319,61 @@ export default async function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* ── Recent Messages ── */}
+      {stats.totalMessages > 0 && (
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+          <div className="p-6 pb-0">
+            <div className="flex items-center justify-between mb-5">
+              <div>
+                <h2 className="text-lg font-bold text-gray-900">Recent Messages</h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  {stats.totalMessages} total{stats.unreadMessages > 0 ? ` · ${stats.unreadMessages} unread` : ""}
+                </p>
+              </div>
+              <Link href="/admin/messages" className="text-sm text-blue-600 hover:text-blue-700 font-medium">View all</Link>
+            </div>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-t border-gray-100">
+                  <th className="text-left py-3 px-6 font-medium text-gray-500">From</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-500">Subject</th>
+                  <th className="text-left py-3 px-4 font-medium text-gray-500">Message</th>
+                  <th className="text-right py-3 px-6 font-medium text-gray-500">Received</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentMessages.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-8 text-center text-gray-400">No messages yet</td>
+                  </tr>
+                ) : (
+                  recentMessages.map((m) => (
+                    <tr key={m._id} className="border-t border-gray-50 hover:bg-gray-50/50 transition-colors">
+                      <td className="py-3 px-6">
+                        <div className="flex items-center gap-2">
+                          {!m.isRead && <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0" />}
+                          <div>
+                            <p className={`font-medium text-gray-900 ${!m.isRead ? "" : "text-gray-600"}`}>{m.name}</p>
+                            <p className="text-xs text-gray-400">{m.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 px-4 text-gray-500 text-xs">
+                        {m.subject === "feedback" ? "Product Feedback" : m.subject === "request" ? "Review Request" : m.subject === "partnership" ? "Partnership" : m.subject === "correction" ? "Correction" : "General"}
+                      </td>
+                      <td className="py-3 px-4 text-gray-600 truncate max-w-60">{m.message}</td>
+                      <td className="py-3 px-6 text-right text-gray-500 text-xs whitespace-nowrap">{ago(m.createdAt)}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
       {/* ── Top Products & Recent Blogs ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-8">

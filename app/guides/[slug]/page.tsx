@@ -1,5 +1,6 @@
 import { getGuideBySlug } from '@/lib/guides';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
+import Breadcrumb from '@/components/Breadcrumb';
 
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -9,7 +10,7 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     return (
       <div className="p-12 min-h-screen">
         <h1 className="text-3xl font-bold">Guide not found</h1>
-        <p className="text-gray-600 mt-4">We couldn&apos;t find the guide you&apos;re looking for.</p>
+        <p className="text-gray-600 mt-4">We couldn't find the guide you're looking for.</p>
       </div>
     );
   }
@@ -18,6 +19,16 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
     <main className="bg-white">
       <div className="bg-linear-to-r from-rose-500 to-purple-600 text-white py-12">
         <div className="max-w-4xl mx-auto px-4">
+          <div className="mb-4">
+            <Breadcrumb
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Guides", href: "/guides" },
+                ...(guide.category ? [{ label: guide.category }] : []),
+                { label: guide.title },
+              ]}
+            />
+          </div>
           {guide.category && (
             <div className="mb-3">
               <span className="inline-block bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold">{guide.category}</span>

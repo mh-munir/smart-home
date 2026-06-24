@@ -22,6 +22,7 @@ const navSections = [
   {
     label: "Audience",
     items: [
+      { href: "/admin/messages", label: "Messages", icon: "messages" },
       { href: "/admin/subscribers", label: "Subscribers", icon: "subscribers" },
       { href: "/admin/analytics", label: "Analytics", icon: "analytics" },
     ],
@@ -95,6 +96,12 @@ const Icon = ({ name, isActive }) => {
           <path d="M4 19.5A2.5 2.5 0 016.5 17H20" />
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
           <path d="M8 7h8M8 11h5" />
+        </svg>
+      );
+    case "messages":
+      return (
+        <svg className={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
         </svg>
       );
     case "subscribers":

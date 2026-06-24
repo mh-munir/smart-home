@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 
 function HeroSlider({ slides }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -57,6 +58,8 @@ function HeroSlider({ slides }) {
           preload
           fetchPriority="high"
           onError={() => handleSlideError(activeSlide._id)}
+          placeholder="blur"
+          blurDataURL={BLUR_DATA_URL}
         />
       </div>
 

@@ -11,6 +11,7 @@ import { ConditionalNavbar, ConditionalFooter } from "@/components/ConditionalNa
 import { CompareProvider } from "@/components/CompareProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import DeferredScripts from "@/components/DeferredScripts";
+import WebVitals from "@/components/WebVitals";
 
 type ExtraMetaTag = { name?: string; content?: string; property?: string; httpEquiv?: string };
 
@@ -265,6 +266,7 @@ export default async function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <ClientScripts />
+        <WebVitals />
         <ThemeProvider>
         <CompareProvider>
             <a href="#main-content" className="sr-only focus:not-sr-only">

@@ -1,3 +1,5 @@
+import { withSentryConfig } from "@sentry/nextjs";
+
 /** @type {import('next').NextConfig} */
 
 const isProd = process.env.NODE_ENV === "production";
@@ -7,7 +9,7 @@ const isProd = process.env.NODE_ENV === "production";
 const baseCsp = [
   "default-src 'self'",
   // Rely on per-request nonces + strict-dynamic in browsers that support it.
-  "script-src 'self' 'strict-dynamic' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com",
+  "script-src 'self' 'strict-dynamic' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://cdn.logrocket.io https://cdn.logrocket.com",
   // Some libraries and Next internals inject inline styles (style attributes or
   // inline <style> tags). To avoid blocking layout at runtime we allow
   // 'unsafe-inline' for styles. This is a pragmatic trade-off; consider
@@ -16,7 +18,7 @@ const baseCsp = [
   "font-src 'self' https://fonts.gstatic.com",
   "img-src 'self' data: https: blob:",
   "media-src 'self' https:",
-  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com",
+  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://*.sentry.io https://*.ingest.sentry.io https://sentry.io https://api.logrocket.com https://r.logrocket.io https://e.logrocket.com https://cdn.logrocket.io",
   "frame-src https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
   "object-src 'none'",
   "base-uri 'self'",
@@ -140,4 +142,16 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  silent: !process.env.CI,
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  sourcemaps: {
+    disable: !process.env.SENTRY_AUTH_TOKEN,
+  },
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
+  },
+});

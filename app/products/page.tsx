@@ -1,7 +1,7 @@
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import { getProducts, getProductsByCategory } from "@/lib/products";
-import { getCategories } from "@/lib/categories";
+import Breadcrumb from "@/components/Breadcrumb";
+import EmptyState from "@/components/EmptyState";
 
 const ProductCard = dynamic(() => import("@/components/ProductCard"));
 const ProductFilters = dynamic(() => import("@/components/ProductFilters"));
@@ -92,20 +92,20 @@ export default async function ProductsPage({ searchParams }: Props) {
     <main className="min-h-screen bg-white py-12">
       <section className="w-full">
         <div className="max-w-7xl mx-auto px-4 lg:px-4">
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Products", href: "/products" },
+              ...(category ? [{ label: category }] : []),
+            ]}
+          />
+
           {/* Product Filters */}
           <ProductFilters products={products} categories={[]} />
 
           <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">
             {category ? `${category} Products` : "All Products"}
           </h1>
-
-          {category ? (
-            <p className="text-sm text-gray-600 mb-1">
-              <Link href="/products" className="text-teal-600 hover:underline">All Products</Link>
-              <span className="mx-2">/</span>
-              <span className="text-gray-900 font-medium">{category}</span>
-            </p>
-          ) : null}
 
           {(q || category) ? (
             <p className="text-sm text-gray-600 mb-4">
@@ -119,18 +119,17 @@ export default async function ProductsPage({ searchParams }: Props) {
           ) : null}
 
           {products.length === 0 ? (
-            <div className="rounded-xl border border-gray-100 p-8 shadow-sm bg-white">
-              <p className="text-gray-600">
-                {category
+            <EmptyState
+              icon="🔍"
+              title="No products found"
+              description={
+                category
                   ? `No products found in the "${category}" category.`
-                  : "No products available."}
-              </p>
-              {category ? (
-                <Link href="/products" className="mt-4 inline-block text-teal-600 hover:underline font-medium">
-                  Browse all products →
-                </Link>
-              ) : null}
-            </div>
+                  : "No products available yet. Check back soon!"
+              }
+              actionLabel={category ? "Browse all products" : undefined}
+              actionHref={category ? "/products" : undefined}
+            />
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((p: any) => (

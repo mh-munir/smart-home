@@ -5,6 +5,8 @@ import { connectDB } from "@/lib/db";
 import Product from "@/models/Product";
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 import SchemaMarkup from '@/components/SchemaMarkup';
+import Breadcrumb from "@/components/Breadcrumb";
+import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -233,6 +235,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         brand={prod.brand || SITE_NAME}
       />
       <div className="pt-8 pb-12 sm:pt-12 sm:pb-16">
+        <Breadcrumb
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Products", href: "/products" },
+            ...(prod.category ? [{ label: prod.category, href: `/products?category=${encodeURIComponent(prod.category)}` }] : []),
+            { label: prod.title || "Product" },
+          ]}
+        />
         <div className="grid lg:grid-cols-3 gap-8 items-start">
           <main className="lg:col-span-2">
             <h1 className="text-[2.5rem] sm:text-[3rem] leading-tight font-extrabold text-gray-900 mb-4 tracking-tight">{prod.title}</h1>
@@ -254,6 +264,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     className="object-cover rounded-lg"
                     priority
                     sizes="(max-width: 1024px) 100vw, 768px"
+                    placeholder="blur"
+                    blurDataURL={BLUR_DATA_URL}
                   />
               </figure>
             )}
@@ -276,6 +288,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                             fill
                             sizes="(max-width: 768px) 100vw, 33vw"
                             className="object-cover"
+                            placeholder="blur"
+                            blurDataURL={BLUR_DATA_URL}
                           />
                         </div>
                       )}

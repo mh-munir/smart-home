@@ -4,6 +4,7 @@ import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCompare } from "./CompareProvider";
+import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 
 function CompareFloatingBar() {
   const { compareList, removeFromCompare, clearCompare, count } = useCompare();
@@ -31,6 +32,8 @@ function CompareFloatingBar() {
                       fill
                       sizes="40px"
                       className="object-cover"
+                      placeholder="blur"
+                      blurDataURL={BLUR_DATA_URL}
                     />
                   </div>
                 ) : (

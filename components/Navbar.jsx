@@ -4,6 +4,7 @@ import { useState, useEffect, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 
 const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false });
 
@@ -90,8 +91,10 @@ function Navbar() {
               alt="Logo"
               width={160}
               height={40}
-              priority
+              preload
               loading="eager"
+              placeholder="blur"
+              blurDataURL={BLUR_DATA_URL}
               className="w-auto h-auto object-contain"
             />
           </Link>

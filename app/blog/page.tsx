@@ -6,6 +6,7 @@ import { getLatestArticles, getAllBlogCategories } from "@/lib/blog";
 import { connectDB } from "@/lib/db";
 import Blog from "@/models/Blog";
 import { SITE_URL } from "@/lib/site";
+import Breadcrumb from "@/components/Breadcrumb";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +93,12 @@ export default async function BlogPage() {
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 lg:px-4 py-12">
           {/* Categories */}
+          <Breadcrumb
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Blog" },
+            ]}
+          />
           <div className="mb-12">
             <h2 className="text-2xl font-bold mb-4 text-gray-900">Categories</h2>
             <div className="flex flex-wrap gap-3">
