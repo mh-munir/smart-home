@@ -33,6 +33,16 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Cursor pointer on all buttons */
+button,
+[role="button"],
+a.btn,
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  cursor: pointer;
+}
+
 /* Smooth Scroll */
 html[data-scroll-behavior="smooth"] {
   scroll-behavior: smooth;
