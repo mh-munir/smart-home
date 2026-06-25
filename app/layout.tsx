@@ -248,30 +248,10 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        {/* Google Analytics config — inline, deferred via next/script */}
-        <Script
-          id="gtag-config"
-          strategy="afterInteractive"
-          {...(nonce ? { nonce } : {})}
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-TYYPR8FBTX');
-            `,
-          }}
-        />
-       
+
         <Script
           id="gtm"
           src="https://www.googletagmanager.com/gtm.js?id=GTM-NV3QJRL8"
-          strategy="afterInteractive"
-          {...(nonce ? { nonce } : {})}
-        />
-        <Script
-          id="ga"
-          src="https://www.googletagmanager.com/gtag/js?id=G-TYYPR8FBTX"
           strategy="afterInteractive"
           {...(nonce ? { nonce } : {})}
         />
@@ -344,8 +324,7 @@ export default async function RootLayout({
             style={{ display: "none", visibility: "hidden" }}
           />
         </noscript>
-        {/* End Google Tag Manager (noscript) */}
-        {/* Google AdSense — loaded in <body> (lazyOnload) to avoid head "data-nscript" warning */}
+    
         <GoogleAdSenseScript nonce={nonce} />
         {/* Deferred providers — avoids blocking hydration for theme/compare */}
         <DeferredProviders>

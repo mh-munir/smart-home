@@ -39,33 +39,19 @@ export function proxy(request: NextRequest) {
 
     const isDev = process.env.NODE_ENV !== 'production';
 
-    // Production-grade CSP with a per-request nonce for inline scripts.
-    //
-    // IMPORTANT: We intentionally do NOT use 'strict-dynamic' because it
-    // causes the browser to IGNORE all host-based allowlists in script-src
-    // (per the CSP spec). This blocks Vercel SSO, Vercel preview toolbar,
-    // and any third-party scripts that are not loaded by a nonced script.
-    // Instead, we use nonces for our own scripts and comprehensive host
-    // allowlists for Google services and Vercel domains.
-    //
-    // GTM dynamically injects <script> tags from google domains listed
-    // below. Since strict-dynamic is removed, those domains must be
-    // explicitly allowlisted.
     const csp = [
       "default-src 'self'",
 
-      // script-src: nonce for our inline/first-party scripts + host
-      // allowlists for Google services (GTM, GA, AdSense) and Vercel.
-      // 'unsafe-eval' is only added in dev for HMR.
       [
         "script-src 'self'",
         `'nonce-${nonce}'`,
         "'unsafe-inline'",
         isDev ? "'unsafe-eval'" : "",
         // Google Tag Manager & Analytics
-        "https://www.googletagmanager.com",
-        "https://www.google-analytics.com",
-        "https://analytics.google.com",
+        "https://*.google.com",
+        "https://www.google.com.bd",
+        "https://*.google.com.bd",
+        "https://*.doubleclick.net",
         // Google AdSense & Ads
         "https://pagead2.googlesyndication.com",
         "https://googleads.g.doubleclick.net",
@@ -92,51 +78,47 @@ export function proxy(request: NextRequest) {
       // all origins that fetch() or XHR may reach at runtime.
       [
         "connect-src 'self'",
-        // Google Analytics & Tag Manager
-        "https://www.google-analytics.com",
-        "https://www.googletagmanager.com",
-        "https://analytics.google.com",
-        "https://*.google-analytics.com",
-        // Google AdSense & Ads
         "https://pagead2.googlesyndication.com",
-        "https://googleads.g.doubleclick.net",
-        "https://*.googlesyndication.com",
-        "https://www.googleadservices.com",
-        "https://adservice.google.com",
-        "https://adservice.google.co.uk",
-        // Google Ad Traffic Quality
-        "https://ep1.adtrafficquality.google",
-        "https://ep2.adtrafficquality.google",
-        "https://adtrafficquality.google",
-        // Vercel (analytics, SSO, previews, toolbar)
-        "https://vitals.vercel-insights.com",
-        "https://*.vercel.app",
-        "https://vercel.com",
-        "https://api.vercel.com",
-        "https://vercel.live",
+          "https://googleads.g.doubleclick.net",
+          "https://*.doubleclick.net",
+          "https://*.googlesyndication.com",
+
+          "https://www.googleadservices.com",
+          "https://adservice.google.com",
+          "https://adservice.google.co.uk",
+
+          // Google regional domains
+          "https://www.google.com",
+          "https://*.google.com",
+          "https://www.google.com.bd",
+          "https://*.google.com.bd",
+
+          // Google Ad Traffic Quality
+          "https://ep1.adtrafficquality.google",
+          "https://ep2.adtrafficquality.google",
+          "https://adtrafficquality.google",
       ].join(" "),
 
       // frame-src: Google ads iframes, GTM noscript, Vercel SSO/preview.
       [
         "frame-src",
-        "https://*.google.com",
-        "https://*.googlesyndication.com",
-        "https://*.adtrafficquality.google",
-        "https://adtrafficquality.google",
-        "https://www.googletagmanager.com",
-        "https://pagead2.googlesyndication.com",
-        "https://googleads.g.doubleclick.net",
-        "https://tpc.googlesyndication.com",
-        "https://vercel.com",
-        "https://*.vercel.app",
-        "https://vercel.live",
+          "https://*.google.com",
+          "https://*.google.com.bd",
+          "https://*.googlesyndication.com",
+          "https://*.doubleclick.net",
+          "https://googleads.g.doubleclick.net",
+          "https://tpc.googlesyndication.com",
+          "https://www.googletagmanager.com",
+          "https://vercel.com",
+          "https://*.vercel.app",
+          "https://vercel.live",
       ].join(" "),
 
       // worker-src: service worker + blob workers
       "worker-src 'self' blob:",
 
       // manifest-src: PWA web app manifest
-      "manifest-src 'self' https://*.vercel.app",
+      "manifest-src 'self' https://*.vercel.app https://vercel.com",
 
       "object-src 'none'",
       "base-uri 'self'",
