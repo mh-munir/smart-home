@@ -271,6 +271,13 @@ export default async function RootLayout({
           }}
         />
         {/* End Google Analytics */}
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8998788891126313"
+          crossOrigin="anonymous"
+        />
+        {/* End Google AdSense */}
         <link rel="icon" href={faviconPath} />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0d9488" />
