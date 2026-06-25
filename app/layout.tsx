@@ -262,11 +262,7 @@ export default async function RootLayout({
             `,
           }}
         />
-        {/* End Google Analytics */}
-        {/* Expose nonce to client components via meta tag so they can render
-            CSP-compliant inline scripts (e.g. JSON-LD). */}
-        {/* Deferred third-party scripts — afterInteractive moves them off the
-            critical rendering path so they don't block TBT. */}
+       
         <Script
           id="gtm"
           src="https://www.googletagmanager.com/gtm.js?id=GTM-NV3QJRL8"
@@ -279,6 +275,12 @@ export default async function RootLayout({
           strategy="afterInteractive"
           {...(nonce ? { nonce } : {})}
         />
+
+        <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8998788891126313"
+            strategy="afterInteractive"
+          />
         {/* AdSense moved to <body> via GoogleAdSenseScript to avoid data-nscript warning */}
         {nonce && <meta name="csp-nonce" content={nonce} />}
         {/* Suppress Next.js HMR console noise in development */}
