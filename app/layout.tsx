@@ -256,12 +256,7 @@ export default async function RootLayout({
           {...(nonce ? { nonce } : {})}
         />
 
-        <Script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8998788891126313"
-            strategy="afterInteractive"
-          />
-        {/* AdSense moved to <body> via GoogleAdSenseScript to avoid data-nscript warning */}
+        {/* AdSense loaded in <body> via GoogleAdSenseScript to avoid data-nscript warning */}
         {nonce && <meta name="csp-nonce" content={nonce} />}
         {/* Suppress Next.js HMR console noise in development */}
         {process.env.NODE_ENV !== "production" && (
