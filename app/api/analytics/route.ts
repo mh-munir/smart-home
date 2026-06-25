@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
-import Product from "@/models/Product";
 import Blog from "@/models/Blog";
-import Category from "@/models/Category";
 import { withRateLimit, getClientIp } from "@/lib/rate-limit";
 
 async function trackClickHandler(request: NextRequest) {

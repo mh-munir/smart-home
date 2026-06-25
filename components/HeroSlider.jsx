@@ -17,11 +17,38 @@ function HeroSlider({ slides }) {
   useEffect(() => {
     if (!slides?.length || slides.length === 1) return;
 
-    const interval = setInterval(() => {
-      setActiveIndex((current) => (current + 1) % slides.length);
-    }, 5000);
+    let interval = null;
 
-    return () => clearInterval(interval);
+    const startInterval = () => {
+      if (interval) return;
+      interval = setInterval(() => {
+        setActiveIndex((current) => (current + 1) % slides.length);
+      }, 5000);
+    };
+
+    const stopInterval = () => {
+      if (interval) {
+        clearInterval(interval);
+        interval = null;
+      }
+    };
+
+    // Pause when tab is hidden to save CPU/battery
+    const handleVisibility = () => {
+      if (document.hidden) {
+        stopInterval();
+      } else {
+        startInterval();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+    startInterval();
+
+    return () => {
+      stopInterval();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, [slides]);
 
   if (!slides?.length) {

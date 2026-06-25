@@ -32,32 +32,34 @@ function ThemeProvider({ children }) {
     const resolved = theme === "system" ? getSystemTheme() : theme;
     setResolvedTheme(resolved);
 
-    const root = document.documentElement;
-    if (resolved === "dark") {
-      root.classList.add("dark");
-      root.classList.remove("light");
-    } else {
-      root.classList.remove("dark");
-      root.classList.add("light");
-    }
-  }, [theme]);
+    // Defer DOM class manipulation to next animation frame to avoid forced reflow
+    const applyClass = (isDark) => {
+      const root = document.documentElement;
+      if (isDark) {
+        root.classList.add("dark");
+        root.classList.remove("light");
+      } else {
+        root.classList.remove("dark");
+        root.classList.add("light");
+      }
+    };
 
-  useEffect(() => {
-    if (theme !== "system") return;
+    const rafId = requestAnimationFrame(() => applyClass(resolved === "dark"));
+
+    // If system theme, listen for OS preference changes
+    if (theme !== "system") return () => cancelAnimationFrame(rafId);
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = (e) => {
       setResolvedTheme(e.matches ? "dark" : "light");
-      const root = document.documentElement;
-      if (e.matches) {
-        root.classList.add("dark");
-      } else {
-        root.classList.remove("dark");
-      }
+      requestAnimationFrame(() => applyClass(e.matches));
     };
 
     mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
+    return () => {
+      cancelAnimationFrame(rafId);
+      mediaQuery.removeEventListener("change", handler);
+    };
   }, [theme]);
 
   const setTheme = useCallback((newTheme) => {

@@ -1,30 +1,30 @@
+"use client";
+
+import { memo, useMemo } from "react";
 import Image from "next/image";
 import AffiliateLinkButton from "./AffiliateLinkButton";
 import CompareButton from "./CompareButton";
 import { BLUR_DATA_URL } from "@/lib/image-placeholder";
 
-function getFormattedDate(date) {
-  if (!date) return null;
-  return new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(new Date(date));
-}
+function ProductCard({ product, showBuyButton = true, priority = false }) {
+  const formattedDate = useMemo(() => {
+    if (!product?.createdAt) return null;
+    return new Intl.DateTimeFormat("en-US", { timeZone: "UTC" }).format(new Date(product.createdAt));
+  }, [product?.createdAt]);
 
-function getAffiliateLinks(product) {
-  if (!product?.affiliateLinks || typeof product.affiliateLinks !== "object") return [];
-
-  return Object.entries(product.affiliateLinks).flatMap(([key, value]) => {
-    if (!value?.url || !value?.enabled) return [];
-    return {
-      id: key,
-      url: value.url,
-      name: key.charAt(0).toUpperCase() + key.slice(1),
-    };
-  });
-}
-
-export default function ProductCard({ product, showBuyButton = true, priority = false }) {
-  const formattedDate = getFormattedDate(product?.createdAt);
-  const affiliateLinks = getAffiliateLinks(product);
-  const mainLink = affiliateLinks[0] || null;
+  const mainLink = useMemo(() => {
+    if (!product?.affiliateLinks || typeof product.affiliateLinks !== "object") return null;
+    for (const [key, value] of Object.entries(product.affiliateLinks)) {
+      if (value?.url && value?.enabled) {
+        return {
+          id: key,
+          url: value.url,
+          name: key.charAt(0).toUpperCase() + key.slice(1),
+        };
+      }
+    }
+    return null;
+  }, [product?.affiliateLinks]);
 
   return (
     <article className="group bg-white border border-gray-200 rounded-lg overflow-hidden transition-transform duration-300 transform-gpu hover:-translate-y-1 hover:shadow-lg h-full flex flex-col">
@@ -113,3 +113,5 @@ export default function ProductCard({ product, showBuyButton = true, priority = 
     </article>
   );
 }
+
+export default memo(ProductCard);

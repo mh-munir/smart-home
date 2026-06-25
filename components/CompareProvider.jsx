@@ -1,11 +1,22 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, memo } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo, memo } from "react";
 
 const CompareContext = createContext(null);
 
 const MAX_COMPARE = 4;
 const STORAGE_KEY = "smart-home-compare";
+
+const EMPTY_COMPARE = {
+  compareList: [],
+  addToCompare: () => {},
+  removeFromCompare: () => {},
+  clearCompare: () => {},
+  isInCompare: () => false,
+  canAdd: true,
+  count: 0,
+  maxCompare: 4,
+};
 
 function getStoredCompare() {
   if (typeof window === "undefined") return [];
@@ -63,23 +74,29 @@ function CompareProvider({ children }) {
     setCompareList([]);
   }, []);
 
+  // Use a ref-based approach for isInCompare to avoid re-creating it on every list change.
+  // Consumers that only call isInCompare should not re-render when compareList changes.
+  const compareListRef = useRef(compareList);
+  compareListRef.current = compareList;
+
   const isInCompare = useCallback((productId) => {
-    return compareList.some((p) => p._id === productId);
-  }, [compareList]);
+    return compareListRef.current.some((p) => p._id === productId);
+  }, []);
+
+  // Memoize the context value to prevent unnecessary re-renders of consumers
+  const value = useMemo(() => ({
+    compareList,
+    addToCompare,
+    removeFromCompare,
+    clearCompare,
+    isInCompare,
+    canAdd: compareList.length < MAX_COMPARE,
+    count: compareList.length,
+    maxCompare: MAX_COMPARE,
+  }), [compareList, addToCompare, removeFromCompare, clearCompare, isInCompare]);
 
   return (
-    <CompareContext.Provider
-      value={{
-        compareList,
-        addToCompare,
-        removeFromCompare,
-        clearCompare,
-        isInCompare,
-        canAdd: compareList.length < MAX_COMPARE,
-        count: compareList.length,
-        maxCompare: MAX_COMPARE,
-      }}
-    >
+    <CompareContext.Provider value={value}>
       {children}
     </CompareContext.Provider>
   );
@@ -87,21 +104,17 @@ function CompareProvider({ children }) {
 
 function useCompare() {
   const context = useContext(CompareContext);
-  if (!context) {
-    return {
-      compareList: [],
-      addToCompare: () => {},
-      removeFromCompare: () => {},
-      clearCompare: () => {},
-      isInCompare: () => false,
-      canAdd: true,
-      count: 0,
-      maxCompare: 4,
-    };
-  }
+  if (!context) return EMPTY_COMPARE;
   return context;
+}
+
+// Selective hook: only re-renders when the selected value changes
+function useCompareSelector(selector) {
+  const context = useContext(CompareContext);
+  if (!context) return selector(EMPTY_COMPARE);
+  return selector(context);
 }
 
 const MemoizedCompareProvider = memo(CompareProvider);
 
-export { MemoizedCompareProvider as CompareProvider, useCompare };
+export { MemoizedCompareProvider as CompareProvider, useCompare, useCompareSelector };

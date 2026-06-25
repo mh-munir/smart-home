@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import localFont from "next/font/local";
 import "./globals.css";
 import { headers } from "next/headers";
@@ -10,6 +11,7 @@ import PublicLayoutShell from "@/components/PublicLayoutShell";
 import DeferredProviders from "@/components/DeferredProviders";
 import DeferredScripts from "@/components/DeferredScripts";
 import WebVitals from "@/components/WebVitals";
+import GoogleAdSenseScript from "@/components/GoogleAdSenseScript";
 
 // Read site settings once at module level for server-side rendering
 let navSettings = { subtitle: "Make your home smarter", logo: "/logo.png" };
@@ -230,8 +232,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const rawNonce = (await headers()).get("x-nonce");
+  const hdrs = await headers();
+  const rawNonce = hdrs.get("x-nonce");
   const nonce = rawNonce && rawNonce.length > 0 ? rawNonce : undefined;
+  const isAdmin = hdrs.get("x-is-admin") === "1";
   return (
     <html
       lang="en"
@@ -244,25 +248,10 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        {/* Google Tag Manager — nonce required for CSP */}
-        <script
-          {...(nonce ? { nonce } : {})}
-          dangerouslySetInnerHTML={{
-            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','GTM-NV3QJRL8');`,
-          }}
-        />
-        {/* End Google Tag Manager */}
-        {/* Google Analytics (gtag.js) — external script needs nonce under strict-dynamic */}
-        <script
-          {...(nonce ? { nonce } : {})}
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-TYYPR8FBTX"
-        />
-        <script
+        {/* Google Analytics config — inline, deferred via next/script */}
+        <Script
+          id="gtag-config"
+          strategy="afterInteractive"
           {...(nonce ? { nonce } : {})}
           dangerouslySetInnerHTML={{
             __html: `
@@ -274,17 +263,34 @@ export default async function RootLayout({
           }}
         />
         {/* End Google Analytics */}
-        {/* Google AdSense — external script needs nonce under strict-dynamic */}
-        <script
-          {...(nonce ? { nonce } : {})}
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8998788891126313"
-          crossOrigin="anonymous"
-        />
-        {/* End Google AdSense */}
         {/* Expose nonce to client components via meta tag so they can render
             CSP-compliant inline scripts (e.g. JSON-LD). */}
+        {/* Deferred third-party scripts — afterInteractive moves them off the
+            critical rendering path so they don't block TBT. */}
+        <Script
+          id="gtm"
+          src="https://www.googletagmanager.com/gtm.js?id=GTM-NV3QJRL8"
+          strategy="afterInteractive"
+          {...(nonce ? { nonce } : {})}
+        />
+        <Script
+          id="ga"
+          src="https://www.googletagmanager.com/gtag/js?id=G-TYYPR8FBTX"
+          strategy="afterInteractive"
+          {...(nonce ? { nonce } : {})}
+        />
+        {/* AdSense moved to <body> via GoogleAdSenseScript to avoid data-nscript warning */}
         {nonce && <meta name="csp-nonce" content={nonce} />}
+        {/* Suppress Next.js HMR console noise in development */}
+        {process.env.NODE_ENV !== "production" && (
+          <script
+            suppressHydrationWarning
+            {...(nonce ? { nonce } : {})}
+            dangerouslySetInnerHTML={{
+              __html: `(function(){try{var s=console.log,m=['[HMR]','[Fast Refresh]'];console.log=function(){var a=Array.from(arguments);if(a.some(function(v){return typeof v==='string'&&m.some(function(k){return v.indexOf(k)!==-1})}))return;s.apply(console,a)}}catch(e){}})();`,
+            }}
+          />
+        )}
         <link rel="icon" href={faviconPath} />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0d9488" />
@@ -337,12 +343,14 @@ export default async function RootLayout({
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
+        {/* Google AdSense — loaded in <body> (lazyOnload) to avoid head "data-nscript" warning */}
+        <GoogleAdSenseScript nonce={nonce} />
         {/* Deferred providers — avoids blocking hydration for theme/compare */}
         <DeferredProviders>
             <a href="#main-content" className="sr-only focus:not-sr-only">
               Skip to content
             </a>
-            <PublicLayoutShell navSettings={navSettings}>{children}</PublicLayoutShell>
+            <PublicLayoutShell navSettings={navSettings} isAdmin={isAdmin}>{children}</PublicLayoutShell>
             <DeferredScripts />
             <WebVitals />
         </DeferredProviders>

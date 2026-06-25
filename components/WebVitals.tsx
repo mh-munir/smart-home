@@ -38,11 +38,24 @@ export default function WebVitals() {
     // Only send to analytics in production
     if (typeof window === "undefined" || process.env.NODE_ENV !== "production") return;
 
-    // Post to a non-blocking endpoint or analytics only after idle
+    // Use requestIdleCallback to defer analytics work off the critical path.
+    // Wrap the gtag call in a try-catch so any analytics failure is silent.
+    const send = () => {
+      try {
+        reportWebVitals(metric);
+      } catch {
+        // silently ignore analytics errors
+      }
+    };
+
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => reportWebVitals(metric), { timeout: 2000 });
+      requestIdleCallback(send, { timeout: 1500 });
     } else {
-      setTimeout(() => reportWebVitals(metric), 1500);
+      // Fallback: use requestAnimationFrame + setTimeout(0) to yield to the browser
+      // before doing non-critical analytics work
+      requestAnimationFrame(() => {
+        setTimeout(send, 0);
+      });
     }
   });
   return null;

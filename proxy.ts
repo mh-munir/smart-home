@@ -42,7 +42,7 @@ export function proxy(request: NextRequest) {
     // Production-grade CSP with a per-request nonce for inline scripts.
     const csp = [
       "default-src 'self'",
-      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://cdn.logrocket.io https://cdn.logrocket.com`,
+      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com`,
       // Do not add nonce for style-src: many client libs add inline styles
       // (style attributes) which are not covered by nonces; allow 'unsafe-inline'
       // for styles to avoid blocking runtime style mutations. Consider hardening
@@ -51,8 +51,8 @@ export function proxy(request: NextRequest) {
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' https:",
-      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://*.google-analytics.com https://*.googlesyndication.com https://api.logrocket.com https://r.logrocket.io https://e.logrocket.com https://cdn.logrocket.io",
-      "frame-src https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://*.google-analytics.com https://*.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adtrafficquality.google",
+      "frame-src https://*.google.com https://*.googlesyndication.com https://*.adtrafficquality.google https://adtrafficquality.google https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
       "worker-src 'self' blob:",
       "object-src 'none'",
       "base-uri 'self'",
@@ -82,6 +82,13 @@ export function proxy(request: NextRequest) {
     res.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), browsing-topics=()');
     res.headers.set('X-DNS-Prefetch-Control', 'on');
     res.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+    // Cross-Origin-Opener-Policy for security (improves Best Practices score)
+    res.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+
+    // Signal admin routes to the server layout so PublicLayoutShell can avoid "use client"
+    if (isAdminRoute(pathname)) {
+      res.headers.set('x-is-admin', '1');
+    }
 
     return res;
   } catch (err) {

@@ -1,11 +1,9 @@
 import dynamic from "next/dynamic";
-import ProductCard from "@/components/ProductCard";
-import Image from "next/image";
-import Link from "next/link";
 import SchemaMarkup from "@/components/SchemaMarkup";
 import HomepageClientWidgets from "@/components/HomepageClientWidgets";
 import HeroSliderWrapper from "@/components/HeroSliderWrapper";
 import HeroSliderServer from "@/components/HeroSliderServer";
+import TrustSection from "@/components/TrustSection";
 import { getHeroSlides } from "@/lib/hero-slides";
 import { getProducts } from "@/lib/products";
 import { getCategoriesWithProducts } from "@/lib/categories";
@@ -26,11 +24,21 @@ const ServiceCategories = dynamic(() => import("@/components/ServiceCategories")
   ),
 });
 
-// Dynamic import for Newsletter with SSR (required in server components)
-const TrustSection = dynamic(() => import("@/components/TrustSection"), {
+// Dynamic import for below-the-fold featured products section
+const FeaturedProducts = dynamic(() => import("@/components/FeaturedProducts"), {
   ssr: true,
-  loading: () => null,
-});
+    loading: () => (
+      <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
+        <div className="h-12 w-64 bg-gray-100 rounded animate-pulse mb-8" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-80 bg-gray-100 rounded-lg animate-pulse" />
+          ))}
+        </div>
+      </section>
+    ),
+  }
+);
 
 export const metadata = {
   title: "Home Smart Products - Best Smart Home Devices Reviews & Buying Guide 2026",
@@ -97,94 +105,16 @@ export default async function Home() {
         {/* Dynamic Service Category Sections — auto-generated from database */}
         <ServiceCategories categoriesWithProducts={categoriesWithProducts} />
 
-        {/* Featured header design (renders 3-per-row ProductCard grid) */}
-        
-        <section className="max-w-7xl mx-auto px-4 lg:px-4 py-12 bg-white">
-          <div className="w-full">
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-4 items-start">
-              <div className="lg:col-span-3">
-                <div className="rounded-xl border border-gray-100 p-6 shadow-sm bg-white mb-6">
-                  <p className="text-xs font-medium text-teal-600 uppercase tracking-wider">Curated Picks</p>
-                  <h2 className="mt-2 text-4xl font-serif font-bold text-gray-900">Featured Products</h2>
-                  <p className="mt-3 text-gray-600">Smart-home upgrades selected for practical features, clean setup, and everyday value.</p>
-                </div>
-
-                {featuredProducts.length === 0 ? (
-                  <div className="rounded-xl border border-gray-100 p-8 shadow-sm bg-white">
-                    <p className="text-gray-600">No featured products at the moment.</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {featuredProducts.map((product) => (
-                      <ProductCard key={product._id} product={product} showBuyButton={true} />
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <aside className="lg:col-span-1">
-                <div className="sticky top-24 space-y-6">
-                  <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <h3 className="text-2xl font-serif font-bold text-gray-900">The Latest</h3>
-                        <div className="mt-2 h-1 w-32 bg-yellow-300 rounded" />
-                      </div>
-                      <Link href="/products" className="text-xs text-teal-600 font-semibold hidden sm:inline">See all</Link>
-                    </div>
-
-                    <ul className="space-y-5">
-                      {allProducts.slice(0, 3).map((product, idx) => (
-                        <li key={product._id} className="flex items-start gap-4">
-                          {product.image ? (
-                            <div className="w-24 h-16 relative rounded-md overflow-hidden">
-                              <Image src={product.image} alt={product.title} fill sizes="96px" loading="lazy" className="object-cover" />
-                            </div>
-                          ) : (
-                            <div className="w-24 h-16 bg-gray-100 rounded-md flex items-center justify-center text-sm">🛒</div>
-                          )}
-
-                          <div className="flex-1">
-                            <Link href={`/products/${product.slug}`} className="text-sm font-semibold text-gray-900 hover:text-teal-600 line-clamp-2">{product.title}</Link>
-                            <div className="text-xs text-gray-500 mt-1">{product.category || 'Smart Home'}{product.price ? ` • ${product.price}` : ''}</div>
-                            <div className="text-xs text-gray-400 mt-1">{Math.max(1, (idx + 1) * 2)} hours ago</div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="bg-white border border-gray-100 p-6 rounded-lg shadow-sm">
-                    <h4 className="text-lg font-serif font-bold text-gray-900">Our Favorites</h4>
-                    <div className="mt-2 h-1 w-40 bg-teal-300 rounded" />
-                    <div className="mt-4 grid gap-4">
-                      {allProducts.slice(3, 6).map((p) => (
-                        <a key={p._id} href={`/products/${p.slug}`} className="flex items-center gap-4 bg-gray-50 p-2 rounded hover:bg-gray-100">
-                          {p.image ? (
-                            <div className="w-20 h-14 relative rounded-sm overflow-hidden">
-                              <Image src={p.image} alt={p.title} fill sizes="80px" loading="lazy" className="object-cover" />
-                            </div>
-                          ) : (
-                            <div className="w-16 h-10 bg-gray-100 rounded-sm" />
-                          )}
-                          <div className="text-sm text-gray-800 line-clamp-2">{p.title}</div>
-                          <div className="ml-auto text-sm text-teal-600 font-semibold">{p.price}</div>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Subscribe CTA removed per user request */}
-                </div>
-              </aside>
-            </div>
-          </div>
-        </section>
+        {/* Below-the-fold: Featured Products + Sidebar (client component for hydration off critical path) */}
+        <FeaturedProducts
+          featuredProducts={featuredProducts}
+          allProducts={allProducts}
+        />
 
         {/* Below-the-fold homepage widgets */}
         <HomepageClientWidgets />
 
-        {/* Trust Section */}
+        {/* Trust Section — server component, imported directly (no dynamic wrapper) */}
         <TrustSection />
 
         {/* About Section */}
@@ -196,7 +126,7 @@ export default async function Home() {
                 Welcome to your trusted guide for smart home technology. We help you find the perfect smart home solutions for your lifestyle and budget.
               </p>
               <p>
-                Our mission is to empower you with honest, expert reviews and recommendations. From smart locks to intelligent lighting systems, we&apos;ve got comprehensive guides and product comparisons.
+                Our mission is to empower you with honest, expert reviews and recommendations. From smart locks to intelligent lighting systems, we've got comprehensive guides and product comparisons.
               </p>
               <p>
                 Each product is carefully selected based on quality, value, and real customer feedback.

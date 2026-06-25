@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
-import { SITE_URL } from "@/lib/site";
 
 const SearchPageClient = dynamic(
   () => import("@/components/SearchPageClient"),

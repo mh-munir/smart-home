@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Sidebar from "@/components/Sidebar";
 
 export default function AdminShell({ children }) {
@@ -14,7 +14,10 @@ export default function AdminShell({ children }) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const pageTitle = pathname?.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Admin";
+  const pageTitle = useMemo(() => 
+    pathname?.split("/").filter(Boolean).slice(-1)[0]?.replace(/-/g, " ") || "Admin",
+    [pathname]
+  );
 
   // Fetch admin avatar from settings
   useEffect(() => {
@@ -86,22 +89,18 @@ export default function AdminShell({ children }) {
 
   // Close dropdown when clicking outside
   useEffect(() => {
+    if (!showNotifications) return;
     function handleClickOutside(e) {
-      // Check all notification bell containers
-      const containers = document.querySelectorAll("[data-notification-bell]");
-      let insideAny = false;
-      containers.forEach((c) => {
-        if (c.contains(e.target)) insideAny = true;
-      });
-      if (!insideAny) {
+      const target = e.target;
+      if (!target.closest("[data-notification-bell]")) {
         setShowNotifications(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [showNotifications]);
 
-  const markAllAsRead = async () => {
+  const markAllAsRead = useCallback(async () => {
     try {
       await fetch("/api/admin/notifications", {
         method: "PATCH",
@@ -114,9 +113,9 @@ export default function AdminShell({ children }) {
     } catch (err) {
       console.error("Failed to mark notifications as read:", err);
     }
-  };
+  }, []);
 
-  const markAsRead = async (notificationId) => {
+  const markAsRead = useCallback(async (notificationId) => {
     try {
       await fetch("/api/admin/notifications", {
         method: "PATCH",
@@ -131,9 +130,9 @@ export default function AdminShell({ children }) {
     } catch (err) {
       console.error("Failed to mark notification as read:", err);
     }
-  };
+  }, []);
 
-  const clearAllNotifications = async () => {
+  const clearAllNotifications = useCallback(async () => {
     try {
       await fetch("/api/admin/notifications", {
         method: "DELETE",
@@ -144,9 +143,9 @@ export default function AdminShell({ children }) {
     } catch (err) {
       console.error("Failed to clear notifications:", err);
     }
-  };
+  }, []);
 
-  const formatTime = (dateStr) => {
+  const formatTime = useCallback((dateStr) => {
     const date = new Date(dateStr);
     const now = new Date();
     const diffMs = now - date;
@@ -159,7 +158,7 @@ export default function AdminShell({ children }) {
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;
     return date.toLocaleDateString();
-  };
+  }, []);
 
   if (isLoginPage) {
     return children;

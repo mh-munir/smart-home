@@ -1,143 +1,62 @@
 /**
- * Google Analytics Integration
- * GTM (Google Tag Manager) + GA4 (Google Analytics 4) Setup
- * 
- * Note: Google Ads (Paid Ads) has been removed. Only AdSense is used for monetization.
- * AdSense is configured separately in GoogleAdSenseScript component.
+ * Google Analytics / Tag Manager Integration
+ *
+ * GTM (Google Tag Manager) + GA4 (Google Analytics 4) helpers.
+ *
+ * Note: Google Ads (Paid Ads) has been removed. Only AdSense is used for
+ * monetisation — see components/GoogleAdSenseScript.tsx.
+ *
+ * The actual <Script> tags for GTM and GA4 live in app/layout.tsx <head>
+ * (afterInteractive). This module only exports *runtime* helpers that
+ * client components can call to push events into `window.dataLayer`.
  */
 
-// Google Tag Manager Configuration
+// ── Configuration ───────────────────────────────────────────────────────────
+
+// Google Tag Manager
 export const GTM_CONFIG = {
-  // Your GTM Container ID (Get from: https://tagmanager.google.com/)
   GTM_ID: process.env.NEXT_PUBLIC_GTM_ID || 'GTM-NGWRC7R4',
-  
-  // Environment
   ENVIRONMENT: process.env.NODE_ENV || 'production',
 };
 
-// Google Analytics 4 Configuration
+// Google Analytics 4
 export const GA4_CONFIG = {
-  // Your GA4 Measurement ID (Get from: https://analytics.google.com/)
   MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA4_ID || 'G-XXXXXXXXXX',
-  
-  // Enable debug mode in development
   DEBUG_MODE: process.env.NODE_ENV === 'development',
-  
-  // Track page views automatically
   AUTO_PAGE_TRACK: true,
-  
-  // Track scroll depth
   TRACK_SCROLL_DEPTH: true,
-  
-  // Track engagement
   TRACK_ENGAGEMENT: true,
 };
 
-// Event tracking configuration
+// ── Event Names ─────────────────────────────────────────────────────────────
+
 export const TRACKING_EVENTS = {
-  // Page view events
   PAGE_VIEW: 'page_view',
-  
-  // Product events
   VIEW_ITEM: 'view_item',
   VIEW_ITEM_LIST: 'view_item_list',
   ADD_TO_CART: 'add_to_cart',
   REMOVE_FROM_CART: 'remove_from_cart',
   VIEW_CART: 'view_cart',
   PURCHASE: 'purchase',
-  
-  // User engagement
   SCROLL: 'scroll',
   CLICK: 'click',
   SEARCH: 'search',
-  
-  // Content engagement
   VIEW_CONTENT: 'view_content',
   SHARE: 'share',
-  
-  // Lead generation
   GENERATE_LEAD: 'generate_lead',
   CONTACT: 'contact',
   NEWSLETTER_SIGNUP: 'newsletter_signup',
-  
-  // User properties
   SET_USER_ID: 'set_user_id',
-};
+} as const;
+
+// ── Runtime Helpers (client-side only) ──────────────────────────────────────
 
 /**
- * Generate GTM Script
- * Place this in <head> tag
- */
-export function generateGTMHeadScript(): string {
-  return `
-    <!-- Google Tag Manager -->
-    <script>
-      (function(w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({
-          'gtm.start': new Date().getTime(),
-          event: 'gtm.js'
-        });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', '${GTM_CONFIG.GTM_ID}');
-    </script>
-    <!-- End Google Tag Manager -->
-  `;
-}
-
-/**
- * Generate GTM NoScript
- * Place this in <body> tag (right after opening tag)
- */
-export function generateGTMBodyScript(): string {
-  return `
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-      <iframe
-        src="https://www.googletagmanager.com/ns.html?id=${GTM_CONFIG.GTM_ID}"
-        height="0"
-        width="0"
-        class="hidden"
-      ></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-  `;
-}
-
-/**
- * Generate GA4 Script
- * Place this in <head> tag
- */
-export function generateGA4Script(): string {
-  return `
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=${GA4_CONFIG.MEASUREMENT_ID}"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '${GA4_CONFIG.MEASUREMENT_ID}', {
-        page_path: window.location.pathname,
-        ${GA4_CONFIG.DEBUG_MODE ? "debug_mode: true," : ""}
-        allow_google_signals: true,
-        allow_ad_personalization_signals: true
-      });
-    </script>
-    <!-- End Google Analytics 4 -->
-  `;
-}
-
-/**
- * Track event with GTM/GA4
+ * Push a custom event into `window.dataLayer` for GTM / GA4.
  */
 export function trackEvent(
   eventName: string,
-  eventData?: Record<string, unknown>
+  eventData?: Record<string, unknown>,
 ): void {
   if (typeof window !== 'undefined' && window.dataLayer) {
     window.dataLayer.push({
@@ -148,7 +67,7 @@ export function trackEvent(
 }
 
 /**
- * Set user properties
+ * Set a GA4 user property.
  */
 export function setUserProperty(key: string, value: unknown): void {
   trackEvent('set_user_property', {
@@ -157,7 +76,7 @@ export function setUserProperty(key: string, value: unknown): void {
 }
 
 /**
- * Track product view
+ * Track a product view event.
  */
 export function trackProductView(product: {
   id: string;
@@ -182,7 +101,7 @@ export function trackProductView(product: {
 }
 
 /**
- * Track add to cart
+ * Track an add-to-cart event.
  */
 export function trackAddToCart(product: {
   id: string;
@@ -200,13 +119,14 @@ export function trackAddToCart(product: {
         item_name: product.name,
         price: product.price,
         quantity: product.quantity,
+        currency: product.currency,
       },
     ],
   });
 }
 
 /**
- * Track purchase
+ * Track a purchase event.
  */
 export function trackPurchase(data: {
   transaction_id: string;
@@ -223,7 +143,7 @@ export function trackPurchase(data: {
 }
 
 /**
- * Track search
+ * Track a search event.
  */
 export function trackSearch(searchTerm: string): void {
   trackEvent(TRACKING_EVENTS.SEARCH, {
@@ -232,7 +152,7 @@ export function trackSearch(searchTerm: string): void {
 }
 
 /**
- * Track scroll
+ * Track a scroll-depth event.
  */
 export function trackScroll(scrollPercentage: number): void {
   trackEvent(TRACKING_EVENTS.SCROLL, {
@@ -241,7 +161,7 @@ export function trackScroll(scrollPercentage: number): void {
 }
 
 /**
- * Track click
+ * Track a click event.
  */
 export function trackClick(elementName: string, elementLocation?: string): void {
   trackEvent(TRACKING_EVENTS.CLICK, {
@@ -251,16 +171,16 @@ export function trackClick(elementName: string, elementLocation?: string): void 
 }
 
 /**
- * Track newsletter signup
+ * Track a newsletter sign-up event.
  */
 export function trackNewsletterSignup(email?: string): void {
   trackEvent(TRACKING_EVENTS.NEWSLETTER_SIGNUP, {
-    email: email ? '***' : undefined, // Don't send actual email for privacy
+    email: email ? '***' : undefined, // redact for privacy
   });
 }
 
 /**
- * Track contact form submission
+ * Track a contact form submission event.
  */
 export function trackContactForm(contactType: string): void {
   trackEvent(TRACKING_EVENTS.CONTACT, {
@@ -268,3 +188,11 @@ export function trackContactForm(contactType: string): void {
   });
 }
 
+// ── Global type augmentations ───────────────────────────────────────────────
+
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}

@@ -18,6 +18,7 @@ const securityHeaders = [
   // Opt-out of privacy-invasive / unwanted features
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
   { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   // HSTS only in production (requires HTTPS)
   ...(isProd
     ? [

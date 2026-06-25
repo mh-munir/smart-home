@@ -1,4 +1,4 @@
-import { DEFAULT_LOGO, DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/site';
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/site';
 import { headers } from 'next/headers';
 
 interface SchemaMarkupProps {

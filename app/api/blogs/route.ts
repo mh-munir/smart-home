@@ -5,7 +5,6 @@ import { requireAdminSession } from '@/lib/admin-auth';
 import Blog from '@/models/Blog';
 import fs from 'fs/promises';
 import path from 'path';
-import { withRateLimit } from '@/lib/rate-limit';
 
 // Helper function to slugify text for filenames
 function slugify(text: string) {

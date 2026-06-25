@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, memo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,18 +8,22 @@ import Link from "next/link";
  * Horizontal scrollable slider for category cards.
  * Supports arrow navigation, mouse drag, and touch swipe.
  */
-export default function CategorySlider({ categories }) {
+function CategorySlider({ categories }) {
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const dragState = useRef({ startX: 0, scrollLeft: 0 });
+  const rafRef = useRef(null);
 
   const checkScroll = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 4);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const el = scrollRef.current;
+      if (!el) return;
+      setCanScrollLeft(el.scrollLeft > 4);
+      setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+    });
   }, []);
 
   useEffect(() => {
@@ -31,15 +35,17 @@ export default function CategorySlider({ categories }) {
     return () => {
       el.removeEventListener("scroll", checkScroll);
       window.removeEventListener("resize", checkScroll);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [checkScroll, categories]);
 
   const scroll = useCallback((direction) => {
     const el = scrollRef.current;
     if (!el) return;
-    const cardWidth = el.querySelector(":scope > a, :scope > div")?.offsetWidth || 200;
-    const gap = 16;
-    el.scrollBy({ left: direction * (cardWidth + gap) * 2, behavior: "smooth" });
+    // Use a fixed card width to avoid forced reflow from reading offsetWidth
+    const CARD_WIDTH = 216;
+    const GAP = 16;
+    el.scrollBy({ left: direction * (CARD_WIDTH + GAP) * 2, behavior: "smooth" });
   }, []);
 
   const onMouseDown = useCallback((e) => {
@@ -161,7 +167,7 @@ export default function CategorySlider({ categories }) {
                 {category.name}
               </h3>
               <p className="text-xs text-gray-500 mt-0.5">
-                {category.products.length} product{category.products.length !== 1 ? "s" : ""}
+                {category.products?.length || 0} product{(category.products?.length || 0) !== 1 ? "s" : ""}
               </p>
             </div>
           </Link>
@@ -170,3 +176,5 @@ export default function CategorySlider({ categories }) {
     </div>
   );
 }
+
+export default memo(CategorySlider);

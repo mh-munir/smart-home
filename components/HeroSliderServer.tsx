@@ -38,7 +38,6 @@ export default function HeroSliderServer({ slides }: { slides: HeroSlide[] }) {
   return (
     <section
       className="relative overflow-hidden bg-gray-950 text-white h-full min-h-105 md:min-h-130"
-      data-hero-slides={JSON.stringify(slides.map((s) => ({ id: s._id, title: s.title, description: s.description, image: s.image, ctaText: s.ctaText, ctaLink: s.ctaLink })))}
     >
       {/* Server-rendered background image — LCP element */}
       <div className="absolute inset-0">

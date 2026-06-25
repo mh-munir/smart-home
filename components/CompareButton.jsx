@@ -1,13 +1,13 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { useCompare } from "./CompareProvider";
 
 function CompareButton({ product }) {
-  const { addToCompare, removeFromCompare, isInCompare, canAdd } = useCompare();
-  const inCompare = isInCompare(product?._id);
+  const { addToCompare, removeFromCompare, canAdd, compareList } = useCompare();
+  const inCompare = compareList.some((p) => p._id === product?._id);
 
-  const handleClick = (e) => {
+  const handleClick = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     if (inCompare) {
@@ -15,7 +15,7 @@ function CompareButton({ product }) {
     } else if (canAdd) {
       addToCompare(product);
     }
-  };
+  }, [inCompare, canAdd, product, addToCompare, removeFromCompare]);
 
   return (
     <button
