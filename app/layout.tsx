@@ -255,6 +255,22 @@ export default async function RootLayout({
                   }}
         />
         {/* End Google Tag Manager */}
+        {/* Google Analytics (gtag.js) */}
+        <script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-TYYPR8FBTX"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-TYYPR8FBTX');
+            `,
+          }}
+        />
+        {/* End Google Analytics */}
         <link rel="icon" href={faviconPath} />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0d9488" />
