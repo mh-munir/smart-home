@@ -18,6 +18,9 @@ export interface IBlog extends Document {
   clicks: number;
   affiliateProducts: mongoose.Types.ObjectId[];
   published: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
+  canonicalUrl?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -79,6 +82,19 @@ const BlogSchema = new Schema<IBlog>(
     published: {
       type: Boolean,
       default: false,
+    },
+    // SEO fields
+    metaTitle: {
+      type: String,
+      default: null,
+    },
+    metaDescription: {
+      type: String,
+      default: null,
+    },
+    canonicalUrl: {
+      type: String,
+      default: null,
     },
   },
   { timestamps: true }

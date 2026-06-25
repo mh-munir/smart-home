@@ -26,6 +26,9 @@ type ProductDoc = {
   brand?: string;
   isActive?: boolean;
   affiliateLinks?: Record<string, unknown>;
+  metaTitle?: string;
+  metaDescription?: string;
+  canonicalUrl?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -37,14 +40,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     await connectDB();
     const entry = (await Product.findOne({ slug }).lean()) as ProductDoc | null;
     if (entry) {
-      const productUrl = `${SITE_URL}/products/${entry.slug}`;
+      const productUrl = entry.canonicalUrl || `${SITE_URL}/products/${entry.slug}`;
       const productImage = entry.image || entry.images?.[0] || DEFAULT_OG_IMAGE;
-      const productDesc = entry.description
-        ? entry.description.replace(/[#*_\[\]]/g, "").slice(0, 160)
-        : `Buy ${entry.title} - best price and reviews on ${SITE_NAME}`;
+      const productDesc = entry.metaDescription
+        || (entry.description
+          ? entry.description.replace(/[#*_\[\]]/g, "").slice(0, 160)
+          : `Buy ${entry.title} - best price and reviews on ${SITE_NAME}`);
+      const productTitle = entry.metaTitle || `${entry.title} | ${SITE_NAME}`;
 
       return {
-        title: `${entry.title} | ${SITE_NAME}`,
+        title: productTitle,
         description: productDesc,
         keywords: `${entry.title}, ${entry.category || "smart home"}, buy online, best price, review`,
         alternates: {

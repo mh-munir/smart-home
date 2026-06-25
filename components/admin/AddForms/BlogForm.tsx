@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import SeoSettings from '@/components/admin/SeoSettings';
 
 interface SubSection {
   subHeading: string;
@@ -17,6 +18,10 @@ interface BlogData {
   mainImagePreview: string;
   mainDescription: string;
   subSections: SubSection[];
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
 }
 
 export default function BlogForm() {
@@ -31,7 +36,11 @@ export default function BlogForm() {
       image: null, 
       imagePreview: '', 
       content: '' 
-    })), 
+    })),
+    slug: '',
+    metaTitle: '',
+    metaDescription: '',
+    canonicalUrl: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const previewsRef = useRef<string[]>([]);
@@ -130,6 +139,10 @@ export default function BlogForm() {
           category: blogData.category,
           content,
           images,
+          slug: blogData.slug || undefined,
+          metaTitle: blogData.metaTitle || undefined,
+          metaDescription: blogData.metaDescription || undefined,
+          canonicalUrl: blogData.canonicalUrl || undefined,
         }),
       });
 
@@ -274,6 +287,20 @@ export default function BlogForm() {
             <span className="text-xl font-bold">+</span> Add Another Step
           </button>
         </div>
+
+        <SeoSettings
+          title={blogData.mainHeading}
+          slug={blogData.slug}
+          onSlugChange={(slug) => setBlogData((prev) => ({ ...prev, slug }))}
+          metaTitle={blogData.metaTitle}
+          onMetaTitleChange={(metaTitle) => setBlogData((prev) => ({ ...prev, metaTitle }))}
+          metaDescription={blogData.metaDescription}
+          onMetaDescriptionChange={(metaDescription) => setBlogData((prev) => ({ ...prev, metaDescription }))}
+          canonicalUrl={blogData.canonicalUrl}
+          onCanonicalUrlChange={(canonicalUrl) => setBlogData((prev) => ({ ...prev, canonicalUrl }))}
+          type="blog"
+          basePath="/blog"
+        />
 
         <button 
           type="submit" 

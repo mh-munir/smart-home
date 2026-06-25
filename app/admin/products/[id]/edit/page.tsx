@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
+import SeoSettings from '@/components/admin/SeoSettings';
 
 interface SubSection {
   subHeading: string;
@@ -22,6 +23,10 @@ interface ProductData {
   mainDescription: string;
   subSections: SubSection[];
   bestDeal?: boolean;
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
 }
 
 const EditProductPage = () => {
@@ -40,6 +45,10 @@ const EditProductPage = () => {
     mainDescription: '',
     subSections: [],
     bestDeal: false,
+    slug: '',
+    metaTitle: '',
+    metaDescription: '',
+    canonicalUrl: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const previewsRef = useRef<string[]>([]);
@@ -93,6 +102,10 @@ const EditProductPage = () => {
               content: '',
             })),
             bestDeal: !!data.bestDeal,
+            slug: data.slug || '',
+            metaTitle: data.metaTitle || '',
+            metaDescription: data.metaDescription || '',
+            canonicalUrl: data.canonicalUrl || '',
           });
         }
       } catch (e) {
@@ -200,6 +213,10 @@ const EditProductPage = () => {
         affiliateLink: productData.affiliateLink,
         description,
         bestDeal: productData.bestDeal,
+        slug: productData.slug || undefined,
+        metaTitle: productData.metaTitle || undefined,
+        metaDescription: productData.metaDescription || undefined,
+        canonicalUrl: productData.canonicalUrl || undefined,
       };
 
       if (images.length > 0) {
@@ -409,6 +426,22 @@ const EditProductPage = () => {
             <span className="text-xl font-bold">+</span> Add Another Step
           </button>
         </div>
+
+        <SeoSettings
+          title={productData.title}
+          slug={productData.slug}
+          onSlugChange={(slug) => setProductData((prev) => ({ ...prev, slug }))}
+          metaTitle={productData.metaTitle}
+          onMetaTitleChange={(metaTitle) => setProductData((prev) => ({ ...prev, metaTitle }))}
+          metaDescription={productData.metaDescription}
+          onMetaDescriptionChange={(metaDescription) => setProductData((prev) => ({ ...prev, metaDescription }))}
+          canonicalUrl={productData.canonicalUrl}
+          onCanonicalUrlChange={(canonicalUrl) => setProductData((prev) => ({ ...prev, canonicalUrl }))}
+          type="product"
+          basePath="/products"
+          excludeId={typeof id === 'string' ? id : undefined}
+          autoGenerateSlug={false}
+        />
 
         <button
           type="submit"

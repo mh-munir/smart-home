@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAdminSession } from "@/lib/admin-auth";
-import { saveBufferToStorage } from "@/lib/storage";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
 export async function POST(request) {
   const unauthorized = await requireAdminSession();
@@ -38,13 +38,17 @@ export async function POST(request) {
 
     // Generate a unique filename
     const ext = file.name.split(".").pop() || "jpg";
-    const filename = `product-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-    const key = `uploads/products/${filename}`;
+    const filename = `product-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-    // Save to storage (S3 or local)
-    const result = await saveBufferToStorage(buffer, key, file.type);
+    // Upload directly to Cloudinary
+    const result = await uploadToCloudinary(
+      buffer,
+      "smart-home/products",
+      filename,
+      file.type
+    );
 
-    return NextResponse.json({ url: result.url, key: result.key });
+    return NextResponse.json({ url: result.url, publicId: result.publicId });
   } catch (error) {
     console.error("Upload error:", error);
     return NextResponse.json(

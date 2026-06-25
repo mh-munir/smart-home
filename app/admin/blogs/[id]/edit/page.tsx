@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter, useParams } from 'next/navigation';
+import SeoSettings from '@/components/admin/SeoSettings';
 
 interface SubSection {
   subHeading: string;
@@ -19,6 +20,10 @@ interface BlogData {
   mainDescription: string;
   subSections: SubSection[];
   published: boolean;
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
 }
 
 const EditBlogPage = () => {
@@ -34,6 +39,10 @@ const EditBlogPage = () => {
     mainDescription: '',
     subSections: [],
     published: false,
+    slug: '',
+    metaTitle: '',
+    metaDescription: '',
+    canonicalUrl: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const previewsRef = useRef<string[]>([]);
@@ -84,6 +93,10 @@ const EditBlogPage = () => {
               content: '',
             })),
             published: !!data.published,
+            slug: data.slug || '',
+            metaTitle: data.metaTitle || '',
+            metaDescription: data.metaDescription || '',
+            canonicalUrl: data.canonicalUrl || '',
           });
         }
       } catch (e) {
@@ -188,6 +201,10 @@ const EditBlogPage = () => {
         category: blogData.category,
         content,
         published: blogData.published,
+        slug: blogData.slug || undefined,
+        metaTitle: blogData.metaTitle || undefined,
+        metaDescription: blogData.metaDescription || undefined,
+        canonicalUrl: blogData.canonicalUrl || undefined,
       };
 
       if (images.length > 0) {
@@ -355,6 +372,22 @@ const EditBlogPage = () => {
             <span className="text-xl font-bold">+</span> Add Another Step
           </button>
         </div>
+
+        <SeoSettings
+          title={blogData.mainHeading}
+          slug={blogData.slug}
+          onSlugChange={(slug) => setBlogData((prev) => ({ ...prev, slug }))}
+          metaTitle={blogData.metaTitle}
+          onMetaTitleChange={(metaTitle) => setBlogData((prev) => ({ ...prev, metaTitle }))}
+          metaDescription={blogData.metaDescription}
+          onMetaDescriptionChange={(metaDescription) => setBlogData((prev) => ({ ...prev, metaDescription }))}
+          canonicalUrl={blogData.canonicalUrl}
+          onCanonicalUrlChange={(canonicalUrl) => setBlogData((prev) => ({ ...prev, canonicalUrl }))}
+          type="blog"
+          basePath="/blog"
+          excludeId={typeof id === 'string' ? id : undefined}
+          autoGenerateSlug={false}
+        />
 
         <button
           type="submit"

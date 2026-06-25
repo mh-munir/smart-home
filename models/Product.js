@@ -102,6 +102,19 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    // SEO fields
+    metaTitle: {
+      type: String,
+      default: null,
+    },
+    metaDescription: {
+      type: String,
+      default: null,
+    },
+    canonicalUrl: {
+      type: String,
+      default: null,
+    },
     // High-traffic optimization fields
     views: {
       type: Number,

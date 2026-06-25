@@ -26,6 +26,9 @@ type BlogArticleDoc = {
   images?: string[];
   imageUrls?: string[];
   tags?: string[];
+  metaTitle?: string;
+  metaDescription?: string;
+  canonicalUrl?: string;
 };
 
 type RelatedArticle = {
@@ -48,21 +51,30 @@ export async function generateMetadata({
     await connectDB();
     const entry = (await Blog.findOne({ slug, published: true }).lean()) as BlogArticleDoc | null;
     if (entry) {
+      const blogUrl = entry.canonicalUrl || `${SITE_URL}/blog/${entry.slug}`;
+      const blogTitle = entry.metaTitle || `${entry.title} | ${SITE_NAME}`;
+      const blogDesc = entry.metaDescription || entry.description || entry.excerpt || "";
+
       return {
-        title: `${entry.title} | ${SITE_NAME}`,
-        description: entry.description || entry.excerpt || "",
+        title: blogTitle,
+        description: blogDesc,
         keywords: (entry.tags || []).join(", "),
         alternates: {
-          canonical: `${SITE_URL}/blog/${entry.slug}`,
+          canonical: blogUrl,
         },
         openGraph: {
           title: entry.title,
-          description: entry.description || entry.excerpt || "",
-          url: `${SITE_URL}/blog/${entry.slug}`,
+          description: blogDesc,
+          url: blogUrl,
           type: "article",
           publishedTime: entry.createdAt,
           authors: [entry.author || SITE_NAME],
           tags: entry.tags || [],
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: entry.title,
+          description: blogDesc,
         },
         article: {
           publishedTime: entry.createdAt,

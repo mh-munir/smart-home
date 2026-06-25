@@ -13,6 +13,13 @@ function serializeBlog(blog) {
     content: blog.content || null,
     image: blog.image || null,
     images: blog.images || [],
+    category: blog.category || null,
+    published: blog.published || false,
+    description: blog.description || null,
+    author: blog.author || null,
+    metaTitle: blog.metaTitle || null,
+    metaDescription: blog.metaDescription || null,
+    canonicalUrl: blog.canonicalUrl || null,
     affiliateProducts: blog.affiliateProducts?.map(product => 
       typeof product === 'object' && product._id 
         ? {

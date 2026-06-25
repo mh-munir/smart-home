@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next'
 import { getProducts } from '@/lib/products'
 import { blogArticles, getAllBlogCategories } from '@/lib/blog'
 import { SITE_URL } from '@/lib/site'
+import { connectDB, hasMongoDBConfig } from '@/lib/db'
+import Blog from '@/models/Blog'
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 3600;
@@ -95,7 +97,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
     );
 
-    // Blog articles
+    // Blog articles (static)
     blogArticles.forEach((article) => {
       entries.push({
         url: `${SITE_URL}/blog/${article.slug}`,
@@ -104,6 +106,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
       });
     });
+
+    // Blog articles (from DB)
+    if (hasMongoDBConfig()) {
+      try {
+        await connectDB();
+        const dbBlogs = await Blog.find({ published: true })
+          .select('slug createdAt updatedAt')
+          .sort({ createdAt: -1 })
+          .limit(500)
+          .lean();
+        const staticSlugs = new Set(blogArticles.map((a) => a.slug));
+        for (const blog of dbBlogs) {
+          if (blog.slug && !staticSlugs.has(blog.slug)) {
+            entries.push({
+              url: `${SITE_URL}/blog/${blog.slug}`,
+              lastModified: blog.updatedAt || blog.createdAt || now,
+              changeFrequency: 'monthly',
+              priority: 0.8,
+            });
+          }
+        }
+      } catch {
+        // ignore DB errors
+      }
+    }
 
     // Blog categories
     const categories = getAllBlogCategories();

@@ -2,20 +2,9 @@ import { connectDB } from "@/lib/db";
 import { requireAdminSession } from "@/lib/admin-auth";
 import { revalidatePath } from "next/cache";
 import Product from "@/models/Product";
-import fs from "fs/promises";
-import path from "path";
-import { saveBufferToStorage } from "@/lib/storage";
+import { uploadToCloudinary } from "@/lib/cloudinary";
 
-function slugify(text) {
-  return String(text || "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-zA-Z0-9\s-]/g, "")
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-")
-    .replace(/--+/g, "-");
-}
+import { generateSlug } from "@/utils/generateSlug";
 
 function serializeProduct(product) {
   let affiliateLinks = {};
@@ -41,6 +30,9 @@ function serializeProduct(product) {
     offer: product.offer || null,
     clicks: product.clicks || 0,
     conversions: product.conversions || 0,
+    metaTitle: product.metaTitle || null,
+    metaDescription: product.metaDescription || null,
+    canonicalUrl: product.canonicalUrl || null,
     createdAt: product.createdAt?.toISOString() || null,
     updatedAt: product.updatedAt?.toISOString() || null,
   };
@@ -54,20 +46,18 @@ export async function POST(req) {
     await connectDB();
     const data = await req.json();
 
-    // slug
-    const baseSlug = slugify(data.title || "product");
+    // slug — use client-provided slug if available, otherwise auto-generate
+    const baseSlug = data.slug ? generateSlug(data.slug) : generateSlug(data.title || "product");
     let slug = baseSlug || `${Date.now()}`;
 
     // ensure unique slug
     let exists = await Product.findOne({ slug });
     if (exists) slug = `${slug}-${Date.now()}`;
 
-    // handle base64 images
+    // handle base64 images — upload directly to Cloudinary
     const images = Array.isArray(data.images) ? data.images : [];
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "products");
-    await fs.mkdir(uploadDir, { recursive: true });
-
     const savedImageUrls = [];
+
     for (const [index, base64Image] of images.entries()) {
       if (typeof base64Image !== "string") continue;
       const matches = base64Image.match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/);
@@ -76,17 +66,20 @@ export async function POST(req) {
       const mime = matches[1];
       const base64Data = matches[2];
       const ext = mime.split("/")[1].split("+")[0] || "jpg";
-      const filename = `${baseSlug}-${Date.now()}-${index}.${ext}`;
       const buffer = Buffer.from(base64Data, "base64");
-      const key = `uploads/products/${filename}`;
+      const filename = `${baseSlug}-${Date.now()}-${index}`;
 
       try {
-        const res = await saveBufferToStorage(buffer, key, mime);
-        savedImageUrls.push(res.url);
-      } catch (e) {
-        const filePath = path.join(uploadDir, filename);
-        await fs.writeFile(filePath, buffer);
-        savedImageUrls.push(`/uploads/products/${filename}`);
+        const result = await uploadToCloudinary(
+          buffer,
+          "smart-home/products",
+          filename,
+          mime
+        );
+        savedImageUrls.push(result.url);
+      } catch (uploadErr) {
+        console.error("Cloudinary upload failed for image:", uploadErr.message);
+        // Skip this image if upload fails — do not write to local filesystem
       }
     }
 
@@ -105,6 +98,9 @@ export async function POST(req) {
       offer: data.offer || null,
       clicks: 0,
       conversions: 0,
+      metaTitle: data.metaTitle || null,
+      metaDescription: data.metaDescription || null,
+      canonicalUrl: data.canonicalUrl || null,
     });
 
     revalidatePath("/");

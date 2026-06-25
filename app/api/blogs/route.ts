@@ -41,6 +41,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { title, category, content } = body;
     const images = Array.isArray(body.images) ? body.images : [];
+    const clientSlug = body.slug as string | undefined;
+    const metaTitle = body.metaTitle as string | undefined;
+    const metaDescription = body.metaDescription as string | undefined;
+    const canonicalUrl = body.canonicalUrl as string | undefined;
 
     // Validate incoming data (optional, but recommended)
     if (!title || !category || !content) {
@@ -82,10 +86,19 @@ export async function POST(request: Request) {
       .trim()
       .slice(0, 180);
 
-    const slugBase = slugify(title).slice(0, 120);
+    // Use client-provided slug if available, otherwise auto-generate
+    const slugBase = clientSlug ? slugify(clientSlug).slice(0, 120) : slugify(title).slice(0, 120);
+    let finalSlug = slugBase || `blog-${Date.now()}`;
+
+    // Ensure unique slug
+    const existingBlog = await Blog.findOne({ slug: finalSlug });
+    if (existingBlog) {
+      finalSlug = `${finalSlug}-${Date.now()}`;
+    }
+
     const newBlog = await Blog.create({
       title,
-      slug: `${slugBase}-${Date.now()}`,
+      slug: finalSlug,
       category,
       content,
       description: description || '',
@@ -93,6 +106,9 @@ export async function POST(request: Request) {
       images: savedImageUrls,
       imageUrls: savedImageUrls,
       published: true,
+      metaTitle: metaTitle || null,
+      metaDescription: metaDescription || null,
+      canonicalUrl: canonicalUrl || null,
     });
 
     revalidatePath('/blog');

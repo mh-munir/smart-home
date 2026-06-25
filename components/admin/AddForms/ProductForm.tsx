@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import SeoSettings from '@/components/admin/SeoSettings';
 
 interface SubSection {
   subHeading: string;
@@ -24,6 +25,10 @@ interface ProductData {
   bestDeal?: boolean;
   dealType?: string;
   offer?: string;
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  canonicalUrl: string;
 }
 
 export default function ProductForm() {
@@ -46,6 +51,10 @@ export default function ProductForm() {
     bestDeal: false,
     dealType: '',
     offer: '',
+    slug: '',
+    metaTitle: '',
+    metaDescription: '',
+    canonicalUrl: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
@@ -224,6 +233,10 @@ export default function ProductForm() {
         dealType: productData.dealType || '',
         offer: productData.offer || '',
         images,
+        slug: productData.slug || undefined,
+        metaTitle: productData.metaTitle || undefined,
+        metaDescription: productData.metaDescription || undefined,
+        canonicalUrl: productData.canonicalUrl || undefined,
       };
 
       const response = await fetch('/api/admin/products', {
@@ -563,6 +576,20 @@ export default function ProductForm() {
             <span className="text-xl font-bold">+</span> Add Another Step
           </button>
         </div>
+
+        <SeoSettings
+          title={productData.title}
+          slug={productData.slug}
+          onSlugChange={(slug) => setProductData((prev) => ({ ...prev, slug }))}
+          metaTitle={productData.metaTitle}
+          onMetaTitleChange={(metaTitle) => setProductData((prev) => ({ ...prev, metaTitle }))}
+          metaDescription={productData.metaDescription}
+          onMetaDescriptionChange={(metaDescription) => setProductData((prev) => ({ ...prev, metaDescription }))}
+          canonicalUrl={productData.canonicalUrl}
+          onCanonicalUrlChange={(canonicalUrl) => setProductData((prev) => ({ ...prev, canonicalUrl }))}
+          type="product"
+          basePath="/products"
+        />
 
         <button
           type="submit"

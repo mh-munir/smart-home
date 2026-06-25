@@ -2,9 +2,11 @@ import { connectDB } from "@/lib/db";
 import { requireAdminSession } from "@/lib/admin-auth";
 import { revalidatePath } from "next/cache";
 import Product from "@/models/Product";
-import fs from "fs/promises";
-import path from "path";
-import { saveBufferToStorage } from "@/lib/storage";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+  isCloudinaryUrl,
+} from "@/lib/cloudinary";
 
 function serializeProduct(product) {
   let affiliateLinks = {};
@@ -30,6 +32,9 @@ function serializeProduct(product) {
     offer: product.offer || null,
     clicks: product.clicks || 0,
     conversions: product.conversions || 0,
+    metaTitle: product.metaTitle || null,
+    metaDescription: product.metaDescription || null,
+    canonicalUrl: product.canonicalUrl || null,
     createdAt: product.createdAt?.toISOString() || null,
     updatedAt: product.updatedAt?.toISOString() || null,
   };
@@ -71,18 +76,20 @@ export async function PUT(req, { params }) {
             const mime = match[1];
             const base64Data = match[2];
             const ext = mime.split("/")[1].split("+")[0] || "jpg";
-            const filename = `product-${id}-${Date.now()}-${i}.${ext}`;
-            const key = `uploads/products/${filename}`;
             const buffer = Buffer.from(base64Data, "base64");
+            const filename = `product-${id}-${Date.now()}-${i}`;
+
             try {
-              const res = await saveBufferToStorage(buffer, key, mime);
-              processedImages.push(res.url);
-            } catch {
-              const uploadsDir = path.join(process.cwd(), "public", "uploads", "products");
-              await fs.mkdir(uploadsDir, { recursive: true });
-              const filePath = path.join(uploadsDir, filename);
-              await fs.writeFile(filePath, buffer);
-              processedImages.push(`/uploads/products/${filename}`);
+              const result = await uploadToCloudinary(
+                buffer,
+                "smart-home/products",
+                filename,
+                mime
+              );
+              processedImages.push(result.url);
+            } catch (uploadErr) {
+              console.error("Cloudinary upload failed for image:", uploadErr.message);
+              // Skip this image if upload fails — do not write to local filesystem
             }
           }
         } else if (typeof img === "string" && img.trim()) {
@@ -113,6 +120,35 @@ export async function DELETE(req, { params }) {
   try {
     await connectDB();
     const { id } = await params;
+
+    // Fetch the product first to get image URLs for Cloudinary deletion
+    const product = await Product.findById(id);
+
+    if (product) {
+      // Delete all Cloudinary images associated with this product
+      const imagesToDelete = [];
+
+      if (product.image && isCloudinaryUrl(product.image)) {
+        imagesToDelete.push(product.image);
+      }
+
+      if (Array.isArray(product.images)) {
+        for (const imgUrl of product.images) {
+          if (isCloudinaryUrl(imgUrl) && !imagesToDelete.includes(imgUrl)) {
+            imagesToDelete.push(imgUrl);
+          }
+        }
+      }
+
+      // Delete images from Cloudinary (don't block on errors)
+      for (const imgUrl of imagesToDelete) {
+        try {
+          await deleteFromCloudinary(imgUrl);
+        } catch (delErr) {
+          console.error("Failed to delete Cloudinary image:", delErr.message);
+        }
+      }
+    }
 
     await Product.findByIdAndDelete(id);
     revalidatePath("/");
