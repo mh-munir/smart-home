@@ -1,42 +1,50 @@
-import Script from 'next/script';
+"use client";
+
+import { useEffect } from "react";
 
 /**
  * Google AdSense Script Component
  *
- * Loads the AdSense ad-by-google script exactly once.
+ * Loads the AdSense ad-by-google script exactly once using a plain <script> tag
+ * (NOT next/script) to avoid the "data-nscript" attribute that Next.js adds
+ * to Script components, which AdSense does not support.
+ *
  * - Skips in development or when NEXT_PUBLIC_ADSENSE_PUBLISHER_ID is missing.
- * - Uses strategy="lazyOnload" to keep ads off the critical rendering path.
- * - Placed in <body> (not <head>) to avoid the "data-nscript" Next.js warning
- *   and the AdSense "head tag doesn't support data-nscript attribute" console error.
- * - Includes the required ?client= query parameter for AdSense to function.
- * - De-dupes by checking window.__adsbygoogle_loaded before rendering.
+ * - Uses useEffect to inject the script client-side, avoiding SSR issues.
+ * - De-dupes by checking window.__adsbygoogle_loaded before injecting.
  *
  * @see https://support.google.com/adsense/answer/9274482
  */
-export default function GoogleAdSenseScript({ nonce }: { nonce?: string }) {
-  // Only load in production
-  if (process.env.NODE_ENV !== 'production') return null;
+export default function GoogleAdSenseScript() {
+  useEffect(() => {
+    // Only load in production
+    if (process.env.NODE_ENV !== "production") return;
 
-  const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
-  if (!publisherId) return null;
+    const publisherId = process.env.NEXT_PUBLIC_ADSENSE_PUBLISHER_ID;
+    if (!publisherId) return;
 
-  // Normalise: ensure it starts with "pub-"
-  const formattedPublisherId = publisherId.startsWith('pub-')
-    ? publisherId
-    : `pub-${publisherId}`;
+    // De-duplicate: don't load twice
+    if (typeof window !== "undefined" && (window as any).__adsbygoogle_loaded) return;
 
-  // AdSense script URL requires ?client=ca-pub-XXXXX
-  const scriptSrc = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${formattedPublisherId}`;
+    // Normalise: ensure it starts with "pub-"
+    const formattedPublisherId = publisherId.startsWith("pub-")
+      ? publisherId
+      : `pub-${publisherId}`;
 
-  const saneNonce = nonce && nonce.length > 0 ? nonce : undefined;
+    // AdSense script URL requires ?client=ca-pub-XXXXX
+    const scriptSrc = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${formattedPublisherId}`;
 
-  return (
-    <Script
-      id="adsense"
-      src={scriptSrc}
-      strategy="lazyOnload"
-      crossOrigin="anonymous"
-      nonce={saneNonce}
-    />
-  );
+    const script = document.createElement("script");
+    script.src = scriptSrc;
+    script.async = true;
+    script.crossOrigin = "anonymous";
+
+    document.head.appendChild(script);
+
+    if (typeof window !== "undefined") {
+      (window as any).__adsbygoogle_loaded = true;
+    }
+  }, []);
+
+  return null;
 }

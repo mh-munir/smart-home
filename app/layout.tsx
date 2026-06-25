@@ -320,7 +320,7 @@ export default async function RootLayout({
           />
         </noscript>
     
-        <GoogleAdSenseScript nonce={nonce} />
+        <GoogleAdSenseScript />
         {/* Deferred providers — avoids blocking hydration for theme/compare */}
         <DeferredProviders>
             <a href="#main-content" className="sr-only focus:not-sr-only">
