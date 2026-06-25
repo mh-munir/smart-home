@@ -40,24 +40,113 @@ export function proxy(request: NextRequest) {
     const isDev = process.env.NODE_ENV !== 'production';
 
     // Production-grade CSP with a per-request nonce for inline scripts.
+    //
+    // IMPORTANT: We intentionally do NOT use 'strict-dynamic' because it
+    // causes the browser to IGNORE all host-based allowlists in script-src
+    // (per the CSP spec). This blocks Vercel SSO, Vercel preview toolbar,
+    // and any third-party scripts that are not loaded by a nonced script.
+    // Instead, we use nonces for our own scripts and comprehensive host
+    // allowlists for Google services and Vercel domains.
+    //
+    // GTM dynamically injects <script> tags from google domains listed
+    // below. Since strict-dynamic is removed, those domains must be
+    // explicitly allowlisted.
     const csp = [
       "default-src 'self'",
-      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com`,
-      // Do not add nonce for style-src: many client libs add inline styles
-      // (style attributes) which are not covered by nonces; allow 'unsafe-inline'
-      // for styles to avoid blocking runtime style mutations. Consider hardening
-      // this later by removing inline styles and using hashed styles where possible.
+
+      // script-src: nonce for our inline/first-party scripts + host
+      // allowlists for Google services (GTM, GA, AdSense) and Vercel.
+      // 'unsafe-eval' is only added in dev for HMR.
+      [
+        "script-src 'self'",
+        `'nonce-${nonce}'`,
+        "'unsafe-inline'",
+        isDev ? "'unsafe-eval'" : "",
+        // Google Tag Manager & Analytics
+        "https://www.googletagmanager.com",
+        "https://www.google-analytics.com",
+        "https://analytics.google.com",
+        // Google AdSense & Ads
+        "https://pagead2.googlesyndication.com",
+        "https://googleads.g.doubleclick.net",
+        "https://www.googleadservices.com",
+        "https://adservice.google.com",
+        "https://adservice.google.co.uk",
+        "https://www.google.com",
+        // Vercel (SSO, preview toolbar, live)
+        "https://vercel.com",
+        "https://vercel.live",
+      ].filter(Boolean).join(" "),
+
+      // style-src: 'unsafe-inline' is required because many client libs
+      // (Tailwind, styled-components, etc.) inject inline style attributes
+      // at runtime which are not covered by nonces.
       `style-src 'self' https://fonts.googleapis.com 'unsafe-inline'`,
+
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' https:",
-      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://*.google-analytics.com https://*.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://adtrafficquality.google",
-      "frame-src https://*.google.com https://*.googlesyndication.com https://*.adtrafficquality.google https://adtrafficquality.google https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+
+      // connect-src: Google Analytics, GTM, AdSense, Ad Traffic Quality,
+      // Google Ads conversion tracking, Vercel analytics/preview/SSO, and
+      // all origins that fetch() or XHR may reach at runtime.
+      [
+        "connect-src 'self'",
+        // Google Analytics & Tag Manager
+        "https://www.google-analytics.com",
+        "https://www.googletagmanager.com",
+        "https://analytics.google.com",
+        "https://*.google-analytics.com",
+        // Google AdSense & Ads
+        "https://pagead2.googlesyndication.com",
+        "https://googleads.g.doubleclick.net",
+        "https://*.googlesyndication.com",
+        "https://www.googleadservices.com",
+        "https://adservice.google.com",
+        "https://adservice.google.co.uk",
+        // Google Ad Traffic Quality
+        "https://ep1.adtrafficquality.google",
+        "https://ep2.adtrafficquality.google",
+        "https://adtrafficquality.google",
+        // Vercel (analytics, SSO, previews, toolbar)
+        "https://vitals.vercel-insights.com",
+        "https://*.vercel.app",
+        "https://vercel.com",
+        "https://api.vercel.com",
+        "https://vercel.live",
+      ].join(" "),
+
+      // frame-src: Google ads iframes, GTM noscript, Vercel SSO/preview.
+      [
+        "frame-src",
+        "https://*.google.com",
+        "https://*.googlesyndication.com",
+        "https://*.adtrafficquality.google",
+        "https://adtrafficquality.google",
+        "https://www.googletagmanager.com",
+        "https://pagead2.googlesyndication.com",
+        "https://googleads.g.doubleclick.net",
+        "https://tpc.googlesyndication.com",
+        "https://vercel.com",
+        "https://*.vercel.app",
+        "https://vercel.live",
+      ].join(" "),
+
+      // worker-src: service worker + blob workers
       "worker-src 'self' blob:",
+
+      // manifest-src: PWA web app manifest
+      "manifest-src 'self' https://*.vercel.app",
+
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
-      "frame-ancestors 'self'",
+      // frame-ancestors: allow embedding from same origin and Vercel previews
+      [
+        "frame-ancestors 'self'",
+        "https://*.vercel.app",
+        "https://vercel.com",
+      ].join(" "),
       ...(isDev ? [] : ["upgrade-insecure-requests"]),
     ]
       .filter(Boolean)
@@ -65,7 +154,6 @@ export function proxy(request: NextRequest) {
 
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set(NONCE_HEADER, nonce);
-    requestHeaders.set(CSP_HEADER, csp);
 
     const res = NextResponse.next({
       request: {
@@ -75,7 +163,8 @@ export function proxy(request: NextRequest) {
 
     res.headers.set(CSP_HEADER, csp);
 
-    // Standard security headers
+    // Standard security headers (also set in next.config.js as a baseline;
+    // proxy values take precedence for routes matching this matcher).
     res.headers.set('X-Frame-Options', 'SAMEORIGIN');
     res.headers.set('X-Content-Type-Options', 'nosniff');
     res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');

@@ -31,6 +31,19 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+/**
+ * Return a basic offline fallback Response when nothing is cached.
+ * Previously some code paths could return `undefined`, which causes
+ * "Failed to convert value to Response" errors in the browser.
+ */
+function createOfflineResponse() {
+  return new Response("Offline", {
+    status: 503,
+    statusText: "Service Unavailable",
+    headers: { "Content-Type": "text/plain" },
+  });
+}
+
 self.addEventListener("fetch", (event) => {
   const { request } = event;
 
@@ -55,11 +68,10 @@ self.addEventListener("fetch", (event) => {
             return networkResponse;
           })
           .catch(() => {
-            return cachedResponse || caches.match("/offline");
+            return cachedResponse || caches.match("/offline").then((r) => r || createOfflineResponse());
           });
       }
 
-      // Cache-first for static assets
       // For Next.js runtime chunks we prefer network-first to avoid serving stale
       // JS/CSS bundles from an old service worker cache which can cause module
       // mismatches. Other large static assets (uploads) remain cache-first.
@@ -74,8 +86,7 @@ self.addEventListener("fetch", (event) => {
             }
             return networkResponse;
           })
-          .catch(() => cachedResponse);
-
+          .catch(() => cachedResponse || createOfflineResponse());
       }
 
       if (
@@ -94,11 +105,11 @@ self.addEventListener("fetch", (event) => {
             });
           }
           return networkResponse;
-        });
+        }).catch(() => createOfflineResponse());
       }
 
       // Network-first for everything else
-      return fetch(request).catch(() => cachedResponse);
+      return fetch(request).catch(() => cachedResponse || createOfflineResponse());
     })
   );
 });
