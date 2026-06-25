@@ -1,10 +1,29 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCompare } from "./CompareProvider";
 import { BLUR_DATA_URL } from "@/lib/image-placeholder";
+
+/**
+ * Client-side JSON-LD helper that reads the CSP nonce from a meta tag
+ * and injects the script element dynamically so it passes CSP checks.
+ */
+function JsonLdScript({ data, nonce }) {
+  useEffect(() => {
+    if (!data) return;
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    if (nonce) script.setAttribute("nonce", nonce);
+    script.textContent = JSON.stringify(data);
+    document.head.appendChild(script);
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, [data, nonce]);
+  return null;
+}
 
 function ComparePageClient() {
   const { compareList, removeFromCompare, clearCompare } = useCompare();
@@ -75,12 +94,17 @@ function ComparePageClient() {
     })),
   };
 
+  // Read CSP nonce from meta tag for compliant inline JSON-LD script
+  const [nonce, setNonce] = useState(undefined);
+  useEffect(() => {
+    const el = document.querySelector('meta[name="csp-nonce"]');
+    if (el) setNonce(el.getAttribute("content") || undefined);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(comparisonSchema) }}
-      />
+      {/* JSON-LD is injected via useEffect so the nonce is available client-side */}
+      <JsonLdScript data={comparisonSchema} nonce={nonce} />
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <div>

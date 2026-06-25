@@ -2,28 +2,11 @@
 
 const isProd = process.env.NODE_ENV === "production";
 
-// Static baseline CSP for fallback. The proxy injects a per-request nonce
-// for inline scripts/styles — proxy's CSP will override this header at runtime.
-const baseCsp = [
-  "default-src 'self'",
-  // Rely on per-request nonces + strict-dynamic in browsers that support it.
-  "script-src 'self' 'strict-dynamic' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://cdn.logrocket.io https://cdn.logrocket.com",
-  // Some libraries and Next internals inject inline styles (style attributes or
-  // inline <style> tags). To avoid blocking layout at runtime we allow
-  // 'unsafe-inline' for styles. This is a pragmatic trade-off; consider
-  // removing inline styles in the future to tighten CSP.
-  "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'",
-  "font-src 'self' https://fonts.gstatic.com",
-  "img-src 'self' data: https: blob:",
-  "media-src 'self' https:",
-  "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://api.logrocket.com https://r.logrocket.io https://e.logrocket.com https://cdn.logrocket.io",
-  "frame-src https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'self'",
-  ...(isProd ? ["upgrade-insecure-requests"] : []),
-].join("; ");
+// NOTE: Content-Security-Policy is NOT set here. It is handled per-request by
+// the middleware (proxy.ts) which generates a unique nonce for each response and
+// builds a nonce-enabled CSP.  The static header below only includes non-CSP
+// security headers.  This avoids conflicts between a static CSP (no nonce) and
+// the runtime nonce-based CSP from the middleware.
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -41,8 +24,6 @@ const securityHeaders = [
         { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
       ]
     : []),
-  // Fallback static CSP; proxy will emit the runtime nonce-enabled CSP.
-  { key: "Content-Security-Policy", value: baseCsp },
 ];
 
 const nextConfig = {

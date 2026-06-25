@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { SITE_URL } from "@/lib/site";
 
 export interface BreadcrumbItem {
@@ -10,7 +11,10 @@ interface BreadcrumbProps {
   items: BreadcrumbItem[];
 }
 
-function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
+async function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
+  const rawNonce = (await headers()).get("x-nonce");
+  const nonce = rawNonce && rawNonce.length > 0 ? rawNonce : undefined;
+
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -24,6 +28,7 @@ function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
 
   return (
     <script
+      {...(nonce ? { nonce } : {})}
       type="application/ld+json"
       suppressHydrationWarning
       dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

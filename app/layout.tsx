@@ -244,23 +244,26 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
-        {/* Google Tag Manager */}
+        {/* Google Tag Manager — nonce required for CSP */}
         <script
+          {...(nonce ? { nonce } : {})}
           dangerouslySetInnerHTML={{
-                    __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-NV3QJRL8');`,
-                  }}
+            __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-NV3QJRL8');`,
+          }}
         />
         {/* End Google Tag Manager */}
-        {/* Google Analytics (gtag.js) */}
+        {/* Google Analytics (gtag.js) — external script needs nonce under strict-dynamic */}
         <script
+          {...(nonce ? { nonce } : {})}
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-TYYPR8FBTX"
         />
         <script
+          {...(nonce ? { nonce } : {})}
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
@@ -271,13 +274,17 @@ export default async function RootLayout({
           }}
         />
         {/* End Google Analytics */}
-        {/* Google AdSense */}
+        {/* Google AdSense — external script needs nonce under strict-dynamic */}
         <script
+          {...(nonce ? { nonce } : {})}
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8998788891126313"
           crossOrigin="anonymous"
         />
         {/* End Google AdSense */}
+        {/* Expose nonce to client components via meta tag so they can render
+            CSP-compliant inline scripts (e.g. JSON-LD). */}
+        {nonce && <meta name="csp-nonce" content={nonce} />}
         <link rel="icon" href={faviconPath} />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#0d9488" />

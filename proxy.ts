@@ -42,7 +42,7 @@ export function proxy(request: NextRequest) {
     // Production-grade CSP with a per-request nonce for inline scripts.
     const csp = [
       "default-src 'self'",
-      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com`,
+      `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' ${isDev ? "'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://cdn.logrocket.io https://cdn.logrocket.com`,
       // Do not add nonce for style-src: many client libs add inline styles
       // (style attributes) which are not covered by nonces; allow 'unsafe-inline'
       // for styles to avoid blocking runtime style mutations. Consider hardening
@@ -51,7 +51,7 @@ export function proxy(request: NextRequest) {
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https: blob:",
       "media-src 'self' https:",
-      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://*.google-analytics.com https://*.googlesyndication.com",
+      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://analytics.google.com https://*.google-analytics.com https://*.googlesyndication.com https://api.logrocket.com https://r.logrocket.io https://e.logrocket.com https://cdn.logrocket.io",
       "frame-src https://www.googletagmanager.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
       "worker-src 'self' blob:",
       "object-src 'none'",
