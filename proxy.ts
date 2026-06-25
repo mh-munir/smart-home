@@ -102,12 +102,18 @@ export function proxy(request: NextRequest) {
       // frame-src: Google ads iframes, GTM noscript, Vercel SSO/preview.
       [
         "frame-src",
+          'self',
           "https://*.google.com",
           "https://*.google.com.bd",
           "https://*.googlesyndication.com",
           "https://*.doubleclick.net",
           "https://googleads.g.doubleclick.net",
           "https://tpc.googlesyndication.com",
+
+          "https://ep1.adtrafficquality.google",
+          "https://ep2.adtrafficquality.google",
+          "https://adtrafficquality.google",
+
           "https://www.googletagmanager.com",
           "https://vercel.com",
           "https://*.vercel.app",
