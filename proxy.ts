@@ -97,6 +97,7 @@ export function proxy(request: NextRequest) {
           "https://ep1.adtrafficquality.google",
           "https://ep2.adtrafficquality.google",
           "https://adtrafficquality.google",
+          "https://*.adtrafficquality.google",
       ].join(" "),
 
       // frame-src: Google ads iframes, GTM noscript, Vercel SSO/preview.
@@ -117,6 +118,7 @@ export function proxy(request: NextRequest) {
           "https://www.googletagmanager.com",
           "https://vercel.com",
           "https://*.vercel.app",
+          "https://*.adtrafficquality.google",
           "https://vercel.live",
       ].join(" "),
 
