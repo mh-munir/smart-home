@@ -3,10 +3,7 @@
 import { useState, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import { BLUR_DATA_URL } from "@/lib/image-placeholder";
-
-const ThemeToggle = dynamic(() => import("./ThemeToggle"), { ssr: false });
 
 const links = [
   { href: "/", label: "Home" },
@@ -110,7 +107,6 @@ function Navbar({ settings: serverSettings }) {
                 <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
             </Link>
-            <ThemeToggle />
           </nav>
         </div>
       </div>
