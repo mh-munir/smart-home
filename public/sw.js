@@ -62,7 +62,7 @@ self.addEventListener("fetch", (event) => {
             if (networkResponse && networkResponse.status === 200) {
               const responseClone = networkResponse.clone();
               caches.open(CACHE_NAME).then((cache) => {
-                cache.put(request, responseClone);
+                cache.put(request, responseClone).catch(() => {});
               });
             }
             return networkResponse;
@@ -79,9 +79,9 @@ self.addEventListener("fetch", (event) => {
         return fetch(request)
           .then((networkResponse) => {
             if (networkResponse && networkResponse.status === 200) {
-              const responseClone = networkResponse.clone();
+            const responseClone = networkResponse.clone();
               caches.open(CACHE_NAME).then((cache) => {
-                cache.put(request, responseClone);
+                cache.put(request, responseClone).catch(() => {});
               });
             }
             return networkResponse;
@@ -101,7 +101,7 @@ self.addEventListener("fetch", (event) => {
           if (networkResponse && networkResponse.status === 200) {
             const responseClone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
+              cache.put(request, responseClone).catch(() => {});
             });
           }
           return networkResponse;

@@ -323,9 +323,6 @@ export default async function RootLayout({
         <GoogleAdSenseScript />
         {/* Deferred providers — avoids blocking hydration for theme/compare */}
         <DeferredProviders>
-            <a href="#main-content" className="sr-only focus:not-sr-only">
-              Skip to content
-            </a>
             <PublicLayoutShell navSettings={navSettings} isAdmin={isAdmin}>{children}</PublicLayoutShell>
             <DeferredScripts />
             <WebVitals />
