@@ -49,6 +49,7 @@ export function proxy(request: NextRequest) {
         isDev ? "'unsafe-eval'" : "",
         // Google Tag Manager & Analytics
         "https://*.google.com",
+        "https://*.googletagmanager.com",
         "https://www.google.com.bd",
         "https://*.google.com.bd",
         "https://*.doubleclick.net",
@@ -92,6 +93,10 @@ export function proxy(request: NextRequest) {
           "https://*.google.com",
           "https://www.google.com.bd",
           "https://*.google.com.bd",
+
+          // Google Tag Manager
+          "https://www.googletagmanager.com",
+          "https://*.googletagmanager.com",
 
           // Google Ad Traffic Quality
           "https://ep1.adtrafficquality.google",
