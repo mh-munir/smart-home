@@ -1,4 +1,4 @@
-const CACHE_NAME = "smarthome-v1";
+const CACHE_NAME = "smarthome-v2";
 const STATIC_ASSETS = [
   "/",
   "/products",
@@ -49,6 +49,18 @@ self.addEventListener("fetch", (event) => {
 
   // Skip non-GET requests
   if (request.method !== "GET") return;
+
+  // Skip cross-origin (third-party) requests entirely.
+  // The service worker cannot serve them from cache, and intercepting them
+  // causes CSP violations when the browser tries to fetch resources like
+  // Google Tag Manager, AdSense, analytics, etc.
+  try {
+    const reqOrigin = new URL(request.url).origin;
+    if (reqOrigin !== self.location.origin) return;
+  } catch (_) {
+    // If URL parsing fails, skip the request
+    return;
+  }
 
   // Skip API routes and admin pages
   if (request.url.includes("/api/") || request.url.includes("/admin/")) return;

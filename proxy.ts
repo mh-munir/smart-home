@@ -103,6 +103,10 @@ export function proxy(request: NextRequest) {
           "https://ep2.adtrafficquality.google",
           "https://adtrafficquality.google",
           "https://*.adtrafficquality.google",
+
+          // Vercel (analytics, preview toolbar, live)
+          "https://vercel.com",
+          "https://vercel.live",
       ].join(" "),
 
       // frame-src: Google ads iframes, GTM noscript, Vercel SSO/preview.
